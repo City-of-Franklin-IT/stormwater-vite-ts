@@ -7,7 +7,7 @@ import { InspectorTableData } from "./hooks"
 
 // Components
 import FormContainer from "../../../form-elements/FormContainer"
-import CreateMultipleSiteLogsForm from "../../../enforcement/forms/create/CreateMultipleSiteLogsForm"
+import CreateMultipleSiteLogsForm from "../../forms/create/CreateMultipleSiteLogsForm"
 import { useContext } from "react"
 import InspectorTableCtx from "./context"
 
@@ -99,7 +99,7 @@ const TableRow = ({ row }: { row: InspectorTableData }) => {
 
   return (
     <tr className="border-b-1 border-neutral-content/50">
-      <CreateSiteLogColumn uuid={row.uuid} />
+      <CreateSiteLogColumn siteId={row.siteId} />
       <SiteNameColumn row={row} />
       <InspectionDatesColumn row={row} />
     </tr>
@@ -146,8 +146,8 @@ const InspectionDatesColumn = ({ row }: { row: InspectorTableData }) => {
   )
 }
 
-const CreateSiteLogColumn = ({ uuid }: { uuid: string }) => {
-  const { handleOnChange, selected } = useHandleInspectorSiteSelection(uuid)
+const CreateSiteLogColumn = ({ siteId }: { siteId: string }) => {
+  const { handleOnChange, selected } = useHandleInspectorSiteSelection(siteId)
 
   const roles = useReturnUserRoles()
 

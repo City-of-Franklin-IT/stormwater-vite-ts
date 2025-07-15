@@ -9,5 +9,5 @@ export const useGetInspector = () => { // Get inspector data by slug
 
   const { slug } = useParams<{ slug: string }>()
 
-  return useQuery(['getInspector', slug], () => getInspector(slug as string, authHeaders(token)), { enabled: enabled && !!slug, staleTime: Infinity })
+  return useQuery(['getInspector', slug], () => getInspector(slug as string, authHeaders(token)), { enabled: enabled && !!slug, staleTime: 600000 })
 }

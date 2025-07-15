@@ -21,15 +21,15 @@ export const useScrollToFormRef = (formRef: React.RefObject<HTMLDivElement>, tab
   }, [formOpen, formRef, tableRef])
 }
 
-export const useHandleInspectorSiteSelection = (uuid: string) => {
+export const useHandleInspectorSiteSelection = (siteId: string) => {
   const { selection, dispatch } = useContext(InspectorTableCtx)
 
-  const selected = !!selection.find(item => item === uuid)
+  const selected = !!selection.find(item => item === siteId)
 
   const handleOnChange = () => {
     if(!selected) {
-      dispatch({ type: 'ADD_TO_SELECTION', payload: uuid })
-    } else dispatch({ type: 'REMOVE_FROM_SELECTION', payload: uuid })
+      dispatch({ type: 'ADD_TO_SELECTION', payload: siteId })
+    } else dispatch({ type: 'REMOVE_FROM_SELECTION', payload: siteId })
   }
 
   return { selected, handleOnChange }
