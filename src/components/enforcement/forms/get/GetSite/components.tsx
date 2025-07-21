@@ -52,8 +52,6 @@ export const NoSiteBtn = () => {
 }
 
 export const Form = () => { // Set form
-  const { selectedSite } = useContext(EnforcementCtx)
-
   const site = useGetSelectedSite()
 
   const today = new Date().toISOString().split('T')[0]
@@ -62,7 +60,7 @@ export const Form = () => { // Set form
 
   useResetCtx() // Reset ctx on page page change
 
-  if(!Component || !selectedSite) return <></>
+  if(!Component || !site) return <></>
 
   return (
     <div className="m-auto w-4/5 mb-10 2xl:w-3/5">
