@@ -60,7 +60,7 @@ export const Form = () => { // Set form
 
   useResetCtx() // Reset ctx on page page change
 
-  if(!Component || !site) return <></>
+  if(!Component) return <></>
 
   return (
     <div className="m-auto w-4/5 mb-10 2xl:w-3/5">
