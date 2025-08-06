@@ -171,7 +171,7 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, sites: AppTyp
 
       if(siteHit) {
         const hit = siteHit as MapHitInterface
-        navigate(`/sites/site/${ hit.graphic.attributes.uuid }`)
+        navigate(`/site/${ hit.graphic.attributes.uuid }`)
       }
     })
 
