@@ -1,19 +1,17 @@
 import { useContext } from 'react'
 import EnforcementCtx from '@/components/enforcement/context'
-import { useGetActiveSiteNames, useOnSiteSelect, useGetSelectedSite, useHandleNoSiteBtn } from './hooks'
+import { useGetActiveSiteNames, useGetSelectedSite, useNoSiteBtnVisibility } from './hooks'
 import { useSetFormType, useResetCtx } from './hooks'
 
 // Components
 import FormContainer from "../../../../form-elements/FormContainer"
 
-export const SiteSelect = () => { // Site select
+export const SiteSelect = ({ onSelect, onNoSiteSelect }: { onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void, onNoSiteSelect: () => void }) => { // Site select
   const { selectedSite } = useContext(EnforcementCtx)
 
   const { data } = useGetActiveSiteNames()
 
   const sites = data?.data || []
-
-  const onSiteSelect = useOnSiteSelect()
 
   if(selectedSite) return null
 
@@ -23,7 +21,7 @@ export const SiteSelect = () => { // Site select
 
       <select
         className="text-info select select-bordered"
-        onChange={(e) => onSiteSelect(e)}>
+        onChange={onSelect}>
           <option value=""></option>
           {sites.map(site => {
             return (
@@ -31,13 +29,13 @@ export const SiteSelect = () => { // Site select
             )
           })}
       </select>
-      <NoSiteBtn />
+      <NoSiteBtn onNoSiteSelect={onNoSiteSelect} />
     </div>
   )
 }
 
-export const NoSiteBtn = () => { 
-  const { onClick, visible } = useHandleNoSiteBtn()
+export const NoSiteBtn = ({ onNoSiteSelect }: { onNoSiteSelect: () => void }) => { 
+  const visible = useNoSiteBtnVisibility()
 
   if(!visible) return null
   
@@ -45,29 +43,27 @@ export const NoSiteBtn = () => {
     <button 
       type="button"
       className="btn btn-ghost uppercase"
-      onClick={onClick}>
+      onClick={onNoSiteSelect}>
         Continue Without Site
     </button>
   )
 }
 
-export const Form = () => { // Set form
-  const site = useGetSelectedSite()
+export const Form = ({ visible }: { visible: boolean }) => { // Set form
+  if(!visible) return null
 
-  const today = new Date().toISOString().split('T')[0]
+  const { data, isFetching } = useGetSelectedSite()
 
   const Component = useSetFormType()
 
   useResetCtx() // Reset ctx on page page change
 
-  if(!Component) return <></>
+  if(!Component || isFetching) return <></>
 
   return (
     <div className="m-auto w-4/5 mb-10 2xl:w-3/5">
       <FormContainer>
-        <Component
-          date={today}
-          site={site} />
+        <Component site={data?.data} />
       </FormContainer>
     </div>
   )

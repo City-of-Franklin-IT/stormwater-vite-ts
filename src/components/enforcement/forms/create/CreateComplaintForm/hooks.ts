@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useContext, useState } from "react"
+import React, { useCallback, useEffect, useContext, useState } from "react"
 import { useParams } from "react-router"
 import { useQueryClient } from "react-query"
 import { useForm, useFormContext } from "react-hook-form"
@@ -70,7 +70,6 @@ export const useSetComplaintsMapView = (mapRef: React.RefObject<HTMLDivElement>)
 }
 
 export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
   const { dispatch } = useContext(EnforcementCtx)
 
   const { enabled, token } = useEnableQuery()

@@ -40,6 +40,7 @@ const TableHeaders = () => {
         <th>Responsible Party / Primary Permitee</th>
         <th className="text-center">Concern</th>
         <th className="text-center">Status</th>
+        <th>Inspector</th>
       </tr>
     </thead>
   )
@@ -75,6 +76,7 @@ const TableRow = ({ complaint }: { complaint: ComplaintsTableDataType }) => {
         <td>{complaint?.primaryPermitee}</td>
         <td>{complaint.concern}</td>
         <Status closed={complaint.closed} />
+        <th>{complaint.Inspector?.name}</th>
     </tr>
   )
 }

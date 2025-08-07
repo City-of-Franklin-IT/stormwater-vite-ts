@@ -157,6 +157,7 @@ export interface IllicitDischargeInterface extends BaseInterface {
   paymentReceived: string | null
   compliance: boolean | null
   closed: boolean | null
+  Inspector?: InspectorInterface
   FollowUpDates?: FollowUpInterface[]
   Site?: SiteInterface
 }

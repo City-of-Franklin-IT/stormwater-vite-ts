@@ -40,6 +40,7 @@ const TableHeaders = () => {
         <th>Responsible Party / Primary Permitee</th>
         <th className="text-center">Civil Penalty</th>
         <th className="text-center">Status</th>
+        <th>Inspector</th>
       </tr>
     </thead>
   )
@@ -76,6 +77,7 @@ const TableRow = ({ illicit }: { illicit: IllicitDischargesTableDataType }) => {
         <CivilPenalty 
           civilPenalty={{ date: illicit.penaltyDate, paymentReceived: illicit.paymentReceived }} />
         <Status closed={illicit.closed} />
+        <td>{illicit.Inspector?.name}</td>
     </tr>
   )
 }

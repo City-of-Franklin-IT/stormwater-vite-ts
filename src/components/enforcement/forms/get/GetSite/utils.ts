@@ -6,7 +6,7 @@ import CreateComplaintForm from "../../create/CreateComplaintForm"
 import CreateIllicitDischargeForm from "../../create/CreateIllicitDischargeForm"
 import CreateViolationForm from '../../create/CreateViolationForm'
 
-type CreateFormMapProps = { date: string, site: AppTypes.SiteInterface | undefined }
+type CreateFormMapProps = { site: AppTypes.SiteInterface | undefined }
 
 export type CreateFormType = 'complaint' | 'discharge' | 'violation'
 

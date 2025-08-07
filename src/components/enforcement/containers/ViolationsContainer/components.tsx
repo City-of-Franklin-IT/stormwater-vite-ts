@@ -166,6 +166,7 @@ const TableHeaders = () => {
         <th className="text-center">Civil Penalty</th>
         <th className="text-center">SWO</th>
         <th className="text-center">Status</th>
+        <th>Inspector</th>
       </tr>
     </thead>
   )
@@ -187,6 +188,7 @@ const TableRow = ({ violation }: { violation: ViolationTableDataType }) => {
         <CivilPenalty civilPenalty={{ date: violation.penaltyDate, paymentReceived: violation.paymentReceived }} />
         <SWO swo={{ date: violation.swoDate, lifted: violation.swoLiftedDate }} />
         <Status closed={violation.closed} />
+        <td>{violation.Site?.Inspector?.name}</td>
     </tr>
   )
 }

@@ -36,10 +36,12 @@ export const useHandlePrimaryContactSelect = () => {
       isContractor: false, 
       isInspector: false, 
       siteId: siteId || '', 
-      contactId: value 
+      contactId: value
     }
 
-    setValue('SiteContacts', [ ...nonPrimaryContacts, primaryContact ], { shouldDirty: true, shouldValidate: true })
+    const allContacts = [ ...nonPrimaryContacts, primaryContact ]
+
+    setValue('SiteContacts', allContacts, { shouldDirty: true, shouldValidate: true })
   }
 
   return { onChange }
@@ -65,7 +67,9 @@ export const useHandleContractorSelect = () => {
       siteId: siteId || ''
     }))
 
-    setValue('SiteContacts', [ ...nonContractors, ...newContractors ])
+    const allContacts = [ ...nonContractors, ...newContractors ]
+
+    setValue('SiteContacts', allContacts, { shouldDirty: true, shouldValidate: true })
   }
 
   return { onChange }
@@ -91,7 +95,9 @@ export const useHandleInspectorSelect = () => {
       contactId: value 
     }))
 
-    setValue('SiteContacts', [ ...nonInspectors, ...inspectors ], { shouldDirty: true, shouldValidate: true })
+    const allContacts = [ ...nonInspectors, ...inspectors ]
+
+    setValue('SiteContacts', allContacts, { shouldDirty: true, shouldValidate: true })
   }
 
   return { onChange }
@@ -117,7 +123,9 @@ export const useHandleOtherContactSelect = () => {
       contactId: value 
     }))
 
-    setValue('SiteContacts', [ ...nonOtherContacts, ...otherContacts ], { shouldDirty: true, shouldValidate: true })
+    const allContacts = [ ...nonOtherContacts, ...otherContacts ]
+
+    setValue('SiteContacts', allContacts, { shouldDirty: true, shouldValidate: true })
   }
 
   return { onChange }
