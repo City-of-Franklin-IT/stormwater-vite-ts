@@ -114,14 +114,13 @@ export const useRedirectAfterLogin = () => {
   }, [activeAccount, inProgress])
 }
 
-export const useReturnUserRoles = () => { // Return active user roles
+export const useReturnUserRoles = () => {
   const { instance } = useMsal()
-
+  
   const activeAccount = instance.getActiveAccount()
-
-  const roles = activeAccount?.idTokenClaims?.roles
-
-  return roles || []
+  const roles = activeAccount?.idTokenClaims?.roles || []
+  
+  return roles
 }
 
 export const useDebounce = <T>(value: T, delay: number): T => { // Debouncer

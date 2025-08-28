@@ -61,14 +61,15 @@ export const useHandleTableData = (contacts: AppTypes.ContactInterface[]) => {
 
 export const useOnTableRowClick = (uuid: string) => {
   const { dispatch } = useContext(ContactsCtx)
-
   const roles = useReturnUserRoles()
 
-  if(!roles.includes('task.write')) {
-    return () => null
-  }
-
-  return () => dispatch({ type: 'SET_FORM_UUID', payload: uuid })
+  return useCallback(() => {
+    if(!roles.includes('task.write')) {
+      return null
+    }
+    
+    dispatch({ type: 'SET_FORM_UUID', payload: uuid })
+  }, [roles, dispatch, uuid])
 }
 
 export const useSetTotalPages = (count: number) => { // Set total pages to ctx

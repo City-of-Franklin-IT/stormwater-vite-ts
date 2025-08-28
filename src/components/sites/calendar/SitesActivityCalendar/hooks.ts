@@ -1,10 +1,10 @@
+import { useMemo } from "react"
 import { useState, useCallback, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import EnforcementCtx from '@/components/enforcement/context'
-import { useMsal } from "@azure/msal-react"
+import { useReturnUserRoles } from '@/helpers/hooks'
 
 // Types
-import { useMemo } from "react"
 import { MbscEventcalendarOptions, MbscCalendarEvent, MbscEventClickEvent } from "@mobiscroll/react"
 import * as AppTypes from '@/context/App/types'
 import { CalendarDatesInterface, CalendarDataInterface } from "./types"
@@ -140,26 +140,24 @@ const useHandleEventClick = () => {
 
   const pathname = useLocation().pathname
 
-  const { instance } = useMsal()
-
-  const activeAccount = instance.getActiveAccount()
-
-  const roles = activeAccount?.idTokenClaims?.roles
-
   const navigate = useNavigate()
 
-  if(!roles?.includes('task.write')) {
-    return () => null
-  }
+  const roles = useReturnUserRoles()
 
-  if(pathname === '/sites' || pathname.includes('inspectors')) { // From Sites page
-    return (e: MbscCalendarEvent) => navigate(`/site/${ e.event.uuid }`)
-  }
+  return useCallback((e: MbscCalendarEvent | MbscEventClickEvent) => {
+    if (!roles?.includes('task.write')) {
+      return null
+    }
 
-  return (e: MbscEventClickEvent) => { // From Site page
-    const event = e.event as CalendarDataInterface
+    if(pathname === '/sites' || pathname.includes('inspectors')) { // Sites page
+      const calendarEvent = e as MbscCalendarEvent
+      navigate(`/site/${calendarEvent.event.uuid}`)
+    } else { // Site page
+      const clickEvent = e as MbscEventClickEvent
+      const event = clickEvent.event as CalendarDataInterface
 
-    dispatch({ type: 'SET_FORM_UUID', payload: event.formUUID })
-    dispatch({ type: 'SET_ACTIVE_FORM', payload: event.form })
-  } 
+      dispatch({ type: 'SET_FORM_UUID', payload: event.formUUID })
+      dispatch({ type: 'SET_ACTIVE_FORM', payload: event.form })
+    }
+  }, [roles, pathname, navigate, dispatch])
 }
