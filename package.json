@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5007",
-    "build": "tsc && vite build --outDir ~/apps/builds/stormwater-vite-ts/dist",
+    "build": "tsc && vite build",
+    "deploy": "scp -r dist/* andrew@cofasv32:/home/andrew/apps/builds/stormwater-vite-ts/dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest"

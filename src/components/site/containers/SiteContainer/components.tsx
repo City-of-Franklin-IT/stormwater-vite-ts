@@ -23,7 +23,7 @@ import DateRangeFilter from '../../filters/DateRangeFilter'
 import SiteIssuesTable from '../../tables/SiteIssuesTable'
 
 export const Header = ({ site }: { site: AppTypes.SiteInterface }) => {
-  const label = !site.inactive ? 'Active Site' : 'Inactive Site'
+  const label = !site.InactiveSite ? 'Active Site' : 'Inactive Site'
 
   return (
     <div className="flex gap-20 justify-between items-end">
@@ -34,7 +34,7 @@ export const Header = ({ site }: { site: AppTypes.SiteInterface }) => {
         <div className="flex flex-col">
           <h2 className="font-[shrikhand] text-4xl">{site.name}</h2>
 
-          <span className={`text-xl font-[play] font-bold italic ${ !site.inactive ? 'text-success animate-pulse' : 'text-error font-normal' }`}>{label}</span>
+          <span className={`text-xl font-[play] font-bold italic ${ !site.InactiveSite ? 'text-success animate-pulse' : 'text-error font-normal' }`}>{label}</span>
         </div>
         <InspectorBtn inspector={site.Inspector} />
       </div>

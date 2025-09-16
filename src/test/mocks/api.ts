@@ -15,7 +15,6 @@ export const createMockSite = (): AppTypes.SiteInterface => ({
   cof: faker.number.int().toString(),
   tnq: null,
   greenInfrastructure: true,
-  inactive: false,
   hasOpenViolation: false,
   hasOpenComplaint: false,
   hasOpenIllicitDischarge: false,

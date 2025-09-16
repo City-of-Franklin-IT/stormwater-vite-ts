@@ -18,7 +18,7 @@ export const useGetToken = () => {
 
     if(!activeAccount && accounts.length === 0) {
       setState(prevState => ({ ...prevState, isLoading: false }))
-      window.location.href = '/'
+      window.location.href = '/stormwater'
       return
     }
 
