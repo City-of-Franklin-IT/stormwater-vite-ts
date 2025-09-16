@@ -11,7 +11,7 @@ export const setSiteMarker = (site: AppTypes.SiteInterface) => {
     return pinErrorIcon
   }
 
-  if(site.inactive) {
+  if(site.InactiveSite) {
     return pinNeutralContentIcon
   }
 

@@ -1,22 +1,33 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router"
 import { useMsal } from "@azure/msal-react"
 import { NODE_ENV } from '@config/index'
 
 export const useGetToken = () => {
-  const [state, setState] = useState<{ token: string | undefined }>({ token: undefined })
+  const [state, setState] = useState<{ token: string | undefined, isLoading: boolean }>({ token: undefined, isLoading: true })
 
-  const { instance, inProgress } = useMsal()
-
-  const activeAccount = instance.getActiveAccount()
-
-  const navigate = useNavigate()
+  const { instance, accounts, inProgress } = useMsal()
 
   if(NODE_ENV === 'development') {
-    return 'dev-token'
+    return { token: 'dev-token', isLoading: false }
   }
 
   const checkToken = async () => {
+    setState(prevState => ({ ...prevState, isLoading: true }))
+
+    const activeAccount = instance.getActiveAccount()
+
+    if(!activeAccount && accounts.length === 0) {
+      setState(prevState => ({ ...prevState, isLoading: false }))
+      window.location.href = '/'
+      return
+    }
+
+    if(!activeAccount && accounts.length > 0) {
+      setState(prevState => ({ ...prevState, isLoading: false }))
+      instance.setActiveAccount(accounts[0])
+      return
+    }
+
     let token: string | undefined = undefined
 
     if(activeAccount?.idTokenClaims && activeAccount.idTokenClaims.exp) { // Check if token is expired or about to expire
@@ -25,7 +36,7 @@ export const useGetToken = () => {
   
       if(expiresOn > now + 3000000) { // Still valid
         token = activeAccount.idToken
-        setState({ token })
+        setState(({ token, isLoading: false }))
         return
       }
   
@@ -37,7 +48,7 @@ export const useGetToken = () => {
   
       const response = await instance.acquireTokenSilent(request) // Refresh token
 
-      setState({ token: response.idToken })
+      setState(({ token: response.idToken, isLoading: false }))
     }
 
     if(activeAccount && !activeAccount.idTokenClaims) { // Active account but !idTokenClaims
@@ -48,12 +59,10 @@ export const useGetToken = () => {
 
       const response = await instance.acquireTokenSilent(request) // Refresh token
 
-      setState({ token: response.idToken })
+      setState(({ token: response.idToken, isLoading: false }))
     }
 
-    if(!activeAccount) { // !Active account - redirect to login
-      navigate('/')
-    }
+    setState(prevState => ({ ...prevState, isLoading: false }))
   }
 
   useEffect(() => {
@@ -66,31 +75,21 @@ export const useGetToken = () => {
     const intervalId = setInterval(checkToken, 4 * 60 * 1000) // Check every 4 minutes
     
     return () => clearInterval(intervalId)
-  }, [inProgress])
+  }, [inProgress, accounts.length])
 
-  return state.token
+  return state
 }
 
 export const useEnableQuery = () => {
   const [state, setState] = useState<{ enabled: boolean }>({ enabled: false })
 
-  const token = useGetToken()
+  const { token, isLoading } = useGetToken()
 
   useEffect(() => {
-    let timeout = null
-
-    if(token) {
-      timeout = setTimeout(() => {
-        setState({ enabled: true })
-      }, 300) // 300ms delay
-    } else setState({ enabled: false })
-
-    return () => {
-      if(timeout) {
-        clearTimeout(timeout)
-      }
-    }
-  }, [token])
+    if(isLoading) {
+      setState({ enabled: false })
+    } else setState({ enabled: !!token })
+  }, [token, isLoading])
 
   return { enabled: state.enabled, token }
 }
@@ -116,6 +115,10 @@ export const useRedirectAfterLogin = () => {
 
 export const useReturnUserRoles = () => {
   const { instance } = useMsal()
+
+  if(NODE_ENV === 'development') {
+    return ['task.write']
+  }
   
   const activeAccount = instance.getActiveAccount()
   const roles = activeAccount?.idTokenClaims?.roles || []

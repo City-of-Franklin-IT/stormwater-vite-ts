@@ -9,6 +9,18 @@ export const handleUpdateSite = async (formData: AppTypes.SiteCreateInterface, t
   const result = await AppActions.updateSite(formData, authHeaders(token))
 
   if(result.success) {
+    const inactiveSite = formData.InactiveSite
+
+    if(inactiveSite) {
+      if(inactiveSite.siteId && !inactiveSite.uuid) { // Create
+        await AppActions.createInactiveSite(inactiveSite, authHeaders(token))
+      }
+
+      if(!inactiveSite.siteId && inactiveSite.uuid) { // Delete
+        await AppActions.deleteInactiveSite(inactiveSite.uuid, authHeaders(token))
+      }
+    }
+
     await AppActions.deleteSiteContacts(result.data.siteId, authHeaders(token))
 
     const contacts = formData.SiteContacts || []

@@ -15,7 +15,6 @@ export interface SiteInterface extends BaseInterface {
   cof: string | null
   tnq: string | null
   greenInfrastructure: boolean | null
-  inactive: boolean
   hasOpenViolation: boolean
   hasOpenComplaint: boolean
   hasOpenIllicitDischarge: boolean
@@ -25,9 +24,10 @@ export interface SiteInterface extends BaseInterface {
   IllicitDischarges?: IllicitDischargeInterface[]
   SiteContacts?: SiteContactInterface[]
   Inspector?: InspectorInterface
+  InactiveSite?: InactiveSiteInterface
 }
 
-export interface SiteCreateInterface extends Omit<SiteInterface, 'siteId' | 'inactive' | 'hasOpenViolation' | 'hasOpenComplaint' | 'hasOpenIllicitDischarge' | 'Logs' | 'ConstructionViolations' | 'Complaints' | 'IllicitDischarges' | 'SiteContacts' | 'Inspector' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface SiteCreateInterface extends Omit<SiteInterface, 'siteId' | 'inactive' | 'hasOpenViolation' | 'hasOpenComplaint' | 'hasOpenIllicitDischarge' | 'Logs' | 'ConstructionViolations' | 'Complaints' | 'IllicitDischarges' | 'SiteContacts' | 'Inspector' | 'InactiveSite' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
   siteId?: string
   inactive?: boolean
   Logs?: SiteLogCreateInterface[]
@@ -35,6 +35,7 @@ export interface SiteCreateInterface extends Omit<SiteInterface, 'siteId' | 'ina
   Complaints?: ComplaintCreateInterface[]
   IllicitDischarges?: IllicitDischargeCreateInterface[]
   SiteContacts?: SiteContactCreateInterface[]
+  InactiveSite?: InactiveSiteCreateInterface
   uuid?: string
 }
 
@@ -196,6 +197,14 @@ export interface ContactInterface extends BaseInterface {
 export interface ContactCreateInterface extends Omit<ContactInterface, 'contactId' | 'inactive' | 'SiteContacts' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
   readonly contactid: string
   inactive?: boolean
+  uuid?: string
+}
+
+export interface InactiveSiteInterface extends BaseInterface {
+  siteId: string
+}
+
+export interface InactiveSiteCreateInterface extends Omit<InactiveSiteInterface, 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
   uuid?: string
 }
 

@@ -468,3 +468,28 @@ export const deleteIllicitDischarge = async (uuid: string, headers: Headers): Pr
 
   return await res.json()
 }
+
+// Create inactive site
+// POST /api/v2/eng/stormwater/inactive
+export const createInactiveSite = async (formData: AppTypes.InactiveSiteCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.InactiveSiteInterface }> => {
+  headers.append('Content-Type', 'application/json')
+
+  const res = await fetch(`${ baseUrl }/inactive`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ ...formData })
+  })
+
+  return await res.json()
+}
+
+// Delete inactive site
+// DELETE /api/v2/eng/stormwater/inactive/:uuid
+export const deleteInactiveSite = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
+  const res = await fetch(`${ baseUrl }/inactive/${ uuid }`, {
+    method: 'DELETE',
+    headers
+  })
+
+  return await res.json()
+}

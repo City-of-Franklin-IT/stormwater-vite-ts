@@ -16,15 +16,24 @@ export const Map = () => { // Map input
 }
 
 export const InactiveCheckbox = () => { // Inactive site checkbox
-  const methods = useUpdateSiteFormContext()
+  const { getValues, setValue, watch } = useUpdateSiteFormContext()
+
+  const siteId = getValues('siteId')
+
+  const checked = !!watch('InactiveSite.siteId')
 
   return (
     <div className="flex items-center gap-2 mx-auto my-10 w-fit">
-      <label htmlFor="inactiveSite" className={styles.checkboxLabel}>Inactive Site</label>
+      <label className={styles.checkboxLabel}>Inactive Site</label>
       <input 
         type="checkbox"
         className="checkbox checkbox-secondary"
-        { ...methods.register('inactive') } />
+        checked={checked}
+        onChange={(e) => {
+          const value = e.currentTarget.checked ? String(siteId) : ''
+
+          setValue('InactiveSite.siteId', value)
+        }}/>
     </div>
   )
 }

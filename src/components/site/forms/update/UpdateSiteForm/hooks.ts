@@ -35,8 +35,8 @@ export const useUpdateSiteForm = (site: AppTypes.SiteInterface) => { // UpdateSi
       cof: site.cof,
       tnq: site.tnq,
       greenInfrastructure: site.greenInfrastructure,
-      inactive: site.inactive,
       SiteContacts: site.SiteContacts,
+      InactiveSite: site.InactiveSite,
       uuid: site.uuid
     }
   })

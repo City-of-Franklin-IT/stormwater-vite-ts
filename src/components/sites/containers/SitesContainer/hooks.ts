@@ -42,7 +42,7 @@ export const useSetTableData = (props: UseSetTableDataProps) => {
   }
 
   if(props.showActiveSitesOnly) { // Show active sites only filter
-    array = array.filter(site => !site.inactive)
+    array = array.filter(site => !site.InactiveSite)
   }
 
   if(props.showOpenIssuesOnly) { // Show open issues only filter
