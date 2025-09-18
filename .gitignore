@@ -7,10 +7,30 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build outputs
 dist
 dist-ssr
+build
+lib
 *.local
+
+# TypeScript compiled output (be more specific)
+src/**/*.js
+src/**/*.js.map
+*.d.ts.map
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# But keep important config files that are actually JavaScript
+!vite.config.js
+!tailwind.config.js
+!postcss.config.js
+!vitest.config.js
+!eslint.config.js
+!prettier.config.js
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +42,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files
+.env
+.env.local
+.env.*.local
