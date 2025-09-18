@@ -1,5 +1,5 @@
 import { useCallback, useContext } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import { useQueryClient } from 'react-query'
 import { useForm, useFormContext } from 'react-hook-form'
 import EnforcementCtx from '@/components/enforcement/context'
@@ -47,10 +47,9 @@ export const useOnCancelBtnClick = () => { // Handle cancel btn click
 }
 
 export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
-  const { dispatch } = useContext(EnforcementCtx)
-
   const { enabled, token } = useEnableQuery()
+
+  const navigate = useNavigate()
 
   const queryClient = useQueryClient()
 
@@ -63,8 +62,8 @@ export const useHandleFormSubmit = () => { // Handle form submit
       .then(() => {
         queryClient.invalidateQueries('getViolations')
         queryClient.invalidateQueries(['getSite', siteUUID])
-        dispatch({ type: 'RESET_CTX' })
+        navigate('/enforcement/violations')
       })
       .catch(err => errorPopup(err))
-  }, [enabled, token, queryClient, dispatch, siteUUID])
+  }, [enabled, token, queryClient, siteUUID])
 }

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useContext, useState } from "react"
-import { useParams } from "react-router"
+import { useParams, useNavigate } from "react-router"
 import { useQueryClient } from "react-query"
 import { useForm, useFormContext } from "react-hook-form"
 import EnforcementCtx from "@/components/enforcement/context"
@@ -70,9 +70,9 @@ export const useSetComplaintsMapView = (mapRef: React.RefObject<HTMLDivElement>)
 }
 
 export const useHandleFormSubmit = () => { // Handle form submit
-  const { dispatch } = useContext(EnforcementCtx)
-
   const { enabled, token } = useEnableQuery()
+
+  const navigate = useNavigate()
 
   const queryClient = useQueryClient()
 
@@ -87,10 +87,10 @@ export const useHandleFormSubmit = () => { // Handle form submit
       .then(() => {
         queryClient.invalidateQueries('getComplaints')
         queryClient.invalidateQueries(['getSite', siteUUID])
-        dispatch({ type: 'RESET_CTX' })
+        navigate('/enforcement/complaints')
       })
       .catch(err => errorPopup(err))
-  }, [enabled, token, queryClient, dispatch, siteUUID])
+  }, [enabled, token, navigate, queryClient, siteUUID])
 }
 
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {

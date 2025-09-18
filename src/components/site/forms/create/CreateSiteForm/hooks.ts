@@ -67,7 +67,6 @@ export const useSetCreateSiteMapView = (mapRef: React.RefObject<HTMLDivElement>)
 }
 
 export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
   const queryClient = useQueryClient()
 
   const navigate = useNavigate()

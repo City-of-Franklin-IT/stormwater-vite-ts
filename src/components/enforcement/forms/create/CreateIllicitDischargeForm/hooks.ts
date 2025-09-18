@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState, useEffect } from "react"
-import { useParams } from "react-router"
+import { useParams, useNavigate } from "react-router"
 import { useQueryClient, useQuery } from "react-query"
 import { useForm, useFormContext } from "react-hook-form"
 import EnforcementCtx from "@/components/enforcement/context"
@@ -89,12 +89,11 @@ export const useSetIllicitDischargeMapView = (mapRef: React.RefObject<HTMLDivEle
 }
 
 export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
-  const { dispatch } = useContext(EnforcementCtx)
-
   const { enabled, token } = useEnableQuery()
 
   const queryClient = useQueryClient()
+
+  const navigate = useNavigate()
 
   const { uuid: siteUUID } = useParams<{ uuid: string }>()
 
@@ -107,10 +106,10 @@ export const useHandleFormSubmit = () => { // Handle form submit
       .then(() => {
         queryClient.invalidateQueries('getIllicitDischarges')
         queryClient.invalidateQueries(['getSite', siteUUID])
-        dispatch({ type: 'RESET_CTX' })
+        navigate('/enforcement/discharges')
       })
       .catch(err => errorPopup(err))
-  }, [enabled, token, queryClient, dispatch, siteUUID])
+  }, [enabled, token, navigate, queryClient, siteUUID])
 }
 
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
