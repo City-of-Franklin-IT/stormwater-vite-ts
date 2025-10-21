@@ -15,7 +15,9 @@ import * as AppTypes from '@/context/App/types'
 export const useSetSiteMapView = (mapRef: React.RefObject<HTMLDivElement>, site: AppTypes.SiteInterface) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
-  useCreateMapView(mapRef, site, setState)
+  useCreateMapView(mapRef, setState)
+
+  useUpdateMapExtent(state.view, site)
 
   useSetMapGraphics(site, state)
 
@@ -36,23 +38,25 @@ export const useOnUpdateBtnClick = (uuid: string) => {
   return () => dispatch({ type: 'SET_SITE_UUID', payload })
 }
 
-const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, site: AppTypes.SiteInterface, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
+const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
   const { basemap } = useContext(SiteCtx)
-  
+
   useEffect(() => {
-    if(!mapRef?.current || !basemap) return
+    if(!mapRef?.current) return
 
     const map = new Map({ basemap })
 
     const mapView = new MapView({
       container: mapRef.current as HTMLDivElement,
       map,
-      center: [site.xCoordinate, site.yCoordinate],
+      center: [-86.86897349, 35.92531721],
       zoom: 16,
       ui: { components: [] }
     })
 
-    mapView.when(() => setState(prevState => ({ ...prevState, view: mapView })))
+    mapView.when(() => {
+      setState(prevState => ({ ...prevState, view: mapView }))
+    })
 
     const pointGraphicsLayer = new GraphicsLayer({ id: 'pointGraphicsLayer' })
     const textGraphicsLayer = new GraphicsLayer({ id: 'textGraphicsLayer', minScale: 20000 })
@@ -63,7 +67,27 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, site: AppType
         mapView.destroy()
       }, 50)
     }
-  }, [mapRef, site, basemap, setState])
+  }, [mapRef, basemap, setState])
+}
+
+const useUpdateMapExtent = (view: __esri.MapView | null, site: AppTypes.SiteInterface) => {
+
+  useEffect(() => {
+    if(!view || !site) return
+
+    const point = new Point({
+      longitude: site.xCoordinate,
+      latitude: site.yCoordinate
+    })
+
+    view.goTo({
+      target: point,
+      zoom: 16
+    }, {
+      animate: true,
+      duration: 300
+    }).catch(err => console.log(err))
+  }, [view, site])
 }
 
 const useSetMapGraphics = (site: AppTypes.SiteInterface, state: { view: __esri.MapView | null }) => {

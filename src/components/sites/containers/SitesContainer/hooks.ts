@@ -59,7 +59,9 @@ export const useSetTableData = (props: UseSetTableDataProps) => {
 export const useSetSitesMapView = (mapRef: React.RefObject<HTMLDivElement>, sites: AppTypes.SiteInterface[]) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
-  useCreateMapView(mapRef, sites, setState)
+  useCreateMapView(mapRef, setState)
+
+  useUpdateMapExtent(state.view, sites)
 
   useSetMapGraphics(sites, state)
 
@@ -134,25 +136,27 @@ export const useSetMapViewProperties = (sites: AppTypes.SiteInterface[], mapRef:
   }, [sites, mapRef])
 }
 
-const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, sites: AppTypes.SiteInterface[], setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
+const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
   const { basemap } = useContext(SitesCtx)
   
   const navigate = useNavigate()
-
-  const mapViewPropertes = useSetMapViewProperties(sites, mapRef)
 
   useEffect(() => {
     if(!mapRef?.current) return
 
     const map = new Map({ basemap })
 
-    const properties = mapViewPropertes(map)
-
-    const mapView = new MapView({ ...properties })
+    const mapView = new MapView({
+      container: mapRef.current as HTMLDivElement,
+      map,
+      center: [-86.86897349, 35.92531721],
+      zoom: 12,
+      ui: { components: [] }
+    })
 
     mapView.when(() => {
       const searchWidget = new Search({ view: mapView })
-      
+
       mapView.ui.add(searchWidget, {
         position: 'top-left'
       })
@@ -181,7 +185,29 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, sites: AppTyp
         mapView.destroy()
       }, 50)
     }
-  }, [mapRef, basemap, navigate, mapViewPropertes, setState])
+  }, [mapRef, basemap, setState, navigate])
+}
+
+const useUpdateMapExtent = (view: __esri.MapView | null, sites: AppTypes.SiteInterface[]) => {
+
+  useEffect(() => {
+    if(!view) return
+
+    if(sites.length) {
+      const multipoint = new Multipoint({
+        points: sites.map(site => [site.xCoordinate, site.yCoordinate])
+      })
+
+      const viewExtent = multipoint.extent
+
+      if(viewExtent) {
+        view.goTo(viewExtent.expand(1.1), {
+          animate: true,
+          duration: 300
+        }).catch(err => console.log(err))
+      }
+    }
+  }, [view, sites])
 }
 
 const useSetMapGraphics = (sites: AppTypes.SiteInterface[], state: { view: __esri.MapView | null }) => {
