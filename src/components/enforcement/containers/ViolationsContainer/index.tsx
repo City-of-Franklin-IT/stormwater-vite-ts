@@ -8,6 +8,7 @@ import * as AppTypes from '@/context/App/types'
 import SiteViolationsIndicator from '../../indicators/ViolationsIndicator'
 import DateRangeFilter from '../../filters/DateRangeFilter'
 import GetViolation from '@/components/enforcement/forms/get/GetViolation'
+import * as ComplaintsContainer from '../ComplaintsContainer/components'
 import * as Components from './components'
 
 function ViolationsContainer({ violations }: { violations: AppTypes.ConstructionViolationInterface[] }) {
@@ -23,6 +24,10 @@ function ViolationsContainer({ violations }: { violations: AppTypes.Construction
         <Components.CreateBtn href={'/create/enforcement/violation'}>
           Create New Violation
         </Components.CreateBtn>
+        <div className="absolute flex items-center gap-3 top-8 right-8">
+          <ComplaintsContainer.ReportBtn />
+          <ComplaintsContainer.ExportBtn />
+        </div>
 
         <div className="m-auto">
           <SiteViolationsIndicator violations={violations} />

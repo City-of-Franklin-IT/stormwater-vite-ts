@@ -1,5 +1,5 @@
 import { useContext, useMemo, useState, useCallback } from "react"
-import { useParams } from "react-router"
+import { useParams, useLocation } from "react-router"
 import { useQueryClient } from "react-query"
 import EnforcementCtx from "../../context"
 import * as AppActions from '@/context/App/AppActions'
@@ -7,6 +7,7 @@ import { authHeaders } from "@/helpers/utils"
 import { useEnableQuery } from "@/helpers/hooks"
 import { useSetTotalPages } from "../ViolationsContainer/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
+import { enforcementPathMap } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -81,4 +82,39 @@ export const useHandleDeleteBtn = () => {
   const label = !state.active ? 'Delete Violation' : 'Confirm Delete'
 
   return { onClick, label }
+}
+
+export const useHandleReportParams = () => {
+  const { dateRangeFilter: { start, end }, showClosedSiteIssues } = useContext(EnforcementCtx)
+
+  const { pathname } = useLocation()
+
+  const setParams = () => {
+    const params = new URLSearchParams()
+
+    const path = pathname.split('/').pop()?.toLowerCase()
+
+    const enforcmentType = enforcementPathMap.get(String(path))
+
+    if(enforcmentType) { // Enforcement type
+      params.append('Enforcement_type', enforcmentType)
+    }
+
+    if(start && end) { // Date range filter applied
+      params.append('startDate', start)
+      params.append('endDate', end)
+    }
+
+    if(!showClosedSiteIssues) { // Hide closed
+      params.append('closed', 'False')
+    }
+
+    return params
+  }
+
+  const params = setParams()
+
+  const href = `https://cofdbv10/ReportServer?/Engineering/Stormwater/Stormwater%20Enforcement%20Report&${ params }`
+
+  return href
 }

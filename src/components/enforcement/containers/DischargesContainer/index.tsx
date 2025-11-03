@@ -8,7 +8,8 @@ import * as AppTypes from '@/context/App/types'
 // Components
 import IllicitDischargesIndicator from "../../indicators/llicitDischargesIndicator"
 import DateRangeFilter from "../../filters/DateRangeFilter"
-import { CreateBtn, UpdateForm } from '../ViolationsContainer/components'
+import * as ViolationsContainer from '../ViolationsContainer/components'
+import * as ComplaintsContainer from '../ComplaintsContainer/components'
 import GetIllicitDischarge from '@/components/enforcement/forms/get/GetIllicitDischarge'
 import * as Components from './components'
 
@@ -22,9 +23,13 @@ function DischargesContainer({ discharges }: { discharges: AppTypes.IllicitDisch
   return (
     <div className="flex flex-col my-10 gap-10 m-auto w-fit">
       <div className="relative flex flex-col gap-11 p-20 pt-30 bg-neutral/10 shadow-xl">
-        <CreateBtn href={'/create/enforcement/discharge'}>
+        <ViolationsContainer.CreateBtn href={'/create/enforcement/discharge'}>
           Create New Illicit Discharge
-        </CreateBtn>
+        </ViolationsContainer.CreateBtn>
+        <div className="absolute flex items-center gap-3 top-8 right-8">
+          <ComplaintsContainer.ReportBtn />
+          <ComplaintsContainer.ExportBtn />
+        </div>
 
         <div className="m-auto">
           <IllicitDischargesIndicator discharges={discharges} />
@@ -36,9 +41,9 @@ function DischargesContainer({ discharges }: { discharges: AppTypes.IllicitDisch
         </div>
       </div>
 
-      <UpdateForm>
+      <ViolationsContainer.UpdateForm>
         <GetIllicitDischarge handleDeleteBtn={handleDeleteBtn} />
-      </UpdateForm>
+      </ViolationsContainer.UpdateForm>
 
     </div>
   )

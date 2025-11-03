@@ -1,5 +1,10 @@
 import { Link } from "react-router"
 import { useHandleTableRowClick } from "../ViolationsContainer/hooks"
+import { useHandleReportParams } from './hooks'
+
+// Icons
+import reportIcon from '@/assets/icons/report/report.svg'
+import xlsxIcon from '@/assets/icons/xlsx/xlsx.svg'
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -28,6 +33,28 @@ export const ComplaintsTable = ({ tableData }: { tableData: ComplaintsTableDataT
         
       </div>
     )
+}
+
+export const ReportBtn = () => {
+  const href = useHandleReportParams()
+
+  return (
+    <a href={href} target={'_blank'} className="flex flex-col items-center gap-1">
+      <img src={reportIcon} className="w-10" />
+      <small className="font-[play] text-neutral-content uppercase">View Report</small>
+    </a>
+  )
+}
+
+export const ExportBtn = () => {
+  const href = useHandleReportParams()
+
+  return (
+    <a href={`${ href }&rs:Command=Download&rs:Format=Excel`} target={'_self'} className="flex flex-col items-center gap-1">
+      <img src={xlsxIcon} className="w-10" />
+      <small className="font-[play] text-neutral-content uppercase">Export Data</small>
+    </a>
+  )
 }
 
 const TableHeaders = () => {

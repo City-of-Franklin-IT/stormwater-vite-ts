@@ -22,9 +22,11 @@ function ComplaintsContainer({ complaints }: { complaints: AppTypes.ComplaintInt
   return (
     <div className="flex flex-col my-10 gap-10 m-auto w-fit">
       <div className="relative flex flex-col gap-11 p-20 pt-30 bg-neutral/10 shadow-xl">
-        <CreateBtn href={'/create/enforcement/complaint'}>
-          Create New Complaint
-        </CreateBtn>
+        <CreateBtn href={'/create/enforcement/complaint'}>Create New Complaint</CreateBtn>
+        <div className="absolute flex items-center gap-3 top-8 right-8">
+          <Components.ReportBtn />
+          <Components.ExportBtn />
+        </div>
 
         <div className="m-auto">
           <ComplaintsIndicator complaints={complaints} />
@@ -39,7 +41,6 @@ function ComplaintsContainer({ complaints }: { complaints: AppTypes.ComplaintInt
       <UpdateForm>
         <GetComplaint handleDeleteBtn={handleDeleteBtn} />
       </UpdateForm>
-      
     </div>
   )
 }
