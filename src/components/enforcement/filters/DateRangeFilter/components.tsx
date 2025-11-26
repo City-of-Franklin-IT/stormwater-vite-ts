@@ -1,5 +1,4 @@
-import { useContext } from "react"
-import EnforcementCtx from "@/components/enforcement/context"
+import { useHandleClearBtn, useHandleDateInput } from './hooks'
 
 export const DateRangeInputs = () => {
 
@@ -12,19 +11,19 @@ export const DateRangeInputs = () => {
 }
 
 export const ClearBtn = () => { // Clear date range filter button
-  const { dateRangeFilter, dispatch } = useContext(EnforcementCtx)
+  const { visible, onClick } = useHandleClearBtn()
 
-  if(!dateRangeFilter.start || !dateRangeFilter.end) return null
+  if(!visible) return
 
   return (
-    <ClearFilterBtn onClick={() => dispatch({ type: 'RESET_DATE_RANGE_FILTER' })}>
+    <ClearFilterBtn onClick={onClick}>
       Remove Date Range Filter
     </ClearFilterBtn>
   )
 }
 
 const StartInput = () => { // Date range filter start input
-  const { dateRangeFilter: { start }, dispatch } = useContext(EnforcementCtx)
+  const inputProps = useHandleDateInput('start')
 
   return (
     <div className="flex flex-col items-center">
@@ -32,15 +31,14 @@ const StartInput = () => { // Date range filter start input
       <input 
         id="start"
         type="date"
-        value={start}
         className="input input-warning bg-neutral"
-        onChange={(e) => dispatch({ type: 'SET_DATE_RANGE_FILTER_START', payload: e.currentTarget.value })} />
+        { ...inputProps } />
     </div>
   )
 }
 
 const EndInput = () => { // Date range filter start input
-  const { dateRangeFilter: { end }, dispatch } = useContext(EnforcementCtx)
+  const inputProps = useHandleDateInput('end')
 
   return (
     <div className="flex flex-col items-center">
@@ -48,9 +46,8 @@ const EndInput = () => { // Date range filter start input
       <input 
         id="end"
         type="date"
-        value={end}
         className="input input-warning bg-neutral"
-        onChange={(e) => dispatch({ type: 'SET_DATE_RANGE_FILTER_END', payload: e.currentTarget.value })} />
+        { ...inputProps } />
     </div>
   )
 }

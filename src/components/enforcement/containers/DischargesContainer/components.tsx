@@ -62,20 +62,19 @@ const TableBody = ({ tableData }: { tableData: IllicitDischargesTableDataType[] 
 }
 
 const TableRow = ({ illicit }: { illicit: IllicitDischargesTableDataType }) => {
-  const handleTableRowClick = useHandleTableRowClick(illicit.uuid)
+  const onClick = useHandleTableRowClick(illicit.uuid)
 
   return (
     <tr 
       title={illicit.details} 
-      onClick={handleTableRowClick}
+      onClick={onClick}
       className="border-b-1 border-neutral-content/50">
         <td className="whitespace-nowrap">{illicit.date}</td>
         <td className="whitespace-nowrap">
           <LocationTableData illicit={illicit} />
         </td>
         <td>{illicit.primaryPermitee}</td>
-        <CivilPenalty 
-          civilPenalty={{ date: illicit.penaltyDate, paymentReceived: illicit.paymentReceived }} />
+        <CivilPenalty civilPenalty={{ date: illicit.penaltyDate, paymentReceived: illicit.paymentReceived }} />
         <Status closed={illicit.closed} />
         <td>{illicit.Inspector?.name}</td>
     </tr>

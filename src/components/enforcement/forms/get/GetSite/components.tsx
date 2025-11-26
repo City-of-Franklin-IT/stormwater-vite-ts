@@ -4,6 +4,7 @@ import { useGetActiveSiteNames, useGetSelectedSite, useNoSiteBtnVisibility } fro
 import { useSetFormType, useResetCtx } from './hooks'
 
 // Components
+import Motion from '@/utils/Motion'
 import FormContainer from "../../../../form-elements/FormContainer"
 
 export const SiteSelect = ({ onSelect, onNoSiteSelect }: { onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void, onNoSiteSelect: () => void }) => { // Site select
@@ -50,21 +51,19 @@ export const NoSiteBtn = ({ onNoSiteSelect }: { onNoSiteSelect: () => void }) =>
 }
 
 export const Form = ({ visible }: { visible: boolean }) => { // Set form
-  if(!visible) return null
-
   const { data, isFetching } = useGetSelectedSite()
-
   const Component = useSetFormType()
-
   useResetCtx() // Reset ctx on page page change
 
-  if(!Component || isFetching) return <></>
+  if(!visible || !Component || isFetching) return null
 
   return (
-    <div className="m-auto w-4/5 mb-10 2xl:w-3/5">
-      <FormContainer>
-        <Component site={data?.data} />
-      </FormContainer>
-    </div>
+    <Motion animation={'fadeInOut'}>
+      <div className="m-auto w-4/5 mb-10 2xl:w-3/5">
+        <FormContainer>
+          <Component site={data?.data} />
+        </FormContainer>
+      </div>
+    </Motion>
   )
 }

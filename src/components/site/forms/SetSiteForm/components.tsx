@@ -6,6 +6,7 @@ import { useHandleDeleteBtn as useHandleDeleteViolationBtn } from "@/components/
 import { useHandleDeleteBtn as useHandleDeleteComplaintBtn } from "@/components/enforcement/containers/ComplaintsContainer/hooks"
 import { useHandleDeleteBtn as useHandleDeleteIllicitDischargeBtn } from "@/components/enforcement/containers/DischargesContainer/hooks"
 import { createFormMap } from './utils'
+import { useHandleForm } from './hooks'
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -21,13 +22,12 @@ import GetIllicitDischarge from "../../../enforcement/forms/get/GetIllicitDischa
 import DeleteBtn from "../../../form-elements/buttons/DeleteBtn"
 
 export const Form = ({ site }: { site: AppTypes.SiteInterface }) => { // Set form opened on site page
-  const { activeForm } = useContext(EnforcementCtx)
-  const { siteUUID } = useContext(SiteCtx)
+  const { visible, createFormActive } = useHandleForm()
 
-  if(activeForm || siteUUID) {
-    if(activeForm && !activeForm?.includes('update')) { // Create site log, violation, complaint, and illicit discharge
+  if(visible) {
+    if(createFormActive) { // Create site log, violation, complaint, and illicit discharge
       return (
-        <div className="flex flex-col gap-10 items-center m-auto w-3/4 min-w-fit">
+        <div className="flex flex-col gap-10 items-center m-auto w-full">
           <FormNav />
           <FormContainer>
             <SetCreateForm site={site} />
@@ -36,8 +36,8 @@ export const Form = ({ site }: { site: AppTypes.SiteInterface }) => { // Set for
       )
     }
 
-    return (
-      <div className="m-auto w-3/4 min-w-fit">
+    return ( // Update
+      <div className="flex">
         <FormContainer>
           <SetUpdateForm site={site} />
         </FormContainer>

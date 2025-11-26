@@ -6,7 +6,6 @@ import { errorPopup, savedPopup } from "../../../../../utils/Toast/Toast"
 import * as AppTypes from '@/context/App/types'
 
 export const handleCreateSite = async (formData: AppTypes.SiteCreateInterface, token: string) => {
-  // TODO verify fn
   const result = await AppActions.createSite(formData, authHeaders(token))
 
   if(result.success) {

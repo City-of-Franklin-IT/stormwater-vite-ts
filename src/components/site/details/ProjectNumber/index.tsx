@@ -1,15 +1,15 @@
-import icon from '@/assets/icons/project/project.svg'
+import { handleProjectNumber } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
 
 function ProjectNumber({ site }: { site: AppTypes.SiteInterface }) {
-  const hastProjectNumber = !!site.cof
+  const props = handleProjectNumber(site)
   
   return (
-    <div className="flex flex-col gap-1 items-center" title={`COF #${ site.cof || '' }`}>
-      <img src={icon} alt="cof number icon" className={`w-10 ${ !hastProjectNumber ? 'opacity-40' : null }`} />
-      <span className={!site.cof ? 'hidden' : 'font-[play] whitespace-nowrap'}>COF #{site.cof}</span>
+    <div className="flex flex-col gap-1 items-center" title={`COF #${ site.cof }`}>
+      <img alt="cof number icon" { ...props.iconProps } />
+      <span className={props.spanClassName}>COF #{site.cof}</span>
     </div>
   )
 }

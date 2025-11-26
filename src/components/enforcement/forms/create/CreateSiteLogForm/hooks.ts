@@ -11,7 +11,21 @@ import { handleCreateSiteLog } from './utils'
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useCreateSiteLogForm = (siteId: string) => { // CreateSiteLogForm useForm
+export const useHandleCreateSiteLogForm = (site: AppTypes.SiteInterface) => {
+  const methods = useCreateSiteLogForm(site.siteId)
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
+
+  return { methods, handleFormSubmit, onCancelBtnClick }
+}
+
+export const useOnCancelBtnClick = () => {
+  const { dispatch } = useContext(EnforcementCtx)
+
+  return () => dispatch({ type: 'RESET_CTX' })
+}
+
+const useCreateSiteLogForm = (siteId: string) => { // CreateSiteLogForm useForm
   const { formDate } = useContext(EnforcementCtx)
 
   return useForm<AppTypes.SiteLogCreateInterface>({
@@ -22,9 +36,9 @@ export const useCreateSiteLogForm = (siteId: string) => { // CreateSiteLogForm u
   })
 }
 
-export const useHandleFormSubmit = () => { // Handle form submit
+const useHandleFormSubmit = () => { // Handle form submit
   const { dispatch } = useContext(EnforcementCtx)
-  // TODO verify hook
+
   const queryClient = useQueryClient()
 
   const { enabled, token } = useEnableQuery()
@@ -41,10 +55,4 @@ export const useHandleFormSubmit = () => { // Handle form submit
       })
       .catch(err => errorPopup(err))
   }, [enabled, token, queryClient, dispatch, siteUUID])
-}
-
-export const useOnCancelBtnClick = () => {
-  const { dispatch } = useContext(EnforcementCtx)
-
-  return () => dispatch({ type: 'RESET_CTX' })
 }

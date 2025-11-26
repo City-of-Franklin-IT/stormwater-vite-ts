@@ -1,6 +1,6 @@
 import { FormProvider } from "react-hook-form"
 import styles from '@/components/form-elements/Forms.module.css'
-import { useCreateSiteForm, useOnCancelBtnClick, useHandleFormSubmit } from "./hooks"
+import { useHandleCreateSiteForm } from "./hooks"
 
 // Components
 import UpdateSiteContactsForm from "../../update/UpdateSiteContactsForm"
@@ -8,11 +8,7 @@ import * as Components from './components'
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
 
 function CreateSiteForm() {
-  const methods = useCreateSiteForm()
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateSiteForm()
 
   return (
     <div className={styles.container}>
@@ -49,7 +45,6 @@ function CreateSiteForm() {
 
         </form>
       </FormProvider>
-
     </div>
   )
 }

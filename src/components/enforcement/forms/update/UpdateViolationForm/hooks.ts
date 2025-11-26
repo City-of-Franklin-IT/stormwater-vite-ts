@@ -2,6 +2,7 @@ import { useCallback, useContext } from "react"
 import { useParams } from "react-router"
 import { useQueryClient } from "react-query"
 import { useForm } from "react-hook-form"
+import { useOnCancelBtnClick } from "../../create/CreateViolationForm/hooks"
 import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
@@ -11,7 +12,15 @@ import { handleUpdateViolation } from './utils'
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useUpdateViolationForm = (violation: AppTypes.ConstructionViolationInterface) => { // UpdateViolationForm useForm
+export const useHandleUpdateViolationForm = (violation: AppTypes.ConstructionViolationInterface) => {
+  const methods = useUpdateViolationForm(violation)
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
+
+  return { methods, handleFormSubmit, onCancelBtnClick }
+}
+
+const useUpdateViolationForm = (violation: AppTypes.ConstructionViolationInterface) => { // UpdateViolationForm useForm
 
   return useForm<AppTypes.ConstructionViolationCreateInterface>({
     mode: 'onBlur',
@@ -31,8 +40,7 @@ export const useUpdateViolationForm = (violation: AppTypes.ConstructionViolation
   })
 }
 
-export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
+const useHandleFormSubmit = () => { // Handle form submit
   const { dispatch } = useContext(EnforcementCtx)
 
   const { enabled, token } = useEnableQuery()

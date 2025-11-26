@@ -1,16 +1,35 @@
-import { useCallback } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router"
 import { useReturnUserRoles } from "@/helpers/hooks"
+import { setTableDataStyle } from "./utils"
 
-export const useOnTableRowClick = (uuid: string) => {
+// Types
+import * as AppTypes from '@/context/App/types'
+
+export const useHandleTableRow = (site: AppTypes.SiteInterface, index: number) => {
   const navigate = useNavigate()
   const roles = useReturnUserRoles()
 
-  return useCallback(() => {
+  const onClick = () => {
     if(!roles.includes('task.write')) {
       return null
     }
 
-    navigate(`/site/${ uuid }`)
-  }, [roles, navigate, uuid])
+    navigate(`/site/${ site.uuid }`)
+  }
+
+  const className = setTableDataStyle(index, site)
+
+  return { onClick, className }
+}
+
+export const useHandleTableData = () => {
+  const [state, setState] = useState<{ hovered: boolean }>({ hovered: false })
+
+  const tableDataProps = {
+    onMouseEnter: () => setState({ hovered: true }),
+    onMouseLeave: () => setState({ hovered: false })
+  }
+
+  return { tableDataProps, hovered: state.hovered }
 }

@@ -1,5 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { useCreateSiteLogForm, useHandleFormSubmit, useOnCancelBtnClick } from "./hooks"
+import { useHandleCreateSiteLogForm } from "./hooks"
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Types
@@ -10,14 +10,10 @@ import FormBtns from "@/components/form-elements/buttons/FormBtns"
 import * as Components from './components'
 
 function CreateSiteLogForm({ site }: { site: AppTypes.SiteInterface }) {
-  const methods = useCreateSiteLogForm(site.siteId)
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateSiteLogForm(site)
 
   return (
-    <div className={styles.container}>
+    <div className="flex flex-col items-center w-full border">
       <h2 className={styles.title}>Create Site Log</h2>
 
         <FormProvider { ...methods }>
@@ -28,7 +24,6 @@ function CreateSiteLogForm({ site }: { site: AppTypes.SiteInterface }) {
 
           </form>
         </FormProvider>
-
     </div>
   )
 }

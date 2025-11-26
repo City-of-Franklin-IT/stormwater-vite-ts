@@ -1,11 +1,8 @@
-import { useRef, useContext } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router'
-import SiteCtx from '../../context'
-import EnforcementCtx from '@/components/enforcement/context'
 import inspectorIcon from '@/assets/icons/inspector/inspector.svg'
-import { useReturnUserRoles } from '@/helpers/hooks'
 import { useScrollToFormRef } from '@/components/enforcement/containers/ViolationsContainer/hooks'
-import { useOnUpdateBtnClick, useSetSiteMapView } from './hooks'
+import { useHandleForm, useHandleButtons, useHandleSiteIssuesCheckbox, useSetSiteMapView } from './hooks'
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -69,33 +66,28 @@ export const Enforcement = ({ site }: { site: AppTypes.SiteInterface }) => {
 }
 
 export const Form = ({ site }: { site: AppTypes.SiteInterface }) => { // Update site form
-  const { activeForm } = useContext(EnforcementCtx)
-  const { siteUUID } = useContext(SiteCtx)
+  const { formRef, visible } = useHandleForm()
 
-  const formRef = useRef<HTMLDivElement>(null)
+  useScrollToFormRef({ formRef, activeForm: visible })
 
-  useScrollToFormRef({ formRef, activeForm: !!activeForm || !!siteUUID })
-
-  if(!activeForm && !siteUUID) return null
+  if(!visible) return null
 
   return (
-    <div ref={formRef}>
+    <div ref={formRef} className="m-auto w-fit min-w-3/4">
       <SetSiteForm site={site} />
     </div>
   )
 }
 
 export const Buttons = ({ site }: { site: AppTypes.SiteInterface }) => {
-  const roles = useReturnUserRoles()
+  const { onClick, visible } = useHandleButtons(site.uuid)
 
-  const onUpdateBtnClick = useOnUpdateBtnClick(site.uuid)
-
-  if(!roles.includes('task.write')) return null // Viewers
+  if(!visible) return
 
   return (
     <div className="flex flex-col gap-4">
       <BackToHomeBtn />
-      <UpdateBtn onClick={onUpdateBtnClick}>
+      <UpdateBtn onClick={onClick}>
         Update Site
       </UpdateBtn>
     </div>
@@ -130,7 +122,7 @@ export const InspectorBtn = ({ inspector }: { inspector: AppTypes.InspectorInter
 }
 
 export const SiteIssuesCheckbox = () => {
-  const { showClosedSiteIssues, dispatch } = useContext(SiteCtx)
+  const inputProps = useHandleSiteIssuesCheckbox()
 
   return (
     <div className="flex gap-2 items-center text-neutral-content font-[play] uppercase mr-auto w-fit">
@@ -138,8 +130,7 @@ export const SiteIssuesCheckbox = () => {
       <input 
         type="checkbox"
         className="checkbox checkbox-secondary"
-        checked={showClosedSiteIssues}
-        onChange={() => dispatch({ type: 'TOGGLE_SHOW_CLOSED_SITE_ISSUES' })} />
+        { ...inputProps } />
     </div>
   )
 }

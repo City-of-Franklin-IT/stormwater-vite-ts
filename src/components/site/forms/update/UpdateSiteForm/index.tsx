@@ -1,5 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { useUpdateSiteForm, useOnCancelBtnClick, useHandleFormSubmit } from "./hooks"
+import { useHandleUpdateSiteForm } from "./hooks"
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Types
@@ -8,17 +8,11 @@ import * as AppTypes from '@/context/App/types'
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
 import UpdateSiteContactsForm from "../UpdateSiteContactsForm"
-import { NameInput, LocationInput, PreconDateInput, GreenInfrastructureSelect, PermitInput, COFInput, TNQInput, InspectorSelect } from '../../create/CreateSiteForm/components'
+import * as CreateSiteForm from '../../create/CreateSiteForm/components'
 import * as Components from './components'
 
 function UpdateSiteForm({ site }: { site: AppTypes.SiteInterface }) {
-  const methods = useUpdateSiteForm(site)
-
-  const onCancelBtnClick = useOnCancelBtnClick()
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  console.log(methods.watch())
+  const { methods, onCancelBtnClick, handleFormSubmit } = useHandleUpdateSiteForm(site)
 
   return (
     <div className={styles.container}>
@@ -30,21 +24,21 @@ function UpdateSiteForm({ site }: { site: AppTypes.SiteInterface }) {
           <Components.Map />
 
           <Components.InactiveCheckbox />
-          <NameInput />
-          <LocationInput />
+          <CreateSiteForm.NameInput />
+          <CreateSiteForm.LocationInput />
 
           <div className="flex gap-2 w-full">
-            <PreconDateInput />
-            <GreenInfrastructureSelect />
+            <CreateSiteForm.PreconDateInput />
+            <CreateSiteForm.GreenInfrastructureSelect />
           </div>
 
           <div className="flex gap-2 w-full">
-            <PermitInput />
-            <COFInput />
-            <TNQInput />
+            <CreateSiteForm.PermitInput />
+            <CreateSiteForm.COFInput />
+            <CreateSiteForm.TNQInput />
           </div>
 
-          <InspectorSelect />
+          <CreateSiteForm.InspectorSelect />
 
           <div className="py-10">
             <UpdateSiteContactsForm />
@@ -53,7 +47,6 @@ function UpdateSiteForm({ site }: { site: AppTypes.SiteInterface }) {
           <FormBtns onCancelBtnClick={onCancelBtnClick} />
         </form>
       </FormProvider>
-
     </div>
   )
 }

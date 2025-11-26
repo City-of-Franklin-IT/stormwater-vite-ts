@@ -9,3 +9,5 @@ const basemapSelectMap = new Map<BasemapType, string>([
 ])
 
 export const basemapSelectOptions = Array.from(basemapSelectMap, ([value, text]) => ({ value, text }))
+
+export type BasemapSelectProps = { onChange: React.ChangeEventHandler<HTMLSelectElement>, basemap: BasemapType }

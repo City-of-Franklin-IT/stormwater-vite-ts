@@ -24,10 +24,10 @@ export const Table = ({ siteContacts }: { siteContacts: AppTypes.SiteContactInte
 }
 
 export const EmailContacts = ({ siteContacts }: { siteContacts: AppTypes.SiteContactInterface[] }) => {
-  const allContacts = setAllSiteContacts(siteContacts)
+  const href = setAllSiteContacts(siteContacts)
 
   return (
-    <a href={`mailto:${ allContacts.join(';') }`} className="text-neutral-content font-[play] uppercase hover:text-warning">Email All Site Contacts</a>
+    <a href={href} className="text-neutral-content font-[play] uppercase hover:text-warning">Email All Site Contacts</a>
   )
 }
 

@@ -41,9 +41,9 @@ export const useCreateViolationFormContext = () => { // CreateViolationForm cont
 }
 
 export const useOnCancelBtnClick = () => { // Handle cancel btn click
-  const { dispatch } = useContext(EnforcementCtx)
+  const navigate = useNavigate()
 
-  return () => dispatch({ type: 'RESET_CTX' })
+  return () => navigate('/sites')
 }
 
 export const useHandleFormSubmit = () => { // Handle form submit

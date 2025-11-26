@@ -1,6 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { useOnCancelBtnClick } from "../CreateViolationForm/hooks"
-import { useCreateComplaintForm, useHandleFormSubmit } from './hooks'
+import { useHandleCreateComplaintForm } from './hooks'
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Types
@@ -12,16 +11,11 @@ import { FollowUpInputs } from "../CreateViolationForm/components"
 import * as Components from './components'
 
 function CreateComplaintForm({ site }: { site: AppTypes.SiteInterface | undefined }) {
-  const methods = useCreateComplaintForm(site)
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateComplaintForm(site)
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Create Complaint</h2>
-
       <FormProvider { ...methods }>
         <form onSubmit={methods.handleSubmit(handleFormSubmit)} className={styles.body}>
 
@@ -38,7 +32,6 @@ function CreateComplaintForm({ site }: { site: AppTypes.SiteInterface | undefine
 
         </form>
       </FormProvider>
-
     </div>
   )
 }

@@ -1,11 +1,15 @@
 import { Link } from 'react-router'
 import styles from './CreateLink.module.css'
 
-function CreateLink({ href, children }: { href: string, children: React.ReactNode }) {
+type CreateLinkProps = { href: string, children: React.ReactNode }
+
+function CreateLink(props: CreateLinkProps) {
   
   return (
-    <Link className={styles.createLink} to={href}>
-      {children}
+    <Link 
+      className={styles.createLink} 
+      to={props.href}>
+        {props.children}
     </Link>
   )
 }

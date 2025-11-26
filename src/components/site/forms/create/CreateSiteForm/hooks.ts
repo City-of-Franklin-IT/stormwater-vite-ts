@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { useForm, useFormContext } from "react-hook-form"
 import { useQueryClient } from "react-query"
@@ -18,7 +18,43 @@ import { handleCreateSite } from "./utils"
 import * as AppTypes from '@/context/App/types'
 import { errorPopup } from "@/utils/Toast/Toast"
 
-export const useCreateSiteForm = () => { // CreateSiteForm useForm state
+export const useHandleCreateSiteForm = () => {
+  const methods = useCreateSiteForm()
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
+
+  return { methods, handleFormSubmit, onCancelBtnClick }
+}
+
+export const useCreateSiteFormContext = () => { // CreateSiteForm context
+  const methods = useFormContext<AppTypes.SiteCreateInterface>()
+
+  return methods
+}
+
+export const useSetCreateSiteMapView = (mapRef: React.RefObject<HTMLDivElement>) => {
+  const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
+
+  useCreateMapView(mapRef, setState)
+
+  useSetMapGraphics(state)
+  
+  useEffect(() => {
+    if(state.view) {
+      state.view.when(() => {
+        setState(prevState => ({ ...prevState, isLoaded: true }))
+      })
+    }
+  }, [state.view])
+}
+
+const useOnCancelBtnClick = () => {
+  const navigate = useNavigate()
+
+  return () => navigate('/sites')
+}
+
+const useCreateSiteForm = () => { // CreateSiteForm useForm state
 
   return useForm<AppTypes.SiteCreateInterface>({
     mode: 'onBlur',
@@ -38,42 +74,14 @@ export const useCreateSiteForm = () => { // CreateSiteForm useForm state
   })
 }
 
-export const useCreateSiteFormContext = () => { // CreateSiteForm context
-  const methods = useFormContext<AppTypes.SiteCreateInterface>()
-
-  return methods
-}
-
-export const useOnCancelBtnClick = () => {
-  const navigate = useNavigate()
-
-  return () => navigate('/sites')
-}
-
-export const useSetCreateSiteMapView = (mapRef: React.RefObject<HTMLDivElement>) => {
-  const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
-
-  useCreateMapView(mapRef, setState)
-
-  useSetMapGraphics(state)
-  
-  useEffect(() => {
-    if(state.view) {
-      state.view.when(() => {
-        setState(prevState => ({ ...prevState, isLoaded: true }))
-      })
-    }
-  }, [state.view])
-}
-
-export const useHandleFormSubmit = () => { // Handle form submit
+const useHandleFormSubmit = () => { // Handle form submit
   const queryClient = useQueryClient()
 
   const navigate = useNavigate()
 
   const { enabled, token } = useEnableQuery()
 
-  return useCallback((formData: AppTypes.SiteCreateInterface) => {
+  return (formData: AppTypes.SiteCreateInterface) => {
     if(!enabled || !token) return 
 
     handleCreateSite(formData, token)
@@ -82,7 +90,7 @@ export const useHandleFormSubmit = () => { // Handle form submit
         navigate(`/sites/site/${ uuid }`)
       })
       .catch(err => errorPopup(err))
-  }, [queryClient, navigate, enabled, token])
+  }
 }
 
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {

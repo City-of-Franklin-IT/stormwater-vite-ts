@@ -2,6 +2,7 @@ import { useCallback, useContext } from "react"
 import { useParams } from "react-router"
 import { useQueryClient } from "react-query"
 import { useForm } from "react-hook-form"
+import { useOnCancelBtnClick } from "../../create/CreateViolationForm/hooks"
 import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
@@ -12,7 +13,15 @@ import { handleUpdateIllicitDischarge } from './utils'
 import * as AppTypes from '@/context/App/types'
 import { StreamWatershedEnum } from "../../create/CreateIllicitDischargeForm/types"
 
-export const useUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischargeInterface) => {
+export const useHandleUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischargeInterface) => {
+  const methods = useUpdateIllicitDischargeForm(illicitDischarge)
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
+
+  return { methods, handleFormSubmit, onCancelBtnClick }
+}
+
+const useUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischargeInterface) => {
   const setStreamWatershed = useSetStreamWatershed(illicitDischarge.streamWatershed) 
 
   return useForm<AppTypes.IllicitDischargeCreateInterface>({
@@ -33,8 +42,7 @@ export const useUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.Illicit
   })
 }
 
-export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
+const useHandleFormSubmit = () => { // Handle form submit
   const { dispatch } = useContext(EnforcementCtx)
 
   const { enabled, token } = useEnableQuery()

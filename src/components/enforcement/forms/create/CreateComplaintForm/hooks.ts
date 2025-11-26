@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useContext, useState } from "react"
+import { useCallback, useEffect, useContext, useState } from "react"
 import { useParams, useNavigate } from "react-router"
 import { useQueryClient } from "react-query"
 import { useForm, useFormContext } from "react-hook-form"
@@ -15,12 +15,42 @@ import pinErrorIcon from '@/assets/icons/pin/error-pin.png'
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
 import { errorPopup } from "@/utils/Toast/Toast"
+import { useOnCancelBtnClick } from "../CreateViolationForm/hooks"
 import { handleCreateComplaint } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useCreateComplaintForm = (site: AppTypes.SiteInterface | undefined) => { 
+export const useHandleCreateComplaintForm = (site: AppTypes.SiteInterface | undefined) => {
+  const methods = useCreateComplaintForm(site)
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
+
+  return { methods, handleFormSubmit, onCancelBtnClick }
+}
+
+export const useCreateComplaintFormContext = () => { 
+  const methods = useFormContext<AppTypes.ComplaintCreateInterface>()
+
+  return methods
+}
+
+export const useSetComplaintsMapView = (mapRef: React.RefObject<HTMLDivElement>) => {
+  const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
+
+  useCreateMapView(mapRef, setState)
+  useSetMapGraphics(state)
+
+  useEffect(() => {
+    if(state.view) {
+      state.view.when(() => {
+        setState(prevState => ({ ...prevState, isLoaded: true }))
+      })
+    }
+  }, [state.view])
+}
+
+const useCreateComplaintForm = (site: AppTypes.SiteInterface | undefined) => { 
   const { formDate } = useContext(EnforcementCtx)
 
   return useForm<AppTypes.ComplaintCreateInterface>({
@@ -48,28 +78,7 @@ export const useCreateComplaintForm = (site: AppTypes.SiteInterface | undefined)
   })
 }
 
-export const useCreateComplaintFormContext = () => { 
-  const methods = useFormContext<AppTypes.ComplaintCreateInterface>()
-
-  return methods
-}
-
-export const useSetComplaintsMapView = (mapRef: React.RefObject<HTMLDivElement>) => {
-  const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
-
-  useCreateMapView(mapRef, setState)
-  useSetMapGraphics(state)
-
-  useEffect(() => {
-    if(state.view) {
-      state.view.when(() => {
-        setState(prevState => ({ ...prevState, isLoaded: true }))
-      })
-    }
-  }, [state.view])
-}
-
-export const useHandleFormSubmit = () => { // Handle form submit
+const useHandleFormSubmit = () => { // Handle form submit
   const { enabled, token } = useEnableQuery()
 
   const navigate = useNavigate()

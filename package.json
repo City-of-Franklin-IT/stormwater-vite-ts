@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5014",
+    "dev": "vite --port 6000",
     "build": "tsc && vite build",
     "deploy": "scp -r dist andrew@cofasv32:/home/andrew/apps/builds/stormwater-vite-ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -15,6 +15,7 @@
     "@arcgis/core": "^4.30.9",
     "@azure/msal-react": "^3.0.12",
     "@mobiscroll/react": "npm:@mobiscroll/react-next@^5.32.0",
+    "motion": "^12.23.24",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-error-boundary": "^4.1.2",

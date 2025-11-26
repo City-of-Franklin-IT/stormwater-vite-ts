@@ -1,5 +1,6 @@
 import { useContext } from "react"
 import SiteCtx from "../../context"
+import { useHandleDateRangeInput } from './hooks'
 
 export const DateRangeInputs = () => {
 
@@ -24,7 +25,7 @@ export const ClearBtn = () => { // Clear date range filter button
 }
 
 const StartInput = () => { // Date range filter start input
-  const { dateRangeFilter: { start }, dispatch } = useContext(SiteCtx)
+  const inputParams = useHandleDateRangeInput('start')
 
   return (
     <div className="flex flex-col items-center">
@@ -32,15 +33,14 @@ const StartInput = () => { // Date range filter start input
       <input 
         id="start"
         type="date"
-        value={start}
         className="input input-warning bg-neutral"
-        onChange={(e) => dispatch({ type: 'SET_DATE_RANGE_FILTER_START', payload: e.currentTarget.value })} />
+        { ...inputParams } />
     </div>
   )
 }
 
 const EndInput = () => { // Date range filter start input
-  const { dateRangeFilter: { end }, dispatch } = useContext(SiteCtx)
+  const inputParams = useHandleDateRangeInput('end')
 
   return (
     <div className="flex flex-col items-center">
@@ -48,9 +48,8 @@ const EndInput = () => { // Date range filter start input
       <input 
         id="end"
         type="date"
-        value={end}
         className="input input-warning bg-neutral"
-        onChange={(e) => dispatch({ type: 'SET_DATE_RANGE_FILTER_END', payload: e.currentTarget.value })} />
+        { ...inputParams } />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useEffect } from "react"
+import { useCallback, useContext, useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router"
 import { useQueryClient, useQuery } from "react-query"
 import { useForm, useFormContext } from "react-hook-form"
@@ -13,42 +13,21 @@ import Search from "@arcgis/core/widgets/Search"
 import { TextSymbol } from "@arcgis/core/symbols"
 import pinErrorIcon from '@/assets/icons/pin/error-pin.png'
 import { useEnableQuery } from "@/helpers/hooks"
-import { formatDate } from "@/helpers/utils"
 import { errorPopup } from "@/utils/Toast/Toast"
 import * as AppActions from '@/context/App/AppActions'
-import { authHeaders } from "@/helpers/utils"
+import { authHeaders, formatDate } from "@/helpers/utils"
+import { useOnCancelBtnClick } from "../CreateViolationForm/hooks"
 import { handleCreateIllicitDischarge } from "./utils"
 
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useCreateIllicitDischargeForm = (site: AppTypes.SiteInterface | undefined) => { // CreateSiteIllicitDischargeForm useForm
-  const { formDate } = useContext(EnforcementCtx)
+export const useHandleCreateIllicitDischargeForm = (site: AppTypes.SiteInterface | undefined) => {
+  const methods = useCreateIllicitDischargeForm(site)
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
 
-  return useForm<AppTypes.IllicitDischargeCreateInterface>({
-    mode: 'onBlur',
-    defaultValues: {
-      siteId: site?.siteId || null,
-      date: formatDate(formDate),
-      xCoordinate: site?.xCoordinate || null,
-      yCoordinate: site?.yCoordinate || null,
-      locationDescription: '',
-      inspectorId: site?.inspectorId || null,
-      details: '',
-      responsibleParty: '',
-      volumeLost: '',
-      streamWatershed: undefined,
-      otherStreamWatershed: '',
-      enforcementAction: '',
-      penaltyDate: null,
-      penaltyAmount: null,
-      penaltyDueDate: null,
-      paymentReceived: null,
-      compliance: null,
-      closed: null,
-      FollowUpDates: []
-    }
-  })
+  return { methods, handleFormSubmit, onCancelBtnClick }
 }
 
 export const useCreateIllicitDischargeFormContext = () => { // CreateSiteIllicitDischargeForm context
@@ -88,7 +67,36 @@ export const useSetIllicitDischargeMapView = (mapRef: React.RefObject<HTMLDivEle
   }, [state.view])
 }
 
-export const useHandleFormSubmit = () => { // Handle form submit
+const useCreateIllicitDischargeForm = (site: AppTypes.SiteInterface | undefined) => { // CreateSiteIllicitDischargeForm useForm
+  const { formDate } = useContext(EnforcementCtx)
+
+  return useForm<AppTypes.IllicitDischargeCreateInterface>({
+    mode: 'onBlur',
+    defaultValues: {
+      siteId: site?.siteId || null,
+      date: formatDate(formDate),
+      xCoordinate: site?.xCoordinate || null,
+      yCoordinate: site?.yCoordinate || null,
+      locationDescription: '',
+      inspectorId: site?.inspectorId || null,
+      details: '',
+      responsibleParty: '',
+      volumeLost: '',
+      streamWatershed: undefined,
+      otherStreamWatershed: '',
+      enforcementAction: '',
+      penaltyDate: null,
+      penaltyAmount: null,
+      penaltyDueDate: null,
+      paymentReceived: null,
+      compliance: null,
+      closed: null,
+      FollowUpDates: []
+    }
+  })
+}
+
+const useHandleFormSubmit = () => { // Handle form submit
   const { enabled, token } = useEnableQuery()
 
   const queryClient = useQueryClient()

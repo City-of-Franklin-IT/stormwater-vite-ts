@@ -24,12 +24,14 @@ export const setSiteContactsTableData = (siteContacts: AppTypes.SiteContactInter
   return siteContactsArray.sort(contact => contact.order)
 }
 
-export const setAllSiteContacts = (siteContacts: AppTypes.SiteContactInterface[]): string[] => { // Return array with all site contact emails
+export const setAllSiteContacts = (siteContacts: AppTypes.SiteContactInterface[]) => { // Return array with all site contact emails
   const emailArray: string[] = siteContacts.map(contact => {
     return contact.Contact?.email as string
   })
 
-  return emailArray
+  const href = `mailto:${ emailArray.join(';') }`
+
+  return href
 }
 
 const setRole = (siteContact: AppTypes.SiteContactInterface, obj: SiteContactType) => {

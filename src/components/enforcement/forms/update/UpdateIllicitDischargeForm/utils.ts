@@ -6,7 +6,6 @@ import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 import * as AppTypes from '@/context/App/types'
 
 export const handleUpdateIllicitDischarge = async (formData: AppTypes.IllicitDischargeCreateInterface, token: string) => {
-  // TODO verify fn
   const result = await AppActions.updateIllicitDischarge(formData, authHeaders(token))
 
   if(result.success) {

@@ -1,7 +1,5 @@
-import { useState } from "react"
-import { setTableDataStyle } from "./utils"
-import { useOnTableRowClick } from './hooks'
 import styles from './SitesTable.module.css'
+import { useHandleTableRow, useHandleTableData } from "./hooks"
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -42,28 +40,28 @@ const TableBody = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => { 
   )
 }
 
-const TableRow = ({ site, index }: { site: AppTypes.SiteInterface, index: number }) => {
-  const onTableRowClick = useOnTableRowClick(site.uuid)
+type TableRowProps = { site: AppTypes.SiteInterface, index: number }
+
+const TableRow = (props: TableRowProps) => {
+  const tableRowProps = useHandleTableRow(props.site, props.index)
 
   return (
-    <tr className={setTableDataStyle(index, site)} onClick={onTableRowClick}>
-      <TableData site={site} />
+    <tr { ...tableRowProps }>
+      <TableData site={props.site} />
     </tr>
   )
 }
 
 const TableData = ({ site }: { site: AppTypes.SiteInterface }) => {
-  const [state, setState] = useState<{ hovered: boolean }>({ hovered: false })
+  const { tableDataProps, hovered } = useHandleTableData()
 
   return (
-    <td 
-      onMouseEnter={() => setState({ hovered: true })}
-      onMouseLeave={() => setState({ hovered: false })}>
+    <td { ...tableDataProps }>
       <div className="flex flex-col gap-3 p-4 w-full">
         <span className={styles.name}>{site.name}</span>
         <SiteDetails 
           site={site}
-          hovered={state.hovered} />
+          hovered={hovered} />
       </div>
     </td>
   )

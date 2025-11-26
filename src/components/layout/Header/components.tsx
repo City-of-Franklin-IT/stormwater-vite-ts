@@ -1,15 +1,10 @@
-import { useContext } from "react"
 import { useLocation, Link } from "react-router"
 import { useMsal } from "@azure/msal-react"
 import { APP_TITLE } from '../../../config'
-import HeaderCtx from "./context"
+import cofIcon from '@/assets/icons/cof/cof-primary-content.svg'
 import { useReturnUserRoles } from '@/helpers/hooks'
 import useHandleLogoutRedirect from "@/context/Auth/hooks/useHandleLogoutRedirect"
 import { useGetInspectors, useIsEnforcmentPageActive } from './hooks'
-
-// Icons
-import icon from '@/assets/icons/menu/menu.svg'
-import activeIcon from '@/assets/icons/menu/menu-light.svg'
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -18,21 +13,16 @@ import * as AppTypes from '@/context/App/types'
 import NavDropdown from "../nav/NavDropdown"
 
 export const Title = () => {
-  const pathname = useLocation().pathname
+  const { pathname } = useLocation()
 
-  if(pathname === '/') { // Login page
-    return (
-      <div className="flex flex-col text-primary-content items-start">
-        <h1 className="text-2xl font-bold text-center">City of Franklin</h1>
-        <h2 className="text-xl ml-6 w-fit">{APP_TITLE}</h2>
-      </div>
-    )
-  }
+  const href = pathname === '/' ? '/' : '/sites'
 
   return (
-    <Link to={'/sites'} className="flex flex-col text-primary-content items-start">
-      <h1 className="text-2xl font-bold text-center">City of Franklin</h1>
-      <h2 className="text-xl ml-6 w-fit">{APP_TITLE}</h2>
+    <Link to={href} className="flex flex-col text-primary-content text-center mt-4 w-fit lg:my-4">
+      <div className="flex gap-4 text-primary-content items-center justify-center">
+        <img src={cofIcon} alt="cof icon" className="w-20" />
+        <h1 className="text-lg font-bold text-center md:text-xl lg:text-3xl">{APP_TITLE}</h1>
+      </div>
     </Link>
   )
 }
@@ -43,27 +33,14 @@ export const Buttons = () => {
   if(pathname === '/') return null // Hide on login page
 
   return (
-    <div className="flex gap-4">
-      <ExpandedMenu />
-      <MenuBtn />
-    </div>
-  )
-}
-
-const ExpandedMenu = () => {
-  const { expanded } = useContext(HeaderCtx)
-
-  if(!expanded) return null
-
-  return (
-    <>
+    <div className="flex flex-nowrap gap-2 overflow-visible w-full pl-4">
       <HeaderLink href={'/sites'}>Sites</HeaderLink>
       <HeaderLink href={'/contacts'}>Contacts</HeaderLink>
       <InspectorsMenu />
       <EnforcementMenu />
       <CreateMenu />
       <LogoutBtn />
-    </>
+    </div>
   )
 }
 
@@ -183,19 +160,6 @@ const LogoutBtn = () => { // Logout button
       onClick={handleLogoutRedirect}
       className="btn btn-ghost text-neutral-content rounded-none uppercase hover:bg-primary hover:shadow-none">
         Logout
-    </button>
-  )
-}
-
-const MenuBtn = () => {
-  const { expanded, dispatch } = useContext(HeaderCtx)
-
-  return (
-    <button 
-      type="button"
-      className="flex flex-col justify-center w-16 hover:cursor-pointer"
-      onClick={() => dispatch({ type: 'TOGGLE_EXPANDED' })}>
-        <img src={!expanded ? icon : activeIcon} alt="menu icon" className="m-auto w-3/4" />
     </button>
   )
 }

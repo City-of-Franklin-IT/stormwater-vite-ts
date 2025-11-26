@@ -1,6 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { useOnCancelBtnClick } from "../../create/CreateViolationForm/hooks"
-import { useUpdateViolationForm, useHandleFormSubmit } from './hooks'
+import { useHandleUpdateViolationForm } from './hooks'
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Types
@@ -12,11 +11,7 @@ import { DateInput, DetailsInput, EnforcementInputs, PenaltyInputs, FollowUpInpu
 import * as Components from './components'
 
 function UpdateViolationForm({ violation }: { violation: AppTypes.ConstructionViolationInterface }) {
-  const methods = useUpdateViolationForm(violation)
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, handleFormSubmit, onCancelBtnClick } = useHandleUpdateViolationForm(violation)
 
   return (
     <div className={styles.container}>

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useForm, useFormContext } from "react-hook-form"
 import { useQueryClient } from "react-query"
 import Map from '@arcgis/core/Map'
@@ -19,27 +19,12 @@ import { handleUpdateSite } from "./utils"
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useUpdateSiteForm = (site: AppTypes.SiteInterface) => { // UpdateSiteForm useForm state
+export const useHandleUpdateSiteForm = (site: AppTypes.SiteInterface) => {
+  const methods = useUpdateSiteForm(site)
+  const onCancelBtnClick = useOnCancelBtnClick()
+  const handleFormSubmit = useHandleFormSubmit()
 
-  return useForm<AppTypes.SiteCreateInterface>({
-    mode: 'onBlur',
-    defaultValues: {
-      siteId: site.siteId,
-      name: site.name,
-      location: site.location,
-      xCoordinate: site.xCoordinate,
-      yCoordinate: site.yCoordinate,
-      inspectorId: site.inspectorId,
-      preconDate: formatDate(site.preconDate),
-      permit: site.permit,
-      cof: site.cof,
-      tnq: site.tnq,
-      greenInfrastructure: site.greenInfrastructure,
-      SiteContacts: site.SiteContacts,
-      InactiveSite: site.InactiveSite,
-      uuid: site.uuid
-    }
-  })
+  return { methods, onCancelBtnClick, handleFormSubmit }
 }
 
 export const useUpdateSiteFormContext = () => { // UpdateSiteForm context
@@ -64,7 +49,46 @@ export const useSetCreateSiteMapView = (mapRef: React.RefObject<HTMLDivElement>)
   }, [state.view])
 }
 
-export const useOnCancelBtnClick = () => {
+export const useHandleInactiveCheckbox = () => {
+  const { getValues, setValue, watch } = useUpdateSiteFormContext()
+
+  const siteId = getValues('siteId')
+
+  const checked = !!watch('InactiveSite.siteId')
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.checked ? String(siteId) : ''
+
+    setValue('InactiveSite.siteId', value)
+  }
+
+  return { checked, onChange }
+}
+
+const useUpdateSiteForm = (site: AppTypes.SiteInterface) => { // UpdateSiteForm useForm state
+
+  return useForm<AppTypes.SiteCreateInterface>({
+    mode: 'onBlur',
+    defaultValues: {
+      siteId: site.siteId,
+      name: site.name,
+      location: site.location,
+      xCoordinate: site.xCoordinate,
+      yCoordinate: site.yCoordinate,
+      inspectorId: site.inspectorId,
+      preconDate: formatDate(site.preconDate),
+      permit: site.permit,
+      cof: site.cof,
+      tnq: site.tnq,
+      greenInfrastructure: site.greenInfrastructure,
+      SiteContacts: site.SiteContacts,
+      InactiveSite: site.InactiveSite,
+      uuid: site.uuid
+    }
+  })
+}
+
+const useOnCancelBtnClick = () => {
   const { dispatch: enforcementDispatch } = useContext(EnforcementCtx)
   const { dispatch: siteDispatch } = useContext(SiteCtx)
 
@@ -74,7 +98,7 @@ export const useOnCancelBtnClick = () => {
   }
 }
 
-export const useHandleFormSubmit = () => { // Handle form submit
+const useHandleFormSubmit = () => { // Handle form submit
   const { dispatch } = useContext(SiteCtx)
 
   const queryClient = useQueryClient()

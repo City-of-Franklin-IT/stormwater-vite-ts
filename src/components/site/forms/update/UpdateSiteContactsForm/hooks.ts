@@ -20,7 +20,7 @@ export const useSetSiteContactOptions = () => {
 }
 
 export const useHandlePrimaryContactSelect = () => {
-  const { getValues, setValue } = useCreateSiteFormContext()
+  const { getValues, setValue, watch } = useCreateSiteFormContext()
 
   const onChange = (e: MbscSelectChangeEvent) => {
     const value = e.value
@@ -44,11 +44,20 @@ export const useHandlePrimaryContactSelect = () => {
     setValue('SiteContacts', allContacts, { shouldDirty: true, shouldValidate: true })
   }
 
-  return { onChange }
+  const contacts = watch('SiteContacts') || []
+
+  const primaryContact = contacts.find(contact => contact.isPrimary)
+
+  const selectProps = {
+    value: primaryContact?.contactId,
+    onChange
+  }
+
+  return selectProps
 }
 
 export const useHandleContractorSelect = () => {
-  const { getValues, setValue } = useCreateSiteFormContext()
+  const { getValues, setValue, watch } = useCreateSiteFormContext()
 
   const onChange = (e: MbscSelectChangeEvent) => {
     const values = e.value as string[]
@@ -72,11 +81,20 @@ export const useHandleContractorSelect = () => {
     setValue('SiteContacts', allContacts, { shouldDirty: true, shouldValidate: true })
   }
 
-  return { onChange }
+  const contacts = watch('SiteContacts') || []
+
+  const contractors = contacts.filter(contact => contact.isContractor).map(contact => contact.contactId)
+
+  const selectProps = {
+    value: contractors,
+    onChange
+  }
+
+  return selectProps
 }
 
 export const useHandleInspectorSelect = () => {
-  const { getValues, setValue } = useCreateSiteFormContext()
+  const { getValues, setValue, watch } = useCreateSiteFormContext()
 
   const onChange = (e: MbscSelectChangeEvent) => {
     const values = e.value as string[]
@@ -100,11 +118,20 @@ export const useHandleInspectorSelect = () => {
     setValue('SiteContacts', allContacts, { shouldDirty: true, shouldValidate: true })
   }
 
-  return { onChange }
+  const contacts = watch('SiteContacts') || []
+
+  const inspectors = contacts.filter(contact => contact.isInspector).map(contact => contact.contactId)
+
+  const selectProps = {
+    value: inspectors,
+    onChange
+  }
+
+  return selectProps
 }
 
 export const useHandleOtherContactSelect = () => {
-  const { getValues, setValue } = useCreateSiteFormContext()
+  const { getValues, setValue, watch } = useCreateSiteFormContext()
 
   const onChange = (e: MbscSelectChangeEvent) => {
     const values = e.value as string[]
@@ -128,5 +155,14 @@ export const useHandleOtherContactSelect = () => {
     setValue('SiteContacts', allContacts, { shouldDirty: true, shouldValidate: true })
   }
 
-  return { onChange }
+  const contacts = watch('SiteContacts') || []
+
+  const otherContacts = contacts.filter(contact => !contact.isPrimary && !contact.isContractor && !contact.isInspector).map(contact => contact.contactId)
+
+  const selectProps = {
+    value: otherContacts,
+    onChange
+  }
+
+  return selectProps
 }

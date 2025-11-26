@@ -2,6 +2,7 @@ import { useCallback, useContext } from "react"
 import { useParams } from "react-router"
 import { useQueryClient } from "react-query"
 import { useForm } from "react-hook-form"
+import { useOnCancelBtnClick } from "../../create/CreateViolationForm/hooks"
 import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
@@ -11,7 +12,15 @@ import { handleUpdateComplaint } from './utils'
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useUpdateComplaintForm = (complaint: AppTypes.ComplaintInterface) => {
+export const useHandleComplaintForm = (complaint: AppTypes.ComplaintInterface) => {
+  const methods = useUpdateComplaintForm(complaint)
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
+
+  return { methods, handleFormSubmit, onCancelBtnClick }
+}
+
+const useUpdateComplaintForm = (complaint: AppTypes.ComplaintInterface) => {
 
   return useForm<AppTypes.ComplaintCreateInterface>({
     defaultValues: {
@@ -25,8 +34,7 @@ export const useUpdateComplaintForm = (complaint: AppTypes.ComplaintInterface) =
   })
 }
 
-export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
+const useHandleFormSubmit = () => { // Handle form submit
   const { dispatch } = useContext(EnforcementCtx)
 
   const { enabled, token } = useEnableQuery()

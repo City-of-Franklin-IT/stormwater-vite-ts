@@ -1,15 +1,16 @@
+import { Context } from 'react'
+import { SearchableCtx } from './hooks'
+
 // Components
 import * as Components from './components'
 
-function Search({ onSearchChange, searchValue }: { onSearchChange: React.ChangeEventHandler<HTMLInputElement>, searchValue: string }) {
+function Search<T extends SearchableCtx>({ ctx }: { ctx: Context<T> }) {
 
   return (
-    <div className="relative flex w-1/4 min-h-[50px] rounded-lg">
+    <div className="flex gap-4 items-center w-1/2 xl:w-1/4">
       <Components.Header />
-      <Components.SearchInput 
-        onChange={onSearchChange}
-        searchValue={searchValue} />
-      <Components.ClearBtn searchValue={searchValue} />
+      <Components.SearchInput ctx={ctx} />
+      <Components.ClearBtn ctx={ctx} />
     </div>
   )
 }

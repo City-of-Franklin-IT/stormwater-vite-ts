@@ -1,6 +1,7 @@
 import { useState, useContext, useCallback } from "react"
 import { useQueryClient } from "react-query"
 import { useNavigate } from "react-router"
+import EnforcementCtx from "@/components/enforcement/context"
 import SiteCtx from "../../context"
 import * as AppActions from '@/context/App/AppActions'
 import { useEnableQuery } from "@/helpers/hooks"
@@ -36,4 +37,14 @@ export const useOnDeleteBtnClick = () => {
   }, [state.active, enabled, token, siteUUID, queryClient, navigate])
 
   return { onClick, active: state.active }
+}
+
+export const useHandleForm = () => {
+  const { activeForm } = useContext(EnforcementCtx)
+  const { siteUUID } = useContext(SiteCtx)
+
+  const visible = activeForm || siteUUID
+  const createFormActive = activeForm && !activeForm?.includes('update')
+
+  return { visible, createFormActive }
 }

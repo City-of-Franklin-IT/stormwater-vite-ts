@@ -4,7 +4,7 @@ import styles from './BasemapSelector.module.css'
 import * as Components from './components'
 
 // Types
-import { BasemapSelectProps } from './types'
+import { BasemapSelectProps } from './utils'
 
 function BasemapSelector(props: BasemapSelectProps) {
 

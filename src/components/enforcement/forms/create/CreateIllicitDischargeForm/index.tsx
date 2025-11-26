@@ -1,6 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { useOnCancelBtnClick } from "../CreateViolationForm/hooks"
-import { useCreateIllicitDischargeForm, useHandleFormSubmit } from './hooks'
+import { useHandleCreateIllicitDischargeForm } from './hooks'
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Types
@@ -12,11 +11,7 @@ import { FollowUpInputs } from "../CreateViolationForm/components"
 import * as Components from './components'
 
 function CreateIllicitDischargeForm({ site }: { site: AppTypes.SiteInterface | undefined }) {
-  const methods = useCreateIllicitDischargeForm(site)
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateIllicitDischargeForm(site)
 
   return (
     <div className={styles.container}>
@@ -39,7 +34,6 @@ function CreateIllicitDischargeForm({ site }: { site: AppTypes.SiteInterface | u
 
         </form>
       </FormProvider>
-
     </div>
   )
 }

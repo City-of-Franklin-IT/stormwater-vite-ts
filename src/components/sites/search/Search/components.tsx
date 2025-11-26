@@ -1,35 +1,34 @@
-import { useContext } from "react"
-import SitesCtx from "@/components/sites/context"
+import { Context } from "react"
+import { useHandleSearch, useHandleClearBtn, SearchableCtx } from "./hooks"
 
 export const Header = () => {
-
   return (
-    <h2 className="absolute text-warning text-4xl font-[fugaz_one] text-shadow-lg -top-5 -left-5 z-10">Search</h2>
+    <h2 className="text-primary-content text-2xl font-[play] uppercase font-bold">Search</h2>
   )
 }
 
-export const SearchInput = ({ onChange, searchValue }: { onChange: React.ChangeEventHandler<HTMLInputElement>, searchValue: string }) => {
+export const SearchInput = <T extends SearchableCtx>({ ctx }: { ctx: Context<T> }) => {
+  const inputProps = useHandleSearch(ctx)
 
   return (
-    <input 
-      type="text" 
-      value={searchValue} 
-      placeholder="by project name, COF #, or permit #.." 
-      onChange={(e) => onChange(e)} 
-      className="input input-lg w-full" />
+    <input
+      type="text"
+      placeholder="by project name, COF #, or permit #.."
+      className="input w-full"
+      { ...inputProps } />
   )
 }
 
-export const ClearBtn = ({ searchValue }: { searchValue: string }) => { // Clear search button
-  const { dispatch } = useContext(SitesCtx)
+export const ClearBtn = <T extends SearchableCtx>({ ctx }: { ctx: Context<T> }) => {
+  const { visible, onClick } = useHandleClearBtn(ctx)
 
-  if(!searchValue) return null
+  if(!visible) return
 
   return (
-    <button 
-      type="button" 
-      onClick={() => dispatch({ type: 'SET_SEARCH_VALUE', payload: '' })}
-      className="absolute btn btn-lg btn-primary uppercase z-10 rounded-l-none right-0">
+    <button
+      type="button"
+      onClick={onClick}
+      className="btn btn-primary uppercase">
         Clear
     </button>
   )

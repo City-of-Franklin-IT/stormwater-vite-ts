@@ -26,7 +26,6 @@
   background-color: transparent;
   box-shadow: 8px 8px 4px rgba(0, 0, 0, .1);
   touch-action: none;
-  animation: fade-in-left 250ms linear;
 
   @media (min-width: 1920px) { /* Desktop */ 
     height: 70vh;

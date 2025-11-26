@@ -1,6 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { useOnCancelBtnClick } from "../../create/CreateViolationForm/hooks"
-import { useUpdateComplaintForm, useHandleFormSubmit } from "./hooks"
+import { useHandleComplaintForm } from "./hooks"
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Types
@@ -13,15 +12,10 @@ import { Map, DateAndInspectorInputs, LocationAndResponsiblePartyInputs, Details
 import { CheckboxInputs } from "../UpdateViolationForm/components"
 
 function UpdateComplaintForm({ complaint }: { complaint: AppTypes.ComplaintInterface }) {
-  const methods = useUpdateComplaintForm(complaint)
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, handleFormSubmit, onCancelBtnClick } = useHandleComplaintForm(complaint)
 
   return (
     <div data-testid="update-site-complaint-form" className={styles.container}>
-
       <h2 className={styles.title}>Update Complaint</h2>
 
         <FormProvider { ...methods }>

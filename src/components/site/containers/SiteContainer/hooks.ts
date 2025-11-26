@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react"
-import SiteCtx from "../../context"
+import { useContext, useEffect, useState, useRef } from "react"
 import Map from '@arcgis/core/Map'
 import MapView from '@arcgis/core/views/MapView'
 import Point from '@arcgis/core/geometry/Point'
@@ -8,6 +7,9 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
 import { TextSymbol } from "@arcgis/core/symbols"
 import { setSiteMarker } from "@/components/sites/containers/SitesContainer/utils"
+import EnforcementCtx from "@/components/enforcement/context"
+import SiteCtx from "../../context"
+import { useReturnUserRoles } from "@/helpers/hooks"
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -30,12 +32,40 @@ export const useSetSiteMapView = (mapRef: React.RefObject<HTMLDivElement>, site:
   }, [state.view])
 }
 
-export const useOnUpdateBtnClick = (uuid: string) => {
-  const { siteUUID, dispatch } = useContext(SiteCtx)
+export const useHandleForm = () => {
+  const { activeForm } = useContext(EnforcementCtx)
+  const { siteUUID } = useContext(SiteCtx)
 
-  const payload = !siteUUID ? uuid : ''
+  const formRef = useRef<HTMLDivElement>(null)
 
-  return () => dispatch({ type: 'SET_SITE_UUID', payload })
+  const visible = !!activeForm || !!siteUUID
+
+  return { formRef, visible }
+}
+
+export const useHandleButtons = (uuid: string) => {
+  const { siteUUID, dispatch } = useContext(SiteCtx) 
+
+  const roles = useReturnUserRoles()
+
+  const onClick = () => {
+    const payload = !siteUUID ? uuid : ''
+    dispatch({ type: 'SET_SITE_UUID', payload })
+  }
+
+  const visible = roles.includes('task.write')
+
+  return { onClick, visible }
+}
+
+export const useHandleSiteIssuesCheckbox = () => {
+  const { showClosedSiteIssues, dispatch } = useContext(SiteCtx)
+
+  const onChange = () => {
+    dispatch({ type: 'TOGGLE_SHOW_CLOSED_SITE_ISSUES' })
+  }
+
+  return { checked: showClosedSiteIssues, onChange }
 }
 
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {

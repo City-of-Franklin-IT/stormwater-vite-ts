@@ -74,16 +74,6 @@ export const useSetSitesMapView = (mapRef: React.RefObject<HTMLDivElement>, site
   }, [state.view])
 }
 
-export const useHandleSearch = () => {
-  const { searchValue, dispatch } = useContext(SitesCtx)
-
-  const cb = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'SET_SEARCH_VALUE', payload: e.currentTarget.value })
-  }, [dispatch])
-
-  return { onSearchChange: cb, searchValue }
-}
-
 export const useHandleBtns = () => {
   const { showActiveSitesOnly, dispatch } = useContext(SitesCtx)
 
