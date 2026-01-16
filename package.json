@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --port 6000",
     "build": "tsc && vite build",
-    "deploy": "scp -r dist andrew@cofasv32:/home/andrew/apps/builds/stormwater-vite-ts",
+    "deploy": "scp -r dist $USER@cofasv32:/opt/builds/stormwater-vite-ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest"
