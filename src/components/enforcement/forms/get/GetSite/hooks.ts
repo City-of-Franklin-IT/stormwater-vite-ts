@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { useLocation } from "react-router"
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
 import EnforcementCtx from "@/components/enforcement/context"
 import * as AppActions from '@/context/App/AppActions'
 import { authHeaders } from "@/helpers/utils"
@@ -13,7 +13,11 @@ import { CreateFormType } from "./utils"
 export const useGetActiveSiteNames = () => { // Get active site names
   const { enabled, token } = useEnableQuery()
 
-  return useQuery('getActiveSiteName', () => AppActions.getActiveSiteNames(authHeaders(token)), { enabled })
+  return useQuery({
+    queryKey: ['getActiveSiteName'],
+    queryFn: () => AppActions.getActiveSiteNames(authHeaders(token)),
+    enabled
+  })
 }
 
 export const useGetSelectedSite = () => {
@@ -21,7 +25,11 @@ export const useGetSelectedSite = () => {
 
   const { enabled, token } = useEnableQuery()
 
-  return useQuery(['getSite', selectedSite], () => AppActions.getSite(selectedSite, authHeaders(token)), { enabled: enabled && !!selectedSite && selectedSite !== 'No Site' })
+  return useQuery({
+    queryKey: ['getSite', selectedSite],
+    queryFn: () => AppActions.getSite(selectedSite, authHeaders(token)),
+    enabled: enabled && !!selectedSite && selectedSite !== 'No Site'
+  })
 }
 
 export const useHandleSiteSelection = () => {
@@ -45,7 +53,7 @@ export const useHandleSiteSelection = () => {
 export const useNoSiteBtnVisibility = () => {
   const location = useLocation().pathname.split('/')[3]
 
-  const visible = location !== 'violation'
+  const visible = location !== 'violations'
 
   return visible
 }

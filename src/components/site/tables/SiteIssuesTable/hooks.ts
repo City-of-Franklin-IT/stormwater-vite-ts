@@ -8,6 +8,9 @@ import * as AppTypes from '@/context/App/types'
 import { FormType } from '../../context'
 import { IssueTableDataType, CombinedType } from './types'
 
+/**
+* Returns site issues table data; applies filters if applicable
+**/
 export const useSetTableData = (site: AppTypes.SiteInterface) => {
   const { showClosedSiteIssues, dateRangeFilter } = useContext(SiteCtx)
 
@@ -60,11 +63,20 @@ export const useSetTableData = (site: AppTypes.SiteInterface) => {
   }, [showClosedSiteIssues, dateRangeFilter, site.Complaints, site.ConstructionViolations, site.IllicitDischarges])
 }
 
+/**
+* Returns site issues table onClick handler
+**/
 export const useOnRowClick = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
-  return (e: React.MouseEvent<HTMLTableRowElement>) => {
-    dispatch({ type: 'SET_FORM_UUID', payload: e.currentTarget.dataset.uuid as string })
-    dispatch({ type: 'SET_ACTIVE_FORM', payload: e.currentTarget.dataset.form as FormType })
+  const onClick = (e: React.MouseEvent<HTMLTableRowElement>) => {
+    const { uuid, form } = e.currentTarget.dataset
+
+    if(!uuid || !form) return
+
+    dispatch({ type: 'SET_FORM_UUID', payload: uuid })
+    dispatch({ type: 'SET_ACTIVE_FORM', payload: form as FormType })
   }
+
+  return onClick
 }

@@ -9,9 +9,9 @@ export const Routing = () => {
 
   return (
     <Routes>
-      <Route path={'violation'} element={<CreateViolation />} />
-      <Route path={'complaint'} element={<CreateComplaint />} />
-      <Route path={'discharge'} element={<CreateIlllicitDischarge />} />
+      <Route path={'violations'} element={<CreateViolation />} />
+      <Route path={'complaints'} element={<CreateComplaint />} />
+      <Route path={'discharges'} element={<CreateIlllicitDischarge />} />
     </Routes>
   )
 }

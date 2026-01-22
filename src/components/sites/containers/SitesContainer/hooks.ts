@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react"
+import { useContext, useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import Map from '@arcgis/core/Map'
 import MapView from '@arcgis/core/views/MapView'
@@ -7,62 +7,38 @@ import Graphic from '@arcgis/core/Graphic'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
 import Search from "@arcgis/core/widgets/Search"
+import Home from "@arcgis/core/widgets/Home"
+import Zoom from "@arcgis/core/widgets/Zoom"
+import BasemapGallery from "@arcgis/core/widgets/BasemapGallery"
+import Expand from "@arcgis/core/widgets/Expand"
 import { TextSymbol } from "@arcgis/core/symbols"
 import { mapHitTest } from "@/helpers/utils"
-import SitesCtx, { BasemapType } from "../../context"
+import SitesCtx from "../../context"
 import { setSiteMarker } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
 import Multipoint from '@arcgis/core/geometry/Multipoint'
-import { MapHitInterface } from './types'
+import { MapHitInterface, FilterableCtx } from './types'
 
-export const useSetTableDataProps = () => {
-  const { searchValue, showActiveSitesOnly, showOpenIssuesOnly } = useContext(SitesCtx)
+/**
+* Returns sites table data, active sites button props, and open issues button onClick handler
+**/
+export const useHandleSitesContainer = (sites: AppTypes.SiteInterface[]) => {
+  const tableData = useSetTableData(SitesCtx, sites)
+  const { activeSitesBtnProps, onOpenIssuesBtnClick } = useHandleBtns(SitesCtx)
 
-  return { searchValue, showActiveSitesOnly, showOpenIssuesOnly }
+  return { tableData, activeSitesBtnProps, onOpenIssuesBtnClick }
 }
 
-type UseSetTableDataProps = { sites: AppTypes.SiteInterface[], searchValue: string, showActiveSitesOnly: boolean, showOpenIssuesOnly: boolean }
-
-export const useSetTableData = (props: UseSetTableDataProps) => {
-  let array = props.sites || []
-
-  if(props.searchValue) {
-    const regex = new RegExp(props.searchValue, 'i')
-
-    array = array.filter(site => {
-      const searchableProps: (keyof AppTypes.SiteInterface)[] = ['name', 'cof', 'permit']
-      
-      return searchableProps.some(prop => {
-        const value = site[prop]
-        return value && regex.test(value as string)
-      })
-    })
-  }
-
-  if(props.showActiveSitesOnly) { // Show active sites only filter
-    array = array.filter(site => !site.InactiveSite?.siteId)
-  }
-
-  if(props.showOpenIssuesOnly) { // Show open issues only filter
-    array = array.filter(site => {
-      if(site.hasOpenComplaint || site.hasOpenIllicitDischarge || site.hasOpenViolation) {
-        return site
-      }
-    })
-  }
-
-  return array
-}
-
+/**
+* Handles sites map view, extent, and graphics
+**/
 export const useSetSitesMapView = (mapRef: React.RefObject<HTMLDivElement>, sites: AppTypes.SiteInterface[]) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
   useCreateMapView(mapRef, setState)
-
   useUpdateMapExtent(state.view, sites)
-
   useSetMapGraphics(sites, state)
 
   useEffect(() => {
@@ -74,70 +50,75 @@ export const useSetSitesMapView = (mapRef: React.RefObject<HTMLDivElement>, site
   }, [state.view])
 }
 
-export const useHandleBtns = () => {
-  const { showActiveSitesOnly, dispatch } = useContext(SitesCtx)
+/**
+* Returns sites table data; applies filters and searchValue from context when applicable
+**/
+export const useSetTableData = <T extends FilterableCtx>(ctx: React.Context<T>, sites: AppTypes.SiteInterface[]) => {
+  const { searchValue, showActiveSitesOnly, showOpenIssuesOnly } = useContext(ctx)
 
-  const onActiveSitesBtnClick = () => dispatch({ type: 'TOGGLE_SHOW_ACTIVE_SITES_ONLY' })
+  let array = sites || []
 
-  const onOpenIssuesBtnClick = () => dispatch({ type: 'TOGGLE_OPEN_ISSUES_ONLY' })
+  if(searchValue) {
+    const regex = new RegExp(searchValue, 'i')
 
-  return { onActiveSitesBtnClick, onOpenIssuesBtnClick, showActiveSitesOnly }
-}
-
-export const useHandleBasemapSelect = () => {
-  const { basemap, dispatch } = useContext(SitesCtx)
-
-  const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({ type: 'SET_BASEMAP', payload: e.currentTarget.value as BasemapType})
+    array = array.filter(site => {
+      const searchableProps: (keyof AppTypes.SiteInterface)[] = ['name', 'cof', 'permit']
+      
+      return searchableProps.some(prop => {
+        const value = site[prop]
+        return value && regex.test(value as string)
+      })
+    })
   }
 
-  return { onChange, basemap }
+  if(showActiveSitesOnly) { // Show active sites only filter
+    array = array.filter(site => !site.InactiveSite?.siteId)
+  }
+
+  if(showOpenIssuesOnly) { // Show open issues only filter
+    array = array.filter(site =>
+      site.hasOpenComplaint || site.hasOpenIllicitDischarge || site.hasOpenViolation
+    )
+  }
+
+  return array
 }
 
-export const useSetMapViewProperties = (sites: AppTypes.SiteInterface[], mapRef: React.RefObject<HTMLDivElement>) => {
+/**
+* Returns active sites only and open issues only button props
+**/
+export const useHandleBtns = <T extends FilterableCtx>(ctx: React.Context<T>) => {
+  const { showActiveSitesOnly, dispatch } = useContext(ctx)
 
-  return useCallback((map: __esri.Map) => {
-    if(sites.length) {
-      const multipoint = new Multipoint({
-        points: sites.map(site => [site.xCoordinate, site.yCoordinate])
-      })
+  const onActiveSitesBtnClick = () => {
+    dispatch({ type: 'TOGGLE_SHOW_ACTIVE_SITES_ONLY' })
+  }
 
-      const viewExtent = multipoint.extent
+  const onOpenIssuesBtnClick = () => {
+    dispatch({ type: 'TOGGLE_OPEN_ISSUES_ONLY' })
+  }
 
-      const properties: __esri.MapViewProperties = {
-        container: mapRef.current as HTMLDivElement,
-        map,
-        extent: viewExtent?.expand(1.1),
-        ui: { components: [] }
-      }
+  const activeSitesBtnProps = {
+    showActiveSitesOnly,
+    onClick: onActiveSitesBtnClick
+  }
 
-      return properties
-    }
-
-    const properties: __esri.MapViewProperties = {
-      container: mapRef.current as HTMLDivElement,
-      map,
-      center: [-86.86897349, 35.92531721],
-      zoom: 12,
-      ui: { components: [] }
-    }
-
-    return properties
-  }, [sites, mapRef])
+  return { activeSitesBtnProps, onOpenIssuesBtnClick }
 }
 
+/**
+* Handles sites map view creation
+**/
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
-  const { basemap } = useContext(SitesCtx)
-  
   const navigate = useNavigate()
 
   useEffect(() => {
     if(!mapRef?.current) return
 
-    const map = new Map({ basemap })
+    const map = new Map({ basemap: 'dark-gray-vector' })
 
     const mapView = new MapView({
-      container: mapRef.current as HTMLDivElement,
+      container: mapRef.current,
       map,
       center: [-86.86897349, 35.92531721],
       zoom: 12,
@@ -146,10 +127,15 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
 
     mapView.when(() => {
       const searchWidget = new Search({ view: mapView })
+      const homeWidget = new Home({ view: mapView })
+      const zoomWidget = new Zoom({ view: mapView })
+      const basemapGallery = new BasemapGallery({ view: mapView })
+      const basemapExpand = new Expand({ view: mapView, content: basemapGallery })
 
-      mapView.ui.add(searchWidget, {
-        position: 'top-left'
-      })
+      mapView.ui.add(searchWidget, { position: 'top-right' })
+      mapView.ui.add(homeWidget, { position: 'top-right' })
+      mapView.ui.add(zoomWidget, { position: 'top-right' })
+      mapView.ui.add(basemapExpand, { position: 'top-right' })
 
       setState(prevState => ({ ...prevState, view: mapView }))
     })
@@ -175,9 +161,12 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
         mapView.destroy()
       }, 50)
     }
-  }, [mapRef, basemap, setState, navigate])
+  }, [mapRef, setState, navigate])
 }
 
+/**
+* Handles sites map extent changes
+**/
 const useUpdateMapExtent = (view: __esri.MapView | null, sites: AppTypes.SiteInterface[]) => {
 
   useEffect(() => {
@@ -200,6 +189,9 @@ const useUpdateMapExtent = (view: __esri.MapView | null, sites: AppTypes.SiteInt
   }, [view, sites])
 }
 
+/**
+* Handles sites map graphics changes
+**/
 const useSetMapGraphics = (sites: AppTypes.SiteInterface[], state: { view: __esri.MapView | null }) => {
 
   useEffect(() => {

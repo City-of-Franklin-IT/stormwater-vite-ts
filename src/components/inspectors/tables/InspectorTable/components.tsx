@@ -1,6 +1,7 @@
+import { useContext } from "react"
 import { Link } from "react-router"
-import { useReturnUserRoles } from "@/helpers/hooks"
-import { useHandleInspectorSiteSelection, useHandleCreateLogBtn } from './hooks'
+import { useHandleInspectorSiteSelection, useHandleCreateLogBtn, useHandleCreateSiteLogColumn } from './hooks'
+import InspectorTableCtx from "./context"
 
 // Types
 import { InspectorTableData } from "./hooks"
@@ -8,13 +9,11 @@ import { InspectorTableData } from "./hooks"
 // Components
 import FormContainer from "../../../form-elements/FormContainer"
 import CreateMultipleSiteLogsForm from "../../forms/create/CreateMultipleSiteLogsForm"
-import { useContext } from "react"
-import InspectorTableCtx from "./context"
 
 export const Table = ({ tableData }: { tableData: InspectorTableData[] }) => {
 
   return (
-    <table className="table table-sm text-neutral-content font-[play]">
+    <table className="table  text-neutral-content font-[play]">
       <TableHeaders />
       <TableBody tableData={tableData} />
     </table>
@@ -28,13 +27,12 @@ export const CreateLogBtn = () => { // Create site log button
 
   return (
     <div className="mx-auto mt-2">
-      <button 
+      <button
         type="button"
         className="btn btn-primary uppercase"
         onClick={onClick}>
-          {label}
-    </button>
-  )
+        {label}
+      </button>
     </div>
   )
 }
@@ -54,14 +52,12 @@ export const Form = ({ formRef }: { formRef: React.RefObject<HTMLDivElement> }) 
 }
 
 const TableHeaders = () => {
-  const roles = useReturnUserRoles()
-
-  const showBtn = roles.includes('task.write')
+  const className = useHandleCreateSiteLogColumn()
 
   return (
     <thead>
       <tr className="text-warning uppercase border-b-2 border-warning">
-        <th className={`${ !showBtn ? 'hidden' : undefined }`}>Create Site Log</th>
+        <th className={className}>Create Site Log</th>
         <th>Site</th>
         <th>Jan</th>
         <th>Feb</th>
@@ -80,7 +76,7 @@ const TableHeaders = () => {
   )
 }
 
-const TableBody = ({ tableData }: { tableData: InspectorTableData[] }) => { // Inspector table body
+const TableBody = ({ tableData }: { tableData: InspectorTableData[] }) => {
 
   return (
     <>
@@ -121,7 +117,7 @@ const InspectionDatesColumn = ({ row }: { row: InspectorTableData }) => {
     <>
       {Array.from({ length: 12 }).map((_, index) => {
         return (
-          <td>
+          <td key={`inspection-date-col-${ row.site }-${ index }`}>
             <div className="flex flex-col">
               {row.dates.filter(date => new Date(date).getMonth() === index).sort((a, b) => {
                 const dateA = new Date(a).getTime()
@@ -136,7 +132,7 @@ const InspectionDatesColumn = ({ row }: { row: InspectorTableData }) => {
                 }
 
                 return 0
-              }).map(x => <small>{x}</small>)
+              }).map(x => <small key={`inspection-date-${ row.site }-${ x }`}>{x}</small>)
               }
             </div>
           </td>
@@ -147,19 +143,16 @@ const InspectionDatesColumn = ({ row }: { row: InspectorTableData }) => {
 }
 
 const CreateSiteLogColumn = ({ siteId }: { siteId: string }) => {
-  const { handleOnChange, selected } = useHandleInspectorSiteSelection(siteId)
+  const { visible, ...inputProps } = useHandleInspectorSiteSelection(siteId)
 
-  const roles = useReturnUserRoles()
-
-  if(!roles.includes('task.write')) return null
+  if(!visible) return null
 
   return (
     <td className="flex flex-col items-center">
       <input 
         type="checkbox" 
         className="checkbox checkbox-secondary"
-        checked={selected}
-        onChange={handleOnChange} />
+        { ...inputProps } />
     </td>
   )
 }

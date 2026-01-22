@@ -1,6 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { useOnCancelBtnClick } from "@/components/enforcement/forms/create/CreateViolationForm/hooks"
-import { useCreateContactForm, useHandleFormSubmit } from './hooks'
+import { useHandleCreateContactForm } from './hooks'
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Components
@@ -8,11 +7,7 @@ import FormBtns from "@/components/form-elements/buttons/FormBtns"
 import * as Components from './components'
 
 function CreateContactForm() {
-  const methods = useCreateContactForm()
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateContactForm()
 
   return (
     <div className={styles.container}>

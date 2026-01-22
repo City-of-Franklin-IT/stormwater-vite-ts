@@ -1,5 +1,5 @@
 import React, { useContext, useCallback, useMemo, useEffect, useState } from "react"
-import { useQueryClient } from "react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import EnforcementCtx from "../../context"
 import * as AppActions from '@/context/App/AppActions'
 import { useEnableQuery } from "@/helpers/hooks"
@@ -124,8 +124,8 @@ export const useHandleDeleteBtn = () => {
       const result = await AppActions.deleteViolation(formUUID, authHeaders(token))
 
       if(result.success) {
-        queryClient.invalidateQueries('getViolations')
-        queryClient.invalidateQueries(['getSite', siteUUID])
+        queryClient.invalidateQueries({ queryKey: ['getViolations'] })
+        queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
         dispatch({ type: 'RESET_CTX' })
         savedPopup(result.msg)
       } else errorPopup(result.msg)

@@ -1,4 +1,5 @@
 import { formatPhone } from "@/helpers/utils"
+import starIcon from '@/assets/icons/star/star.svg'
 import { setSiteContactsTableData, setAllSiteContacts } from "./utils"
 
 // Types
@@ -16,7 +17,7 @@ export const Table = ({ siteContacts }: { siteContacts: AppTypes.SiteContactInte
   const tableData = setSiteContactsTableData(siteContacts)
 
   return (
-    <table className="table table-sm font-[play] text-neutral-content mr-auto">
+    <table className="table  font-[play] text-neutral-content mr-auto">
       <TableHeaders />
       <TableBody tableData={tableData} />
     </table>
@@ -27,7 +28,11 @@ export const EmailContacts = ({ siteContacts }: { siteContacts: AppTypes.SiteCon
   const href = setAllSiteContacts(siteContacts)
 
   return (
-    <a href={href} className="text-neutral-content font-[play] uppercase hover:text-warning">Email All Site Contacts</a>
+    <a 
+      href={href} 
+      className="text-neutral-content font-[play] uppercase hover:text-warning">
+        Email All Site Contacts
+    </a>
   )
 }
 
@@ -63,7 +68,12 @@ const TableRow = ({ siteContact }: { siteContact: SiteContactType }) => {
   return (
     <tr className="border-b-1 border-neutral-content/50">
       <ContactTableData siteContact={siteContact} />
-      <td>{siteContact.role}</td>
+      <td>
+        <div className="flex gap-2">
+          <span>{siteContact.role}</span>
+          <PrimaryIcon visible={siteContact.role === 'Primary'} />
+        </div>
+      </td>
     </tr>
   )
 }
@@ -72,11 +82,22 @@ const ContactTableData = ({ siteContact }: { siteContact: SiteContactType }) => 
 
   return (
     <td className="flex flex-col whitespace-nowrap">
-      <div className="font-extrabold whitespace-nowrap">{siteContact.name}</div>
-      <div>{siteContact.company}</div>
+      <div className="flex gap-2">
+        <span className="font-extrabold whitespace-nowrap">{siteContact.name}</span>
+        <PrimaryIcon visible={siteContact.role === 'Primary'} />
+      </div>
+      <span>{siteContact.company}</span>
       <Phone phone={siteContact.phone} />
       <Email email={siteContact.email} />
     </td>
+  )
+}
+
+const PrimaryIcon = ({ visible }: { visible: boolean }) => {
+  if(!visible) return null
+
+  return (
+    <img src={starIcon} className="w-4" />
   )
 }
 

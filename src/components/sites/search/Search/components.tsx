@@ -20,15 +20,15 @@ export const SearchInput = <T extends SearchableCtx>({ ctx }: { ctx: Context<T> 
 }
 
 export const ClearBtn = <T extends SearchableCtx>({ ctx }: { ctx: Context<T> }) => {
-  const { visible, onClick } = useHandleClearBtn(ctx)
+  const { visible, ...btnProps } = useHandleClearBtn(ctx)
 
   if(!visible) return
 
   return (
     <button
       type="button"
-      onClick={onClick}
-      className="btn btn-primary uppercase">
+      className="btn btn-primary uppercase"
+      { ...btnProps }>
         Clear
     </button>
   )

@@ -3,7 +3,7 @@ import InspectorCtx from "../../context"
 import { InspectorTableProvider } from "../../tables/InspectorTable/context"
 import { useReturnUserRoles, useDebounce } from '@/helpers/hooks'
 import { useScrollToFormRef } from "@/components/enforcement/containers/ViolationsContainer/hooks"
-import { useSetInspectorMapView, useHandleBasemapSelect, useHandleDeleteBtn } from './hooks'
+import { useSetInspectorMapView, useHandleDeleteBtn } from './hooks'
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -14,7 +14,6 @@ import SitesActivityCalendar from "../../../sites/calendar/SitesActivityCalendar
 import InspectorTable from "../../tables/InspectorTable"
 import FormContainer from "../../../form-elements/FormContainer"
 import UpdateBtn from "../../../form-elements/buttons/UpdateBtn"
-import BasemapSelector from "@/components/map/BasemapSelector"
 import MapLegend from "@/components/map/MapLegend"
 import DeleteBtn from "@/components/form-elements/buttons/DeleteBtn"
 
@@ -25,14 +24,9 @@ export const Map = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
 
   useSetInspectorMapView(mapRef, debounced)
 
-  const basemapSelectProps = useHandleBasemapSelect()
-
   return (
     <div className="flex-1 h-full bg-neutral">
       <div ref={mapRef} className="relative w-full h-full">
-        <div className="absolute top-2 right-4 z-10">
-          <BasemapSelector { ...basemapSelectProps } />
-        </div>
         <div className="absolute bottom-4 left-4 z-10">
           <MapLegend sites={debounced} />
         </div>

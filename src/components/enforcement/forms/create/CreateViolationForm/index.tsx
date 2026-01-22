@@ -1,5 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { useCreateViolationForm, useHandleFormSubmit, useOnCancelBtnClick } from "./hooks"
+import { useHandleCreateViolationForm } from "./hooks"
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Types
@@ -10,11 +10,7 @@ import FormBtns from "@/components/form-elements/buttons/FormBtns"
 import * as Components from './components'
 
 function CreateViolationForm({ site }: { site: SiteInterface | undefined }) {
-  const methods = useCreateViolationForm(site)
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, onCancelBtnClick, handleFormSubmit } = useHandleCreateViolationForm(site)
 
   return (
     <div className={styles.container}>

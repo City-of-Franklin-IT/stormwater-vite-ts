@@ -7,28 +7,31 @@ import * as AppTypes from '@/context/App/types'
 
 export type ContactOptionsType = { value: string, text: string }
 
+/**
+* Returns site contact options for site contact select inputs
+**/
 export const useSetSiteContactOptions = () => {
   const result = useGetContacts()
 
-  if(result.isSuccess) {
-    const contacts = result.data.data.filter(contact => !contact.inactive)
+  if(!result.isSuccess) return []
 
-    const options: ContactOptionsType[] = contacts.map(contact => ({ value: contact.contactId, text: contact.name }))
+  const contacts = result.data.data.filter(contact => !contact.inactive)
 
-    return [ { value: '', text: '' }, ...options ]
-  } else return []
+  const options: ContactOptionsType[] = contacts.map(contact => ({ value: contact.contactId, text: contact.name }))
+
+  return [ { value: '', text: '' }, ...options ]
 }
 
+/**
+* Returns primary contact select props
+**/
 export const useHandlePrimaryContactSelect = () => {
   const { getValues, setValue, watch } = useCreateSiteFormContext()
 
   const onChange = (e: MbscSelectChangeEvent) => {
     const value = e.value
-
     const siteId = getValues('siteId')
-
     const contacts = getValues('SiteContacts') || []
-
     const nonPrimaryContacts = contacts.filter(contact => !contact.isPrimary)
 
     const primaryContact: AppTypes.SiteContactCreateInterface = { 
@@ -45,7 +48,6 @@ export const useHandlePrimaryContactSelect = () => {
   }
 
   const contacts = watch('SiteContacts') || []
-
   const primaryContact = contacts.find(contact => contact.isPrimary)
 
   const selectProps = {
@@ -56,16 +58,16 @@ export const useHandlePrimaryContactSelect = () => {
   return selectProps
 }
 
+/**
+* Returns contract select props
+**/
 export const useHandleContractorSelect = () => {
   const { getValues, setValue, watch } = useCreateSiteFormContext()
 
   const onChange = (e: MbscSelectChangeEvent) => {
     const values = e.value as string[]
-
     const contacts = getValues('SiteContacts') || []
-
     const siteId = getValues('siteId')
-    
     const nonContractors = contacts?.filter(contact => !contact.isContractor) || []
 
     const newContractors: AppTypes.SiteContactCreateInterface[] = values.map(value => ({
@@ -82,7 +84,6 @@ export const useHandleContractorSelect = () => {
   }
 
   const contacts = watch('SiteContacts') || []
-
   const contractors = contacts.filter(contact => contact.isContractor).map(contact => contact.contactId)
 
   const selectProps = {
@@ -93,16 +94,16 @@ export const useHandleContractorSelect = () => {
   return selectProps
 }
 
+/**
+* Returns inspector select props
+**/
 export const useHandleInspectorSelect = () => {
   const { getValues, setValue, watch } = useCreateSiteFormContext()
 
   const onChange = (e: MbscSelectChangeEvent) => {
     const values = e.value as string[]
-
     const siteId = getValues('siteId')
-
     const contacts = getValues('SiteContacts') || []
-
     const nonInspectors = contacts.filter(contact => !contact.isInspector)
 
     const inspectors: AppTypes.SiteContactCreateInterface[] = values.map(value => ({  
@@ -119,7 +120,6 @@ export const useHandleInspectorSelect = () => {
   }
 
   const contacts = watch('SiteContacts') || []
-
   const inspectors = contacts.filter(contact => contact.isInspector).map(contact => contact.contactId)
 
   const selectProps = {
@@ -130,16 +130,16 @@ export const useHandleInspectorSelect = () => {
   return selectProps
 }
 
+/**
+* Returns other contact select props
+**/
 export const useHandleOtherContactSelect = () => {
   const { getValues, setValue, watch } = useCreateSiteFormContext()
 
   const onChange = (e: MbscSelectChangeEvent) => {
     const values = e.value as string[]
-
     const siteId = getValues('siteId')
-
     const contacts = getValues('SiteContacts') || []
-
     const nonOtherContacts = contacts.filter(contact => contact.isPrimary || contact.isContractor || contact.isInspector )
 
     const otherContacts: AppTypes.SiteContactCreateInterface[] = values.map(value => ({ 
@@ -156,7 +156,6 @@ export const useHandleOtherContactSelect = () => {
   }
 
   const contacts = watch('SiteContacts') || []
-
   const otherContacts = contacts.filter(contact => !contact.isPrimary && !contact.isContractor && !contact.isInspector).map(contact => contact.contactId)
 
   const selectProps = {

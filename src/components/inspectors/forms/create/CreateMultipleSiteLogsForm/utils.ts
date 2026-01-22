@@ -3,7 +3,6 @@ import * as AppActions from '@/context/App/AppActions'
 import { savedPopup } from '@/utils/Toast/Toast'
 
 export const handleCreateMultipleSiteLogs = async (formData: { siteIds: string[], inspectionDate: string }, token: string) => { // Handle form submit
-  // TODO verify fn
   const { siteIds, inspectionDate } = formData
 
   await Promise.all(

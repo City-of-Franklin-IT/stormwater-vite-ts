@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from "@tanstack/react-query"
 import { useLocation } from 'react-router'
 import { useEnableQuery } from '@/helpers/hooks'
 import { authHeaders } from '@/helpers/utils'
@@ -7,7 +7,12 @@ import * as AppActions from '@/context/App/AppActions'
 export const useGetInspectors = () => {
   const { enabled, token } = useEnableQuery()
 
-  return useQuery('getInspectors', () => AppActions.getInspectors(authHeaders(token)), { enabled, staleTime: Infinity })
+  return useQuery({
+    queryKey: ['getInspectors'],
+    queryFn: () => AppActions.getInspectors(authHeaders(token)),
+    enabled,
+    staleTime: Infinity
+  })
 }
 
 export const useIsEnforcmentPageActive = () => {

@@ -125,9 +125,9 @@ const CreateMenu = () => {
       label={'Create'}
       active={active}>
         <CreateMenuItem href={'/create/site'}>Site</CreateMenuItem>
-        <CreateMenuItem href={'/create/enforcement/violation'}>Construction Violation</CreateMenuItem>
-        <CreateMenuItem href={'/create/enforcement/complaint'}>Complaint</CreateMenuItem>
-        <CreateMenuItem href={'/create/enforcement/discharge'}>Illicit Discharge</CreateMenuItem>
+        <CreateMenuItem href={'/create/enforcement/violations'}>Construction Violation</CreateMenuItem>
+        <CreateMenuItem href={'/create/enforcement/complaints'}>Complaint</CreateMenuItem>
+        <CreateMenuItem href={'/create/enforcement/discharges'}>Illicit Discharge</CreateMenuItem>
         <CreateMenuItem href={'/create/contact'}>Contact</CreateMenuItem>
         <CreateMenuItem href={'/create/inspector'}>Inspector</CreateMenuItem>
     </NavDropdown>

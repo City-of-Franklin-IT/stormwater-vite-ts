@@ -1,6 +1,6 @@
-import { useCallback, useContext } from "react"
+import { useContext } from "react"
 import { useParams } from "react-router"
-import { useQueryClient } from "react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { useEnableQuery } from "@/helpers/hooks"
 import EnforcementCtx from "@/components/enforcement/context"
@@ -9,8 +9,23 @@ import { handleUpdateSiteLog } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
+import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 
-export const useUpdateSiteLogForm = (siteLog: AppTypes.SiteLogInterface) => { // UpdateSiteLog useForm
+/**
+* Returns update site log form methods, cancel button onClick handler, and form submit function
+**/
+export const useHandleUpdateSiteLogForm = (siteLog: AppTypes.SiteLogInterface) => {
+  const methods = useUpdateSiteLogForm(siteLog)
+  const onCancelBtnClick = useOnCancelBtnClick()
+  const handleFormSubmit = useHandleFormSubmit()
+
+  return { methods, onCancelBtnClick, handleFormSubmit }
+}
+
+/**
+* Returns update site log form methods
+**/
+const useUpdateSiteLogForm = (siteLog: AppTypes.SiteLogInterface) => {
 
   return useForm<AppTypes.SiteLogCreateInterface>({
     defaultValues: {
@@ -21,28 +36,40 @@ export const useUpdateSiteLogForm = (siteLog: AppTypes.SiteLogInterface) => { //
   })
 }
 
-export const useOnCancelBtnClick = () => {
+/**
+* Returns update site log form cancel button onClick handler
+**/
+const useOnCancelBtnClick = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
-  return () => dispatch({ type: 'RESET_CTX' })
+  const onClick = () => {
+    dispatch({ type: 'RESET_CTX' })
+  }
+
+  return onClick
 }
 
-export const useHandleFormSubmit = () => { // Handle form submit
+/**
+* Returns update site log form submit function
+**/
+const useHandleFormSubmit = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
   const queryClient = useQueryClient()
-
   const { uuid: siteUUID } = useParams<{ uuid: string }>()
 
   const { enabled, token } = useEnableQuery()
 
-  return useCallback((formData: AppTypes.SiteLogCreateInterface) => {
+  return async (formData: AppTypes.SiteLogCreateInterface) => {
     if(!enabled || !token) return
 
-    handleUpdateSiteLog(formData, token)
-      .then(() => {
-        queryClient.invalidateQueries(['getSite', siteUUID])
-        dispatch({ type: 'RESET_CTX' })
-      })
-  }, [enabled, token, dispatch, queryClient, siteUUID])
+    const result = await handleUpdateSiteLog(formData, token)
+
+    if(!result.success) {
+      errorPopup(result.msg)
+    } else savedPopup(result.msg)
+
+    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
+    dispatch({ type: 'RESET_CTX' })
+  }
 }

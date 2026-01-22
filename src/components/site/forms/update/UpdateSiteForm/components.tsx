@@ -1,11 +1,8 @@
-import { useRef } from 'react'
 import styles from '@/components/form-elements/Forms.module.css'
 import { useSetCreateSiteMapView, useHandleInactiveCheckbox } from './hooks'
 
 export const Map = () => { // Map input
-  const mapRef = useRef<HTMLDivElement>(null)
-  
-  useSetCreateSiteMapView(mapRef)
+  const mapRef = useSetCreateSiteMapView()
 
   return (
     <div className="w-full h-[50vh] overflow-hidden shadow-xl rounded-xl touch-none">

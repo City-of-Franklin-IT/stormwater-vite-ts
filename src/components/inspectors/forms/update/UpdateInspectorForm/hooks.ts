@@ -1,16 +1,31 @@
-import { useContext, useCallback } from "react"
+import { useContext } from "react"
 import { useParams } from "react-router"
 import { useForm } from "react-hook-form"
-import { useQueryClient } from "react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { useEnableQuery } from "@/helpers/hooks"
 import InspectorCtx from "@/components/inspectors/context"
-import { errorPopup } from "@/utils/Toast/Toast"
+import { useOnCancelBtnClick } from '@/components/inspectors/containers/InspectorContainer/hooks'
+import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 import { handleUpdateInspector } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useUpdateInspectorForm = (inspector: AppTypes.InspectorInterface) => { 
+/**
+* Returns update inspector form methods, cancel button onClick handler, and form submit function
+**/
+export const useHandleUpdateInspectorForm = (inspector: AppTypes.InspectorInterface) => {
+  const methods = useUpdateInspectorForm(inspector)
+  const onCancelBtnClick = useOnCancelBtnClick()
+  const handleFormSubmit = useHandleFormSubmit()
+
+  return { methods, onCancelBtnClick, handleFormSubmit }
+}
+
+/**
+* Returns update inspector form methods
+**/
+const useUpdateInspectorForm = (inspector: AppTypes.InspectorInterface) => { 
   
   return useForm<AppTypes.InspectorInterface>({
     mode: 'onBlur',
@@ -23,27 +38,28 @@ export const useUpdateInspectorForm = (inspector: AppTypes.InspectorInterface) =
   })
 }
 
-export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
+/**
+* Returns update inspector form submit function
+**/
+const useHandleFormSubmit = () => {
   const { dispatch } = useContext(InspectorCtx)
 
   const { slug } = useParams<{ slug: string}>()
+  const queryClient = useQueryClient()
 
   const { enabled, token } = useEnableQuery()
 
-  const queryClient = useQueryClient()
+  return async (formData: AppTypes.InspectorCreateInterface) => {
+    if(!enabled || !token) return
 
-  return useCallback((formData: AppTypes.InspectorCreateInterface) => {
-    if(!enabled || !token) {
-      return
-    }
+    const result = await handleUpdateInspector(formData, token)
 
-    handleUpdateInspector(formData, token)
-      .then(() => {
-        queryClient.invalidateQueries('getInspectors')
-        queryClient.invalidateQueries(['getInspector', slug])
-        dispatch({ type: 'RESET_CTX' })
-      })
-      .catch(err => errorPopup(err))
-  }, [enabled, token, queryClient, slug, dispatch])
+    if(!result.success) {
+      errorPopup(result.msg)
+    } else savedPopup(result.msg)
+
+    queryClient.invalidateQueries({ queryKey: ['getInspectors'] })
+    queryClient.invalidateQueries({ queryKey: ['getInspector', slug] })
+    dispatch({ type: 'RESET_CTX' })
+  }
 }

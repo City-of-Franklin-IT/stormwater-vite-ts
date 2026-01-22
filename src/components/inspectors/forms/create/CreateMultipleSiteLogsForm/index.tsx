@@ -1,17 +1,13 @@
 import { FormProvider } from "react-hook-form"
 import styles from '@/components/form-elements/Forms.module.css'
-import { useCreateMultipleSiteLogsForm, useHandleFormSubmit, useOnCancelBtnClick } from "./hooks"
+import { useHandleCreateMultipleSiteLogsForm } from "./hooks"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
 import * as Components from './components'
 
 function CreateMultipleSiteLogsForm() {
-  const methods = useCreateMultipleSiteLogsForm()
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, onCancelBtnClick, handleFormSubmit } = useHandleCreateMultipleSiteLogsForm()
 
   return (
     <div className={styles.container}>

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useSetTableDataProps, useSetTableData, useHandleBtns } from './hooks'
+import { useHandleSitesContainer } from './hooks'
 import SitesCtx from '../../context'
 import styles from './SitesContainer.module.css'
 
@@ -14,22 +14,16 @@ import Motion from '@/utils/Motion'
 import * as Components from './components'
 
 function SitesContainer({ sites }: { sites: AppTypes.SiteInterface[] }) {
-  const tableDataProps = useSetTableDataProps()
-
-  const tableData = useSetTableData({ sites, ...tableDataProps }) 
-
-  const { onActiveSitesBtnClick, onOpenIssuesBtnClick, showActiveSitesOnly } = useHandleBtns()
+  const { tableData, activeSitesBtnProps, onOpenIssuesBtnClick } = useHandleSitesContainer(sites)
 
   return (
     <Motion animation={'fadeInOut'}>
       <div className="flex flex-col my-10">
 
-        <div className="flex justify-between w-full">
+        <div className="flex justify-between mb-4 w-full">
           <Search ctx={SitesCtx} />
-          <div className="flex gap-4 mb-6 ml-auto">
-            <Components.ActiveSitesBtn
-              showActiveSitesOnly={showActiveSitesOnly}
-              onClick={onActiveSitesBtnClick} />
+          <div className="flex gap-4 ml-auto">
+            <Components.ActiveSitesBtn { ...activeSitesBtnProps } />
             <Components.OpenIssuesBtn onClick={onOpenIssuesBtnClick} />
           </div>
         </div>

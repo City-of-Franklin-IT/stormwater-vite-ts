@@ -1,8 +1,7 @@
 import { memo } from "react"
-import { useSetTableData } from "@/components/sites/containers/SitesContainer/hooks"
-import { useSetTableDataProps, useHandleBtns } from './hooks'
 import InspectorCtx from "../../context"
 import styles from './InspectorContainer.module.css'
+import { useHandleInspectorContainer } from './hooks'
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -16,24 +15,18 @@ import { ActiveSitesBtn, OpenIssuesBtn } from "@/components/sites/containers/Sit
 import * as Components from './components'
 
 function InspectorContainer({ sites, inspector }: { sites: AppTypes.SiteInterface[], inspector: AppTypes.InspectorInterface }) {
-  const tableDataProps = useSetTableDataProps()
-
-  const tableData = useSetTableData({ sites, ...tableDataProps })
-
-  const { onActiveSitesBtnClick, onOpenIssuesBtnClick, showActiveSitesOnly } = useHandleBtns()
+  const { tableData, activeSitesBtnProps, onOpenIssuesBtnClick } = useHandleInspectorContainer(sites)
 
   return (
     <Motion animation={'fadeInOut'}>
       <div className="flex flex-col my-10">
         <Components.Header inspector={inspector} />
 
-        <div className="flex justify-between w-full">
+        <div className="flex justify-between mb-4 w-full">
           <Search ctx={InspectorCtx} />
-          <div className="flex gap-4 mb-6 ml-auto">
+          <div className="flex gap-4 ml-auto">
             <Components.UpdateInspectorBtn inspector={inspector} />
-            <ActiveSitesBtn
-              showActiveSitesOnly={showActiveSitesOnly}
-              onClick={onActiveSitesBtnClick} />
+            <ActiveSitesBtn { ...activeSitesBtnProps } />
             <OpenIssuesBtn onClick={onOpenIssuesBtnClick} />
           </div>
         </div>

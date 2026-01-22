@@ -1,6 +1,6 @@
 import { useContext, useMemo, useState, useCallback } from "react"
 import { useParams, useLocation } from "react-router"
-import { useQueryClient } from "react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import EnforcementCtx from "../../context"
 import * as AppActions from '@/context/App/AppActions'
 import { authHeaders } from "@/helpers/utils"
@@ -13,7 +13,10 @@ import { enforcementPathMap } from './utils'
 import * as AppTypes from '@/context/App/types'
 import { ComplaintsTableDataType } from './components'
 
-export const useHandleTableData = (complaints: AppTypes.ComplaintInterface[]) => { // Complaints table data
+/**
+* Returns paginated complaints table data; applies filters when applicable
+**/
+export const useHandleTableData = (complaints: AppTypes.ComplaintInterface[]) => {
   const { currentPage, showClosedSiteIssues, dateRangeFilter } = useContext(EnforcementCtx)
 
   const tableData = useMemo(() => {
@@ -51,6 +54,9 @@ export const useHandleTableData = (complaints: AppTypes.ComplaintInterface[]) =>
   return tableData.data
 }
 
+/**
+* Returns complaint delete button onClick handler and label
+**/
 export const useHandleDeleteBtn = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { formUUID, dispatch } = useContext(EnforcementCtx)
@@ -71,15 +77,17 @@ export const useHandleDeleteBtn = () => {
       const result = await AppActions.deleteComplaint(formUUID, authHeaders(token))
 
       if(result.success) {
-        queryClient.invalidateQueries('getComplaints')
-        queryClient.invalidateQueries(['getSite', siteUUID])
+        queryClient.invalidateQueries({ queryKey: ['getComplaints'] })
+        queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
         dispatch({ type: 'RESET_CTX' })
         savedPopup(result.msg)
       } else errorPopup(result.msg)
     }
   }, [state.active, enabled, token, formUUID, queryClient, siteUUID])
 
-  const label = !state.active ? 'Delete Violation' : 'Confirm Delete'
+  const label = !state.active ? 
+    'Delete Complaint' : 
+    'Confirm Delete'
 
   return { onClick, label }
 }

@@ -10,10 +10,10 @@ import LastInspected from '../LastInspected'
 import { GreenInfrastructureIcon } from './components'
 
 function SiteDetails({ site, hovered }: { site: AppTypes.SiteInterface, hovered?: boolean }) {
-  const style = useSetStyle(hovered)
+  const className = useSetStyle(hovered)
 
   return (
-    <div className={`flex gap-4 justify-around font-[play] uppercase m-auto w-fit ${ style }`}>
+    <div className={className}>
       <PermitNumber site={site} />
       <ProjectNumber site={site} />
       <LastInspected site={site} />

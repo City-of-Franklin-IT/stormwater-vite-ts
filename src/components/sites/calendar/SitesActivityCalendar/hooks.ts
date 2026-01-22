@@ -3,12 +3,16 @@ import { useState, useCallback, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import EnforcementCtx from '@/components/enforcement/context'
 import { useReturnUserRoles } from '@/helpers/hooks'
+import { calendarColorMap } from './utils'
 
 // Types
 import { MbscEventcalendarOptions, MbscCalendarEvent, MbscEventClickEvent } from "@mobiscroll/react"
 import * as AppTypes from '@/context/App/types'
 import { CalendarDatesInterface, CalendarDataInterface } from "./types"
 
+/**
+* Returns sites activity data formatted for calendar
+**/
 export const useFormatCalendarData = (sites: AppTypes.SiteInterface[]) => {
   const calendarData = useMemo(() => {
     const dates: CalendarDatesInterface = {
@@ -27,50 +31,182 @@ export const useFormatCalendarData = (sites: AppTypes.SiteInterface[]) => {
 
     sites.map(site => {
       site.Logs?.forEach(log => { // Site logs
-        addCalendarObj({ start: new Date(log.inspectionDate), end: new Date(log.inspectionDate), allDay: true, title: `Inspection - ${ site.name }`, color: '#157EE8', uuid: site.uuid, formUUID: log.uuid, form: 'updateSiteLog' }, dates.logsArray)
+        const inspectionDate = new Date(log.inspectionDate)
+
+        addCalendarObj({ 
+          start: inspectionDate, 
+          end: inspectionDate, 
+          allDay: true, 
+          title: `Inspection - ${ site.name }`, 
+          color: calendarColorMap.get('log')!, 
+          uuid: site.uuid, 
+          formUUID: log.uuid, 
+          form: 'updateSiteLog' }, 
+          dates.logsArray)
       })
   
       site.ConstructionViolations?.forEach(violation => { // Construction violations
-        addCalendarObj({ start: new Date(violation.date), end: new Date(violation.date), allDay: true, title: `Construction Violation - ${ site.name }`, color: '#F55D34', uuid: site.uuid, formUUID: violation.uuid, form: 'updateViolation' }, dates.violationsArray)
-  
+        const violationDate = new Date(violation.date)
+
+        addCalendarObj({
+          start: violationDate,
+          end: violationDate,
+          allDay: true,
+          title: `Construction Violation - ${ site.name }`,
+          color: calendarColorMap.get('violation')!,
+          uuid: site.uuid,
+          formUUID: violation.uuid,
+          form: 'updateViolation' },
+          dates.violationsArray)
+
         violation.FollowUpDates?.forEach(followUp => { // Construction violation follow ups
-          addCalendarObj({ start: new Date(followUp.followUpDate), end: new Date(followUp.followUpDate), allDay: true, title: `Follow Up - ${ site.name }`, color: '#FFFF00', uuid: site.uuid, formUUID: violation.uuid, form: "updateViolation" }, dates.followUpsArray)
+          const followUpDate = new Date(followUp.followUpDate)
+
+          addCalendarObj({
+            start: followUpDate,
+            end: followUpDate,
+            allDay: true,
+            title: `Follow Up - ${ site.name }`,
+            color: calendarColorMap.get('follow-up')!,
+            uuid: site.uuid,
+            formUUID: violation.uuid,
+            form: 'updateViolation' },
+            dates.followUpsArray)
         })
-  
+
         if(violation.penaltyDate) { // Construction violation penalties
-          addCalendarObj({ start: new Date(violation.penaltyDate), end: new Date(violation.penaltyDate), allDay: true, title: `Penalty - ${ site.name }`, color: '#DB4EFC', uuid: site.uuid, formUUID: violation.uuid, form: "updateViolation" }, dates.penaltyArray)
-  
+          const penaltyDate = new Date(violation.penaltyDate)
+
+          addCalendarObj({
+            start: penaltyDate,
+            end: penaltyDate,
+            allDay: true,
+            title: `Penalty - ${ site.name }`,
+            color: calendarColorMap.get('penalty')!,
+            uuid: site.uuid,
+            formUUID: violation.uuid,
+            form: 'updateViolation' },
+            dates.penaltyArray)
+
           if(violation.penaltyDueDate) { // Construction violation penalty due dates
-            addCalendarObj({ start: new Date(violation.penaltyDueDate), end: new Date(violation.penaltyDueDate), allDay: true, title: `Penalty Due - ${ site.name }`, color: '#DB4EFC', uuid: site.uuid, formUUID: violation.uuid, form: "updateViolation" }, dates.penaltyArray)
+            const penaltyDueDate = new Date(violation.penaltyDueDate)
+
+            addCalendarObj({
+              start: penaltyDueDate,
+              end: penaltyDueDate,
+              allDay: true,
+              title: `Penalty Due - ${ site.name }`,
+              color: calendarColorMap.get('penalty')!,
+              uuid: site.uuid,
+              formUUID: violation.uuid,
+              form: 'updateViolation' },
+              dates.penaltyArray)
           }
-  
+
           if(violation.paymentReceived) { // Construction violation penalty received dates
-            addCalendarObj({ start: new Date(violation.paymentReceived), end: new Date(violation.paymentReceived),allDay: true, title: `Penalty Payment Received - ${ site.name }`, color: '#DB4EFC', uuid: site.uuid, formUUID: violation.uuid, form: "updateViolation" }, dates.penaltyArray)
+            const paymentReceivedDate = new Date(violation.paymentReceived)
+
+            addCalendarObj({
+              start: paymentReceivedDate,
+              end: paymentReceivedDate,
+              allDay: true,
+              title: `Penalty Payment Received - ${ site.name }`,
+              color: calendarColorMap.get('penalty')!,
+              uuid: site.uuid,
+              formUUID: violation.uuid,
+              form: 'updateViolation' },
+              dates.penaltyArray)
           }
         }
 
         if(violation.swoDate) { // SWO
-          addCalendarObj({ start: new Date(violation.swoDate), end: new Date(violation.swoDate), allDay: true, title: `SWO Issued - ${ site.name }`, color: '#FFFFFF', uuid: site.uuid, formUUID: violation.uuid, form: 'updateViolation' }, dates.swoArray)
+          const swoDate = new Date(violation.swoDate)
+
+          addCalendarObj({
+            start: swoDate,
+            end: swoDate,
+            allDay: true,
+            title: `SWO Issued - ${ site.name }`,
+            color: calendarColorMap.get('swo')!,
+            uuid: site.uuid,
+            formUUID: violation.uuid,
+            form: 'updateViolation' },
+            dates.swoArray)
 
           if(violation.swoLiftedDate) {
-            addCalendarObj({ start: new Date(violation.swoLiftedDate), end: new Date(violation.swoLiftedDate), allDay: true, title: `SWO Lifted - ${ site.name }`, color: '#FFFFFF', uuid: site.uuid, formUUID: violation.uuid, form: 'updateViolation' }, dates.swoArray)
+            const swoLiftedDate = new Date(violation.swoLiftedDate)
+
+            addCalendarObj({
+              start: swoLiftedDate,
+              end: swoLiftedDate,
+              allDay: true,
+              title: `SWO Lifted - ${ site.name }`,
+              color: calendarColorMap.get('swo')!,
+              uuid: site.uuid,
+              formUUID: violation.uuid,
+              form: 'updateViolation' },
+              dates.swoArray)
           }
         }
       })
 
       site.Complaints?.forEach(complaint => { // Complaints
-        addCalendarObj({ start: new Date(complaint.date), end: new Date(complaint.date), allDay: true, title: `Complaint - ${ site.name }`, color: '#ED5197', uuid: site.uuid, formUUID: complaint.uuid, form: "updateComplaint" }, dates.complaintsArray)
-  
+        const complaintDate = new Date(complaint.date)
+
+        addCalendarObj({
+          start: complaintDate,
+          end: complaintDate,
+          allDay: true,
+          title: `Complaint - ${ site.name }`,
+          color: calendarColorMap.get('complaint')!,
+          uuid: site.uuid,
+          formUUID: complaint.uuid,
+          form: 'updateComplaint' },
+          dates.complaintsArray)
+
         complaint.FollowUpDates?.forEach(followUp => { // Complaint follow ups
-          addCalendarObj({ start: new Date(followUp.followUpDate), end: new Date(followUp.followUpDate), allDay: true, title: `Follow Up - ${ site.name }`, color: '#FFFF00', uuid: site.uuid, formUUID: complaint.uuid, form: "updateComplaint" }, dates.followUpsArray)
+          const followUpDate = new Date(followUp.followUpDate)
+
+          addCalendarObj({
+            start: followUpDate,
+            end: followUpDate,
+            allDay: true,
+            title: `Follow Up - ${ site.name }`,
+            color: calendarColorMap.get('follow-up')!,
+            uuid: site.uuid,
+            formUUID: complaint.uuid,
+            form: 'updateComplaint' },
+            dates.followUpsArray)
         })
       })
 
       site.IllicitDischarges?.forEach(illicit => { // Illicit discharges
-        addCalendarObj({ start: new Date(illicit.date), end: new Date(illicit.date), allDay: true, title: `Illicit Discharge - ${ site.name }`, color: '#C4EB3B', uuid: site.uuid, formUUID: illicit.uuid, form: 'updateIllicitDischarge'}, dates.illicitArray)
+        const illicitDate = new Date(illicit.date)
 
-        illicit.FollowUpDates?.forEach(followUp => { // Complaint follow ups
-          addCalendarObj({ start: new Date(followUp.followUpDate), end: new Date(followUp.followUpDate), allDay: true, title: `Follow Up - ${ site.name }`, color: '#FFFF00', uuid: site.uuid, formUUID: illicit.uuid, form: "updateIllicitDischarge" }, dates.followUpsArray)
+        addCalendarObj({
+          start: illicitDate,
+          end: illicitDate,
+          allDay: true,
+          title: `Illicit Discharge - ${ site.name }`,
+          color: calendarColorMap.get('illicit')!,
+          uuid: site.uuid,
+          formUUID: illicit.uuid,
+          form: 'updateIllicitDischarge' },
+          dates.illicitArray)
+
+        illicit.FollowUpDates?.forEach(followUp => { // Illicit discharge follow ups
+          const followUpDate = new Date(followUp.followUpDate)
+
+          addCalendarObj({
+            start: followUpDate,
+            end: followUpDate,
+            allDay: true,
+            title: `Follow Up - ${ site.name }`,
+            color: calendarColorMap.get('follow-up')!,
+            uuid: site.uuid,
+            formUUID: illicit.uuid,
+            form: 'updateIllicitDischarge' },
+            dates.followUpsArray)
         })
       })
     })
@@ -78,7 +214,7 @@ export const useFormatCalendarData = (sites: AppTypes.SiteInterface[]) => {
     return dates
   }, [sites])
 
-  return [ 
+  const allCalendarItems = [ 
     ...calendarData.logsArray, 
     ...calendarData.violationsArray, 
     ...calendarData.followUpsArray, 
@@ -87,8 +223,13 @@ export const useFormatCalendarData = (sites: AppTypes.SiteInterface[]) => {
     ...calendarData.illicitArray,
     ...calendarData.swoArray
   ]
+
+  return allCalendarItems
 }
 
+/**
+* Returns calendar props
+**/
 export const useCalendarProps = (type: 'week' | 'month', calendarData: CalendarDataInterface[]) => { // Set calendar props
   const { dispatch } = useContext(EnforcementCtx)
 
@@ -121,6 +262,9 @@ export const useCalendarProps = (type: 'week' | 'month', calendarData: CalendarD
   return calendarProps
 }
 
+/**
+* Returns calendar type (week | month) and button onClick handler
+**/
 export const useHandleCalendarTypeBtnClick = (): { type: 'week' | 'month', onClick: React.MouseEventHandler<HTMLButtonElement>, label: 'Show Month' | 'Show Week' } => {
   const [state, setState] = useState<{ type: 'week' | 'month' }>({ type: 'week' })
 
@@ -135,11 +279,13 @@ export const useHandleCalendarTypeBtnClick = (): { type: 'week' | 'month', onCli
   return { type: state.type, onClick: cb, label }
 }
 
+/**
+* Returns calendar event onClick handler; sets for uuid and activeForm in context
+**/
 const useHandleEventClick = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
-  const pathname = useLocation().pathname
-
+  const { pathname } = useLocation()
   const navigate = useNavigate()
 
   const roles = useReturnUserRoles()
@@ -160,4 +306,12 @@ const useHandleEventClick = () => {
       dispatch({ type: 'SET_ACTIVE_FORM', payload: event.form })
     }
   }, [roles, pathname, navigate, dispatch])
+}
+
+export const useHandleCalendarNoteVisibility = () => {
+  const { pathname } = useLocation()
+
+  const visible = pathname.includes('/site/')
+
+  return visible
 }

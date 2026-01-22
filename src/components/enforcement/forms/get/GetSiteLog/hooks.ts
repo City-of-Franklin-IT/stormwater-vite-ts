@@ -1,5 +1,5 @@
 import { useState, useContext, useCallback } from "react"
-import { useQuery, useQueryClient } from "react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useParams } from "react-router"
 import EnforcementCtx from "@/components/enforcement/context"
 import * as AppActions from '@/context/App/AppActions'
@@ -14,7 +14,11 @@ export const useGetSiteLog = () => { // Get site log
 
   const { enabled, token } = useEnableQuery()
 
-  return useQuery(['getSiteLog', formUUID], () => AppActions.getSiteLog(formUUID as string, authHeaders(token)), { enabled: enabled && !!formUUID })
+  return useQuery({
+    queryKey: ['getSiteLog', formUUID],
+    queryFn: () => AppActions.getSiteLog(formUUID as string, authHeaders(token)),
+    enabled: enabled && !!formUUID
+  })
 }
 
 export const useOnDeleteBtnClick = (uuid: string) => {
@@ -39,7 +43,7 @@ export const useOnDeleteBtnClick = (uuid: string) => {
 
       if(result.success) {
         savedPopup(result.msg)
-        queryClient.invalidateQueries(['getSite', siteUUID])
+        queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
         dispatch({ type: 'RESET_CTX' })
       } else errorPopup(result.msg)
     }

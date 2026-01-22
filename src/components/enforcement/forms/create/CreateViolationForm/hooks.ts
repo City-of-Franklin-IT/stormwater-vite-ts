@@ -1,17 +1,57 @@
-import { useCallback, useContext } from 'react'
-import { useParams, useNavigate } from 'react-router'
-import { useQueryClient } from 'react-query'
+import { useContext } from 'react'
+import { useParams, useNavigate, useLocation } from 'react-router'
+import { useQueryClient } from "@tanstack/react-query"
 import { useForm, useFormContext } from 'react-hook-form'
 import EnforcementCtx from '@/components/enforcement/context'
+import SiteCtx from '@/components/site/context'
 import { useEnableQuery } from '@/helpers/hooks'
 import { formatDate } from '@/helpers/utils'
-import { errorPopup } from '@/utils/Toast/Toast'
+import { errorPopup, savedPopup } from '@/utils/Toast/Toast'
 import { handleCreateViolation } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useCreateViolationForm = (site: AppTypes.SiteInterface | undefined) => { // CreateViolationForm useForm
+/**
+* Returns create violation form methods, form submit function, and cancel button onClick handler
+**/
+export const useHandleCreateViolationForm = (site: AppTypes.SiteInterface | undefined) => {
+  const methods = useCreateViolationForm(site)
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
+
+  return { methods, handleFormSubmit, onCancelBtnClick }
+}
+
+/**
+* Returns create violation form context
+**/
+export const useCreateViolationFormContext = () => {
+  const methods = useFormContext<AppTypes.ConstructionViolationCreateInterface>()
+
+  return methods
+}
+
+/**
+* Returns cancel button onClick handler
+**/
+export const useOnCancelBtnClick = () => {
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const { dispatch: enforcementDispatch } = useContext(EnforcementCtx)
+  const { dispatch: siteDispatch } = useContext(SiteCtx)
+
+  return () => {
+    enforcementDispatch({ type: 'RESET_CTX' })
+    siteDispatch({ type: 'RESET_CTX' })
+    navigate(pathname.replace('/create', ''))
+  }
+}
+
+/**
+* Returns create violation form methods
+**/
+const useCreateViolationForm = (site: AppTypes.SiteInterface | undefined) => {
   const { formDate } = useContext(EnforcementCtx)
 
   return useForm<AppTypes.ConstructionViolationCreateInterface>({
@@ -34,36 +74,24 @@ export const useCreateViolationForm = (site: AppTypes.SiteInterface | undefined)
   })
 }
 
-export const useCreateViolationFormContext = () => { // CreateViolationForm context
-  const methods = useFormContext<AppTypes.ConstructionViolationCreateInterface>()
-
-  return methods
-}
-
-export const useOnCancelBtnClick = () => { // Handle cancel btn click
-  const navigate = useNavigate()
-
-  return () => navigate('/sites')
-}
-
-export const useHandleFormSubmit = () => { // Handle form submit
+const useHandleFormSubmit = () => { // Handle form submit
   const { enabled, token } = useEnableQuery()
 
   const navigate = useNavigate()
-
   const queryClient = useQueryClient()
-
   const { uuid: siteUUID } = useParams<{ uuid: string }>()
 
-  return useCallback((formData: AppTypes.ConstructionViolationCreateInterface) => {
+  return async (formData: AppTypes.ConstructionViolationCreateInterface) => {
     if(!enabled || !token) return
 
-    handleCreateViolation(formData, token)
-      .then(() => {
-        queryClient.invalidateQueries('getViolations')
-        queryClient.invalidateQueries(['getSite', siteUUID])
-        navigate('/enforcement/violations')
-      })
-      .catch(err => errorPopup(err))
-  }, [enabled, token, queryClient, siteUUID])
+    const result = await handleCreateViolation(formData, token)
+
+    if(!result.success) {
+      errorPopup(result.msg)
+    } else savedPopup(result.msg)
+
+    queryClient.invalidateQueries({ queryKey: ['getViolations'] })
+    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
+    navigate('/enforcement/violations')
+  }
 }

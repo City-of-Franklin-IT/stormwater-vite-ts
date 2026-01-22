@@ -10,29 +10,20 @@ import xlsxIcon from '@/assets/icons/xlsx/xlsx.svg'
 import * as AppTypes from '@/context/App/types'
 
 // Components
-import { ShowClosedCheckbox, PageNavBtns, Status } from "../ViolationsContainer/components"
+import { EnforcementTableHeaders, EnforcementTable, Status } from "../ViolationsContainer/components"
 
 export type ComplaintsTableDataType = AppTypes.ComplaintInterface & { siteUUID?: string, siteName?: string, primaryPermitee?: string }
 
 export const ComplaintsTable = ({ tableData }: { tableData: ComplaintsTableDataType[] }) => {
 
   return (
-      <div className="flex flex-col font-[play] gap-6 items-center">
-  
-        <div className="flex justify-between items-end mb-4 w-full">
-          <ShowClosedCheckbox />
-          <div className="translate-y-7">
-            <PageNavBtns />
-          </div>
-        </div>    
-  
-        <table className="table table-sm text-neutral-content">
-          <TableHeaders />
-          <TableBody tableData={tableData} />
-        </table>
-        
-      </div>
-    )
+    <EnforcementTable>
+      <EnforcementTableHeaders>
+        <ComplaintsTableHeaders />
+      </EnforcementTableHeaders>
+      <ComplaintsTableBody tableData={tableData} />
+    </EnforcementTable>
+  )
 }
 
 export const ReportBtn = () => {
@@ -57,38 +48,31 @@ export const ExportBtn = () => {
   )
 }
 
-const TableHeaders = () => {
+const ComplaintsTableHeaders = () => {
 
-  return (
-    <thead>
-      <tr className="text-warning uppercase border-b-2 border-warning">
-        <th>Date</th>
-        <th>Site / Location</th>
-        <th>Responsible Party / Primary Permitee</th>
-        <th className="text-center">Concern</th>
-        <th className="text-center">Status</th>
-        <th>Inspector</th>
-      </tr>
-    </thead>
-  )
-}
-
-const TableBody = ({ tableData }: { tableData: ComplaintsTableDataType[] }) => { // Complaints table body
-  
   return (
     <>
-      {tableData.map(complaint => {
-        if(complaint) return (
-          <TableRow
-            key={`complaints-table-row-${ complaint.uuid }`}
-            complaint={complaint} />
-        )
-      })}
+      <th>Date</th>
+      <th>Site / Location</th>
+      <th>Responsible Party / Primary Permitee</th>
+      <th className="text-center">Concern</th>
+      <th className="text-center">Status</th>
+      <th>Inspector</th>
     </>
   )
 }
 
-const TableRow = ({ complaint }: { complaint: ComplaintsTableDataType }) => {
+const ComplaintsTableBody = ({ tableData }: { tableData: ComplaintsTableDataType[] }) => (
+  <tbody>
+    {tableData.map(complaint => {
+      if(complaint) return (
+        <ComplaintsTableRow key={`complaints-table-row-${ complaint.uuid }`} complaint={complaint} />
+      )
+    })}
+  </tbody>
+)
+
+const ComplaintsTableRow = ({ complaint }: { complaint: ComplaintsTableDataType }) => {
   const handleTableRowClick = useHandleTableRowClick(complaint.uuid)
   
   return (

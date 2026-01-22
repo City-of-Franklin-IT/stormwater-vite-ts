@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
 import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
@@ -10,5 +10,9 @@ export const useGetIllicitDischarge = () => { // Get illicit discharge
 
   const { enabled, token } = useEnableQuery()
 
-  return useQuery(['getIllicitDischarge', formUUID], () => AppActions.getIllicitDischarge(formUUID as string, authHeaders(token)), { enabled: enabled && !!formUUID })
+  return useQuery({
+    queryKey: ['getIllicitDischarge', formUUID],
+    queryFn: () => AppActions.getIllicitDischarge(formUUID as string, authHeaders(token)),
+    enabled: enabled && !!formUUID
+  })
 }

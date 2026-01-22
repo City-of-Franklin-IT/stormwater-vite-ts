@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useContext, useState } from "react"
+import { useEffect, useContext, useState } from "react"
 import { useParams, useNavigate } from "react-router"
-import { useQueryClient } from "react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { useForm, useFormContext } from "react-hook-form"
 import EnforcementCtx from "@/components/enforcement/context"
 import Map from '@arcgis/core/Map'
@@ -14,13 +14,17 @@ import { TextSymbol } from "@arcgis/core/symbols"
 import pinErrorIcon from '@/assets/icons/pin/error-pin.png'
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
-import { errorPopup } from "@/utils/Toast/Toast"
+import { errorPopup, infoPopup, savedPopup } from "@/utils/Toast/Toast"
 import { useOnCancelBtnClick } from "../CreateViolationForm/hooks"
+import { handleCreateIllicitDischarge } from "../CreateIllicitDischargeForm/utils"
 import { handleCreateComplaint } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
 
+/**
+* Returns create complaint form methods, form submit function, and cancel button onClick handler
+**/
 export const useHandleCreateComplaintForm = (site: AppTypes.SiteInterface | undefined) => {
   const methods = useCreateComplaintForm(site)
   const handleFormSubmit = useHandleFormSubmit()
@@ -29,12 +33,18 @@ export const useHandleCreateComplaintForm = (site: AppTypes.SiteInterface | unde
   return { methods, handleFormSubmit, onCancelBtnClick }
 }
 
+/**
+* Returns create complaint form context
+**/
 export const useCreateComplaintFormContext = () => { 
   const methods = useFormContext<AppTypes.ComplaintCreateInterface>()
 
   return methods
 }
 
+/**
+* Handles complaint map view and graphics
+**/
 export const useSetComplaintsMapView = (mapRef: React.RefObject<HTMLDivElement>) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
@@ -50,6 +60,9 @@ export const useSetComplaintsMapView = (mapRef: React.RefObject<HTMLDivElement>)
   }, [state.view])
 }
 
+/**
+* Returns create complaint form methods
+**/
 const useCreateComplaintForm = (site: AppTypes.SiteInterface | undefined) => { 
   const { formDate } = useContext(EnforcementCtx)
 
@@ -78,30 +91,77 @@ const useCreateComplaintForm = (site: AppTypes.SiteInterface | undefined) => {
   })
 }
 
-const useHandleFormSubmit = () => { // Handle form submit
+/**
+* Returns create complaint form submit function
+**/
+const useHandleFormSubmit = () => {
   const { enabled, token } = useEnableQuery()
 
   const navigate = useNavigate()
-
   const queryClient = useQueryClient()
 
   const { uuid: siteUUID } = useParams<{ uuid: string }>()
 
-  return useCallback((formData: AppTypes.ComplaintCreateInterface) => {
-    if(!enabled || !token) {
+  return async (formData: AppTypes.ComplaintCreateInterface) => {
+    if(!enabled || !token) return
+
+    const result = await handleCreateComplaint(formData, token)
+
+    if(!result?.success) {
+      errorPopup(result?.msg)
+      navigate('/enforcement/complaints')
       return
     }
 
-    handleCreateComplaint(formData, token)
-      .then(() => {
-        queryClient.invalidateQueries('getComplaints')
-        queryClient.invalidateQueries(['getSite', siteUUID])
-        navigate('/enforcement/complaints')
-      })
-      .catch(err => errorPopup(err))
-  }, [enabled, token, navigate, queryClient, siteUUID])
+    if(result.data && formData.concern === 'Illicit Discharge / Spill') {
+      const illicitData: AppTypes.IllicitDischargeCreateInterface = {
+        complaintId: result.data.complaintId,
+        siteId: formData.siteId,
+        date: formData.date,
+        xCoordinate: formData.xCoordinate,
+        yCoordinate: formData.yCoordinate,
+        locationDescription: formData.locationDescription,
+        inspectorId: formData.inspectorId,
+        details: formData.details,
+        responsibleParty: formData.responsibleParty,
+        volumeLost: '',
+        streamWatershed: '',
+        otherStreamWatershed: '',
+        enforcementAction: null,
+        penaltyDate: null,
+        penaltyAmount: null,
+        penaltyDueDate: null,
+        paymentReceived: null,
+        compliance: null,
+        closed: null,
+        FollowUpDates: formData.FollowUpDates
+      }
+
+      const illicitRes = await handleCreateIllicitDischarge(illicitData, token)
+
+      if(!illicitRes?.success) {
+        errorPopup(illicitRes?.msg)
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['getIllicitDischarges'] })
+      infoPopup('Illicit Discharge Created')
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['getComplaints'] })
+    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
+    savedPopup(result.msg)
+
+    const href = formData.concern !== 'Illicit Discharge / Spill' ?
+      '/enforcement/complaints' :
+      '/enforcement/discharges'
+
+    navigate(href)
+  }
 }
 
+/**
+* Handles complaints map view creation
+**/
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
   const { setValue } = useFormContext<AppTypes.ComplaintCreateInterface>()
 
@@ -148,6 +208,9 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
   }, [mapRef, setValue, setState])
 }
 
+/**
+* Handles complaints map graphics
+**/
 const useSetMapGraphics = (state: { view: __esri.MapView | null }) => {
   const { watch } = useFormContext<AppTypes.ComplaintCreateInterface>()
 

@@ -1,6 +1,5 @@
 import { FormProvider } from 'react-hook-form'
-import { useOnCancelBtnClick } from '@/components/inspectors/containers/InspectorContainer/hooks'
-import { useUpdateInspectorForm, useHandleFormSubmit } from './hooks'
+import { useHandleUpdateInspectorForm } from './hooks'
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Types
@@ -11,18 +10,14 @@ import FormBtns from '@/components/form-elements/buttons/FormBtns'
 import { NameInput, EmailInput } from '../../create/CreateInspectorForm/components'
 
 function UpdateInspectorForm({ inspector }: { inspector: AppTypes.InspectorInterface }) {
-  const methods = useUpdateInspectorForm(inspector)
-
-  const onCancelBtnClick = useOnCancelBtnClick()
-
-  const handleFormSubmit = useHandleFormSubmit()
+  const { methods, onCancelBtnClick, handleFormSubmit } = useHandleUpdateInspectorForm(inspector)
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Update Inspector</h2>
 
       <FormProvider { ...methods }>
-        <form onSubmit={methods.handleSubmit(formData => handleFormSubmit(formData))} className={styles.body}>
+        <form onSubmit={methods.handleSubmit(handleFormSubmit)} className={styles.body}>
 
           <NameInput />
           <EmailInput />

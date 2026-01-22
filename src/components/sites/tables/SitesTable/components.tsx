@@ -24,7 +24,7 @@ export const NoSites = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) 
   )
 }
 
-const TableBody = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => { // Sites table body
+const TableBody = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => {
 
   return (
     <tbody>

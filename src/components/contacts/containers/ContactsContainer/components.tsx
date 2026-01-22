@@ -2,7 +2,7 @@ import { useContext, useRef } from 'react'
 import { Link } from 'react-router'
 import ContactsCtx from '../../context'
 import { useScrollToFormRef } from '@/components/enforcement/containers/ViolationsContainer/hooks'
-import { useHandleNavBtns, useOnTableRowClick } from './hooks'
+import { useHandleNavBtns, useHandleTableRow } from './hooks'
 import { formatPhone } from '@/helpers/utils'
 
 // Types
@@ -58,31 +58,31 @@ export const UpdateForm = (props: FormProps) => { // Update form
   )
 }
 
-export const PageNavBtns = () => { // Page nav buttons
-  const { currentPage, totalPages } = useContext(ContactsCtx)
-  
-  const { handlePrevBtn, handleNextBtn, label } = useHandleNavBtns()
+export const PageNavBtns = () => {
+  const { btnProps, label } = useHandleNavBtns()
 
   return (
     <div className="flex flex-col gap-1 items-center">
       <div className="flex gap-4 ml-auto">
-        <PrevPageBtn 
-          onClick={handlePrevBtn}
-          disabled={currentPage === 1} />
-        <NextPageBtn 
-          onClick={handleNextBtn}
-          disabled={!totalPages || currentPage === totalPages} />
+        <PrevPageBtn { ...btnProps.prevPageBtnProps } />
+        <NextPageBtn { ...btnProps.nextPageBtnProps } />
       </div>
       <small className="text-neutral-content font-[play] uppercase">{label}</small>
     </div>
   )
 }
 
-const TableBody = ({ tableData }: { tableData: AppTypes.ContactInterface[] }) => { // Contacts table body
+const TableBody = ({ tableData }: { tableData: AppTypes.ContactInterface[] }) => {
 
   return (
     <tbody>
-      {tableData.map(contact => <TableRow contact={contact} />)}
+      {tableData.map(contact => {
+        return (
+          <TableRow
+            key={`contact-${ contact.uuid }`}
+            contact={contact} />
+        )
+      })}
     </tbody>
   )
   
@@ -101,12 +101,10 @@ const TableHeaders = () => {
 }
 
 const TableRow = ({ contact }: { contact: AppTypes.ContactInterface }) => {
-  const onTableRowClick = useOnTableRowClick(contact.uuid)
+  const tableRowProps = useHandleTableRow(contact)
 
   return (
-    <tr 
-      onClick={onTableRowClick}
-      className={`border-b-1 border-neutral-content/50 ${ contact.inactive ? 'opacity-50' : null }`}>
+    <tr { ...tableRowProps }>
         <ContactTableData contact={contact} />
         <ContactSitesTableData sites={contact.SiteContacts?.map(site => site.Site) || []} />
     </tr>

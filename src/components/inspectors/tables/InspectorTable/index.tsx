@@ -1,4 +1,3 @@
-import { useRef } from "react"
 import { useSetInspectorTableData, useScrollToFormRef } from "./hooks"
 import styles from './InspectorTable.module.css'
 
@@ -12,10 +11,7 @@ import * as Components from './components'
 function InspectorTable({ sites }: { sites: AppTypes.SiteInterface[] }) {
   const tableData = useSetInspectorTableData(sites)
 
-  const tableRef = useRef<HTMLDivElement>(null)
-  const formRef = useRef<HTMLDivElement>(null)
-
-  useScrollToFormRef(formRef, tableRef)
+  const { tableRef, formRef } = useScrollToFormRef()
 
   return (
     <div ref={tableRef}  className={styles.container}>

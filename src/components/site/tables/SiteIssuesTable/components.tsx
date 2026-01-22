@@ -66,10 +66,10 @@ const TableRow = ({ issue }: { issue: IssueTableDataType }) => {
 }
 
 const TypeIcon = ({ type }: { type: FormType }) => { // Type icon
-  const icon = typeIconMap.get(type)
+  const icon = typeIconMap.get(type)!
 
   return (
-    <td title={icon?.title}><img src={icon?.src} className="p-1 w-8"></img></td>
+    <td title={icon.title}><img src={icon.src} className="p-1 w-8"></img></td>
   )
 }
 

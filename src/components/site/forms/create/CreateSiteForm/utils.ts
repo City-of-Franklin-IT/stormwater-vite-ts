@@ -1,6 +1,5 @@
 import * as AppActions from '@/context/App/AppActions'
 import { authHeaders } from '@/helpers/utils'
-import { errorPopup, savedPopup } from "../../../../../utils/Toast/Toast"
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -15,7 +14,7 @@ export const handleCreateSite = async (formData: AppTypes.SiteCreateInterface, t
       )
     }
 
-    savedPopup(result.msg)
-    return result.data.uuid
-  } else errorPopup(result.msg)
+  }
+
+  return result
 }

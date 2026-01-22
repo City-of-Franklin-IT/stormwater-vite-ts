@@ -164,7 +164,7 @@ export interface IllicitDischargeInterface extends BaseInterface {
 }
 
 export interface IllicitDischargeCreateInterface extends Omit<IllicitDischargeInterface, 'illicitId' | 'FollowUpDates' | 'Site' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
-  readonly illicitId: string
+  readonly illicitId?: string
   FollowUpDates: FollowUpCreateInterface[]
   uuid?: string
 }

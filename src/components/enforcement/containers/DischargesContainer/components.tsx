@@ -5,63 +5,47 @@ import { useHandleTableRowClick } from "../ViolationsContainer/hooks"
 import * as AppTypes from '@/context/App/types'
 
 // Components
-import { ShowClosedCheckbox, PageNavBtns, CivilPenalty, Status } from "../ViolationsContainer/components"
+import { EnforcementTableHeaders, EnforcementTable, CivilPenalty, Status } from "../ViolationsContainer/components"
 
 export type IllicitDischargesTableDataType = AppTypes.IllicitDischargeInterface & { siteUUID?: string, siteName?: string, primaryPermitee?: string }
 
 export const IllicitDischargesTable = ({ tableData }: { tableData: IllicitDischargesTableDataType[] }) => {
 
   return (
-    <div className="flex flex-col font-[play] gap-6 items-center">
-
-      <div className="flex justify-between items-end mb-4 w-full">
-        <ShowClosedCheckbox />
-        <div className="translate-y-7">
-          <PageNavBtns />
-        </div>
-      </div>    
-
-      <table className="table table-sm text-neutral-content">
-        <TableHeaders />
-        <TableBody tableData={tableData} />
-      </table>
-      
-    </div>
+    <EnforcementTable>
+      <EnforcementTableHeaders>
+        <DischargesTableHeaders />
+      </EnforcementTableHeaders>
+      <DischargesTableBody tableData={tableData} />
+    </EnforcementTable>
   )
 }
 
-const TableHeaders = () => {
+const DischargesTableHeaders = () => {
 
-  return (
-    <thead>
-      <tr className="text-warning uppercase border-b-2 border-warning">
-        <th>Date</th>
-        <th>Site / Location</th>
-        <th>Responsible Party / Primary Permitee</th>
-        <th className="text-center">Civil Penalty</th>
-        <th className="text-center">Status</th>
-        <th>Inspector</th>
-      </tr>
-    </thead>
-  )
-}
-
-const TableBody = ({ tableData }: { tableData: IllicitDischargesTableDataType[] }) => { // Illicit discharges table body
-  
   return (
     <>
-      {tableData.map(illicit => {
-        if(illicit) return (
-          <TableRow
-            key={`illcit-discharges-table-row-${ illicit.uuid }`}
-            illicit={illicit} />
-        )
-      })}
+      <th>Date</th>
+      <th>Site / Location</th>
+      <th>Responsible Party / Primary Permitee</th>
+      <th className="text-center">Civil Penalty</th>
+      <th className="text-center">Status</th>
+      <th>Inspector</th>
     </>
   )
 }
 
-const TableRow = ({ illicit }: { illicit: IllicitDischargesTableDataType }) => {
+const DischargesTableBody = ({ tableData }: { tableData: IllicitDischargesTableDataType[] }) => (
+  <tbody>
+    {tableData.map(illicit => {
+      if(illicit) return (
+        <DischargesTableRow key={`discharge-${ illicit.uuid }`} illicit={illicit} />
+      )
+    })}
+  </tbody>
+)
+
+const DischargesTableRow = ({ illicit }: { illicit: IllicitDischargesTableDataType }) => {
   const onClick = useHandleTableRowClick(illicit.uuid)
 
   return (

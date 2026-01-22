@@ -1,34 +1,50 @@
-import { API_URL as baseUrl, ACTIVE_SITES_URL } from '../../config'
+import { NODE_ENV } from '../../config'
+
+const [baseUrl, activeSitesUrl] = NODE_ENV === 'development' ?
+  ['https://cofasv38.franklin-gov.com/api/v2/eng/stormwater', 'https://cofasv38.franklin-gov.com/api/v2/eng/public/active-sites'] :
+  ['https://dev.franklintn.gov/api/v2/eng/stormwater', 'https://dev.franklintn.gov/api/v2/eng/public/active-sites']
 
 // Types
 import * as AppTypes from './types'
 
-// Get sites
-// GET /api/v2/eng/stormwater/sites
+/**
+* Get sites
+* 
+* GET /api/v2/eng/stormwater/sites
+**/
 export const getSites = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface[] }> => {
   const res = await fetch(`${ baseUrl }/site`, { headers })
 
   return await res.json()
 }
 
-// Get site
-// GET /api/v2/eng/stormwater/sites/:uuid
+/**
+* Get site by uuid
+*
+* GET /api/v2/eng/stormwater/sites/:uuid
+**/
 export const getSite = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface }> => {
   const res = await fetch(`${ baseUrl }/site/${ uuid }`, { headers })
 
   return await res.json()
 }
 
-// Get active site names
-// POST /api/v2/eng/public/active-sites
+/**
+* Get active site names
+*
+* POST /api/v2/eng/public/active-sites
+**/
 export const getActiveSiteNames = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface[] }> => {
-  const res = await fetch(`${ ACTIVE_SITES_URL }`, { headers })
+  const res = await fetch(`${ activeSitesUrl }`, { headers })
 
   return await res.json()
 }
 
-// Create site
-// POST /api/v2/eng/stormwater/site
+/**
+* Create site
+*
+* POST /api/v2/eng/stormwater/site
+**/
 export const createSite = async (formData: AppTypes.SiteCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -41,8 +57,11 @@ export const createSite = async (formData: AppTypes.SiteCreateInterface, headers
   return await res.json()
 }
 
-// Update site
-// PUT /api/v2/eng/stormwater/site/:uuid
+/**
+* Update site by uuid
+*
+* PUT /api/v2/eng/stormwater/site/:uuid
+**/
 export const updateSite = async (formData: AppTypes.SiteCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface }> => {
   headers.append('Content-Type', 'application/json')
   
@@ -55,8 +74,11 @@ export const updateSite = async (formData: AppTypes.SiteCreateInterface, headers
   return await res.json()
 }
 
-// Delete site
-// DELETE /api/v2/eng/stormwater/site/:uuid
+/**
+* Delete site by uuid
+*
+* DELETE /api/v2/eng/stormwater/site/:uuid
+**/
 export const deleteSite = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/site/${ uuid }`, {
     method: 'DELETE',
@@ -66,24 +88,33 @@ export const deleteSite = async (uuid: string, headers: Headers): Promise<AppTyp
   return await res.json()
 }
 
-// Get contacts
-// GET /api/v2/eng/stormwater/contact
+/**
+* Get contacts
+*
+* GET /api/v2/eng/stormwater/contact
+**/
 export const getContacts = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ContactInterface[] }> => {
   const res = await fetch(`${ baseUrl }/contact`, { headers })
 
   return await res.json()
 }
 
-// Get contact
-// GET /api/v2/eng/stormwater/contact/:uuid
+/**
+* Get contact by uuid
+*
+* GET /api/v2/eng/stormwater/contact/:uuid
+**/
 export const getContact = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ContactInterface }> => {
   const res = await fetch(`${ baseUrl }/contact/${ uuid }`, { headers })
 
   return await res.json()
 }
 
-// Create contact
-// POST /api/v2/eng/stormwater/contact
+/**
+* Create contact
+*
+* POST /api/v2/eng/stormwater/contact
+**/
 export const createContact = async (formData: AppTypes.ContactCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ContactInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -96,8 +127,11 @@ export const createContact = async (formData: AppTypes.ContactCreateInterface, h
   return await res.json()
 }
 
-// Update contact
-// PUT /api/v2/eng/stormwater/contact/:uuid
+/**
+* Update contact by uuid
+*
+* PUT /api/v2/eng/stormwater/contact/:uuid
+**/
 export const updateContact = async (formData: AppTypes.ContactCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ContactInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -110,8 +144,11 @@ export const updateContact = async (formData: AppTypes.ContactCreateInterface, h
   return await res.json()
 }
 
-// Delete contact
-// DELETE /api/v2/eng/stormwater/contact/:uuid 
+/**
+* Delete contact by uuid
+*
+* DELETE /api/v2/eng/stormwater/contact/:uuid
+**/
 export const deleteContact = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/contact/${ uuid }`, {
     method: 'DELETE',
@@ -121,8 +158,11 @@ export const deleteContact = async (uuid: string, headers: Headers): Promise<App
   return await res.json()
 }
 
-// Create site contact
-// POST /api/v2/eng/stormwater/sitecontact
+/**
+* Create site contact
+*
+* POST /api/v2/eng/stormwater/sitecontact
+**/
 export const createSiteContact = async (formData: AppTypes.SiteContactCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteContactInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -135,8 +175,11 @@ export const createSiteContact = async (formData: AppTypes.SiteContactCreateInte
   return await res.json()
 }
 
-// Delete site contact by uuid
-// DELETE /api/v2/stormwater/sitecontact/:uuid
+/**
+* Delete site contact by uuid
+*
+* DELETE /api/v2/stormwater/sitecontact/:uuid
+**/
 export const deleteSiteContact = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/sitecontact/${ uuid }`, {
     method: 'DELETE',
@@ -146,8 +189,11 @@ export const deleteSiteContact = async (uuid: string, headers: Headers): Promise
   return await res.json()
 }
 
-// Delete site contacts by siteId
-// DELETE /api/v2/stormwater/sitecontact/site/:siteid
+/**
+* Delete site contacts by siteId
+*
+* DELETE /api/v2/stormwater/sitecontact/site/:siteid
+**/
 export const deleteSiteContacts = async (siteId: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/sitecontact/site/${ siteId }`, {
     method: 'DELETE',
@@ -157,8 +203,11 @@ export const deleteSiteContacts = async (siteId: string, headers: Headers): Prom
   return await res.json()
 }
 
-// Create follow up date
-// POST /api/v2/stormwater/followup
+/**
+* Create follow up date
+*
+* POST /api/v2/stormwater/followup
+**/
 export const createFollowUp = async (formData: AppTypes.FollowUpCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.FollowUpInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -171,16 +220,22 @@ export const createFollowUp = async (formData: AppTypes.FollowUpCreateInterface,
   return await res.json()
 }
 
-// Get follow up date
-// GET /api/v2/stormwater/followup
+/**
+* Get follow up date by uuid
+*
+* GET /api/v2/stormwater/followup/:uuid
+**/
 export const getFollowUp = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.FollowUpInterface }> => {
   const res = await fetch(`${ baseUrl }/followup/${ uuid }`, { headers })
 
   return await res.json()
 }
 
-// Update follow up date
-// PUT /api/v2/stormwater/followup
+/**
+* Update follow up date by uuid
+*
+* PUT /api/v2/stormwater/followup/:uuid
+**/
 export const updateFollowUp = async (formData: AppTypes.FollowUpCreateInterface, headers: Headers) => {
   headers.append('Content-Type', 'application/json')
 
@@ -189,8 +244,11 @@ export const updateFollowUp = async (formData: AppTypes.FollowUpCreateInterface,
   return await res.json()
 }
 
-// Delete follow up date
-// DELETE /api/v2/eng/stormwater/followup?parentId=parentId&followUpDate=followUpDate
+/**
+* Delete follow up date by uuid
+*
+* DELETE /api/v2/eng/stormwater/followup/:uuid
+**/
 export const deleteFollowUp = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/followup/${ uuid }`, {
     method: 'DELETE',
@@ -200,24 +258,33 @@ export const deleteFollowUp = async (uuid: string, headers: Headers): Promise<Ap
   return await res.json()
 }
 
-// Get inspectors
-// GET /api/v2/eng/stormwater/inspector
+/**
+* Get inspectors
+*
+* GET /api/v2/eng/stormwater/inspector
+**/
 export const getInspectors = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.InspectorInterface[] }> => {
   const res = await fetch(`${ baseUrl }/inspector`, { headers })
 
   return await res.json()
 }
 
-// Get inspector
-// GET /api/v2/eng/stormwater/inspector/:slug
+/**
+* Get inspector
+*
+* GET /api/v2/eng/stormwater/inspector/:slug
+**/
 export const getInspector = async (slug: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: { sites: AppTypes.SiteInterface[], inspector: AppTypes.InspectorInterface } }> => {
   const res = await fetch(`${ baseUrl }/inspector/${ slug }`, { headers })
 
   return await res.json()
 }
 
-// Create inspector
-// POST /api/v2/eng/stormwater/inspector
+/**
+* Create inspector
+*
+* POST /api/v2/eng/stormwater/inspector
+**/
 export const createInspector = async (formData: AppTypes.InspectorCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.InspectorInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -230,8 +297,11 @@ export const createInspector = async (formData: AppTypes.InspectorCreateInterfac
   return await res.json()
 }
 
-// Update inspector
-// PUT /api/v2/eng/stormwater/inspector/:inspectorid
+/**
+* Update inspector
+*
+* PUT /api/v2/eng/stormwater/inspector/:inspectorid
+**/
 export const updateInspector = async (formData: AppTypes.InspectorCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.InspectorInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -244,8 +314,11 @@ export const updateInspector = async (formData: AppTypes.InspectorCreateInterfac
   return await res.json()
 }
 
-// Delete inspector
-// DELETE /api/v2/eng/stormwater/inspector/:inspectorid
+/**
+* Delete inspector
+*
+* DELETE /api/v2/eng/stormwater/inspector/:inspectorid
+**/
 export const deleteInspector = async (inspectorid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/inspector/${ inspectorid }`, {
     method: 'DELETE',
@@ -255,8 +328,11 @@ export const deleteInspector = async (inspectorid: string, headers: Headers): Pr
   return await res.json()
 }
 
-// Create site log
-// POST /api/v2/eng/stormwater/log
+/**
+* Create site log
+*
+* POST /api/v2/eng/stormwater/log
+**/
 export const createSiteLog = async (formData: AppTypes.SiteLogCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteLogInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -269,16 +345,22 @@ export const createSiteLog = async (formData: AppTypes.SiteLogCreateInterface, h
   return await res.json()
 }
 
-// Get site log
-// GET /api/v2/eng/stormwater/log/:uuid
+/**
+* Get site log by uuid
+*
+* GET /api/v2/eng/stormwater/log/:uuid
+**/
 export const getSiteLog = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteLogInterface }> => {
   const res = await fetch(`${ baseUrl }/log/${ uuid }`, { headers })
 
   return await res.json()
 }
 
-// Update site log
-// PUT /api/v2/eng/stormwater/log/:uuid
+/**
+* Update site log by uuid
+*
+* PUT /api/v2/eng/stormwater/log/:uuid
+**/
 export const updateSiteLog = async (formData: AppTypes.SiteLogCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteLogInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -291,8 +373,11 @@ export const updateSiteLog = async (formData: AppTypes.SiteLogCreateInterface, h
   return await res.json()
 }
 
-// Delete site log
-// DELETE /api/v2/eng/stormwater/log/:uuid
+/**
+* Delete site log by uuid
+*
+* DELETE /api/v2/eng/stormwater/log/:uuid
+**/
 export const deleteSiteLog = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/log/${ uuid }`, {
     method: 'DELETE',
@@ -302,8 +387,11 @@ export const deleteSiteLog = async (uuid: string, headers: Headers): Promise<App
   return await res.json()
 }
 
-// Create construction violation
-// POST /api/v2/eng/stormwater/violation
+/**
+* Create construction violation
+*
+* POST /api/v2/eng/stormwater/violation
+**/
 export const createViolation = async (formData: AppTypes.ConstructionViolationCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ConstructionViolationInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -316,8 +404,11 @@ export const createViolation = async (formData: AppTypes.ConstructionViolationCr
   return await res.json()
 }
 
-// Get construction violation
-// GET /api/v2/eng/stormwater/violation/:uuid
+/**
+* Get construction violation by uuid
+*
+* GET /api/v2/eng/stormwater/violation/:uuid
+**/
 export const getViolation = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ConstructionViolationInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -326,16 +417,22 @@ export const getViolation = async (uuid: string, headers: Headers): Promise<AppT
   return await res.json()
 }
 
-// Get construction violations
-// GET /api/v2/eng/stormwater/violation
+/**
+* Get construction violations
+*
+* GET /api/v2/eng/stormwater/violation
+**/
 export const getViolations = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ConstructionViolationInterface[] }> => {
   const res = await fetch(`${ baseUrl }/violation`, { headers })
 
   return await res.json()
 }
 
-// Update construction violation
-// PUT /api/v2/eng/stormwater/violation/:uuid
+/**
+* Update construction violation by uuid
+*
+* PUT /api/v2/eng/stormwater/violation/:uuid
+**/
 export const updateViolation = async (formData: AppTypes.ConstructionViolationCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ConstructionViolationInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -348,8 +445,11 @@ export const updateViolation = async (formData: AppTypes.ConstructionViolationCr
   return await res.json()
 }
 
-// Delete construction violation
-// DELETE /api/v2/eng/stormwater/violation/:uuid
+/**
+* Delete construction violation by uuid
+*
+* DELETE /api/v2/eng/stormwater/violation/:uuid
+**/
 export const deleteViolation = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/violation/${ uuid }`, {
     method: 'DELETE',
@@ -359,8 +459,11 @@ export const deleteViolation = async (uuid: string, headers: Headers): Promise<A
   return await res.json()
 }
 
-// Create complaint
-// POST /api/v2/eng/stormwater/complaint
+/**
+* Create complaint
+*
+* POST /api/v2/eng/stormwater/complaint
+**/
 export const createComplaint = async (formData: AppTypes.ComplaintCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ComplaintInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -373,24 +476,33 @@ export const createComplaint = async (formData: AppTypes.ComplaintCreateInterfac
   return await res.json()
 }
 
-// Get complaint
-// GET /api/v2/eng/stormwater/complaint/:uuid
+/**
+* Get complaint by uuid
+*
+* GET /api/v2/eng/stormwater/complaint/:uuid
+**/
 export const getComplaint = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ComplaintInterface }> => {
   const res = await fetch(`${ baseUrl }/complaint/${ uuid }`, { headers })
 
   return await res.json()
 }
 
-// Get complaints
-// GET /api/v2/eng/stormwater/complaint
+/**
+* Get complaints
+*
+* GET /api/v2/eng/stormwater/complaint
+**/
 export const getComplaints = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ComplaintInterface[] }> => {
   const res = await fetch(`${ baseUrl }/complaint`, { headers })
 
   return await res.json()
 }
 
-// Update complaint
-// PUT /api/v2/eng/stormwater/complaint/:uuid
+/**
+* Update complaint by uuid
+*
+* PUT /api/v2/eng/stormwater/complaint/:uuid
+**/
 export const updateComplaint = async (formData: AppTypes.ComplaintCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ComplaintInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -403,8 +515,11 @@ export const updateComplaint = async (formData: AppTypes.ComplaintCreateInterfac
   return await res.json()
 }
 
-// Delete complaint
-// DELETE /api/v2/eng/stormwater/complaint/:uuid
+/**
+* Delete complaint by uuid
+*
+* DELETE /api/v2/eng/stormwater/complaint/:uuid
+**/
 export const deleteComplaint = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/complaint/${ uuid }`, {
     method: 'DELETE',
@@ -414,8 +529,11 @@ export const deleteComplaint = async (uuid: string, headers: Headers): Promise<A
   return await res.json()
 }
 
-// Create illicit discharge
-// POST /api/v2/eng/stormwater/illicitdischarge
+/**
+* Create illicit discharge
+*
+* POST /api/v2/eng/stormwater/illicitdischarge
+**/
 export const createIllicitDischarge = async (formData: AppTypes.IllicitDischargeCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.IllicitDischargeInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -428,24 +546,33 @@ export const createIllicitDischarge = async (formData: AppTypes.IllicitDischarge
   return await res.json()
 }
 
-// Get illicit discharge
-// GET /api/v2/eng/stormwater/illicitdischarge/:uuid
+/**
+* Get illicit discharge by uuid
+*
+* GET /api/v2/eng/stormwater/illicitdischarge/:uuid
+**/
 export const getIllicitDischarge = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.IllicitDischargeInterface }> => {
   const res = await fetch(`${ baseUrl }/illicitdischarge/${ uuid }`, { headers })
 
   return await res.json()
 }
 
-// Get illicit discharges - no associated site
-// GET /api/v2/eng/stormwater/illicitdischarge
+/**
+* Get illicit discharges - no associated site
+*
+* GET /api/v2/eng/stormwater/illicitdischarge
+**/
 export const getIllicitDischarges = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.IllicitDischargeInterface[] }> => {
   const res = await fetch(`${ baseUrl }/illicitdischarge`, { headers })
 
   return await res.json()
 }
 
-// Update illicit discharge
-// PUT /api/v2/eng/stormwater/illicitdischarge/:uuid
+/**
+* Update illicit discharge by uuid
+*
+* PUT /api/v2/eng/stormwater/illicitdischarge/:uuid
+**/
 export const updateIllicitDischarge = async (formData: AppTypes.IllicitDischargeCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.IllicitDischargeInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -458,8 +585,11 @@ export const updateIllicitDischarge = async (formData: AppTypes.IllicitDischarge
   return await res.json()
 }
 
-// Delete illicit discharge
-// DELETE /api/v2/eng/stormwater/illicitdischarge/:uuid
+/**
+* Delete illicit discharge by uuid
+*
+* DELETE /api/v2/eng/stormwater/illicitdischarge/:uuid
+**/
 export const deleteIllicitDischarge = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/illicitdischarge/${ uuid }`, {
     method: 'DELETE',
@@ -469,8 +599,11 @@ export const deleteIllicitDischarge = async (uuid: string, headers: Headers): Pr
   return await res.json()
 }
 
-// Create inactive site
-// POST /api/v2/eng/stormwater/inactive
+/**
+* Create inactive site
+*
+* POST /api/v2/eng/stormwater/inactive
+**/
 export const createInactiveSite = async (formData: AppTypes.InactiveSiteCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.InactiveSiteInterface }> => {
   headers.append('Content-Type', 'application/json')
 
@@ -483,8 +616,11 @@ export const createInactiveSite = async (formData: AppTypes.InactiveSiteCreateIn
   return await res.json()
 }
 
-// Delete inactive site
-// DELETE /api/v2/eng/stormwater/inactive/:uuid
+/**
+* Delete inactive site by uuid
+*
+* DELETE /api/v2/eng/stormwater/inactive/:uuid
+**/
 export const deleteInactiveSite = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
   const res = await fetch(`${ baseUrl }/inactive/${ uuid }`, {
     method: 'DELETE',

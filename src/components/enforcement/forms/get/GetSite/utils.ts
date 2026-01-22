@@ -8,10 +8,10 @@ import CreateViolationForm from '../../create/CreateViolationForm'
 
 type CreateFormMapProps = { site: AppTypes.SiteInterface | undefined }
 
-export type CreateFormType = 'complaint' | 'discharge' | 'violation'
+export type CreateFormType = 'complaints' | 'discharges' | 'violations'
 
 export const createFormMap = new Map<CreateFormType, (props: CreateFormMapProps) => JSX.Element>([
-  ['complaint', CreateComplaintForm],
-  ['discharge', CreateIllicitDischargeForm],
-  ['violation', CreateViolationForm]
+  ['complaints', CreateComplaintForm],
+  ['discharges', CreateIllicitDischargeForm],
+  ['violations', CreateViolationForm]
 ])

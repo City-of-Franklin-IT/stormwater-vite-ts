@@ -5,6 +5,10 @@ import Point from '@arcgis/core/geometry/Point'
 import Graphic from '@arcgis/core/Graphic'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
+import Home from "@arcgis/core/widgets/Home"
+import Zoom from "@arcgis/core/widgets/Zoom"
+import BasemapGallery from "@arcgis/core/widgets/BasemapGallery"
+import Expand from "@arcgis/core/widgets/Expand"
 import { TextSymbol } from "@arcgis/core/symbols"
 import { setSiteMarker } from "@/components/sites/containers/SitesContainer/utils"
 import EnforcementCtx from "@/components/enforcement/context"
@@ -17,10 +21,8 @@ import * as AppTypes from '@/context/App/types'
 export const useSetSiteMapView = (mapRef: React.RefObject<HTMLDivElement>, site: AppTypes.SiteInterface) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
-  useCreateMapView(mapRef, setState)
-
+  useCreateMapView(mapRef, setState, site)
   useUpdateMapExtent(state.view, site)
-
   useSetMapGraphics(site, state)
 
   useEffect(() => {
@@ -68,23 +70,30 @@ export const useHandleSiteIssuesCheckbox = () => {
   return { checked: showClosedSiteIssues, onChange }
 }
 
-const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
-  const { basemap } = useContext(SiteCtx)
-
+const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>, site: AppTypes.SiteInterface) => {
   useEffect(() => {
     if(!mapRef?.current) return
 
-    const map = new Map({ basemap })
+    const map = new Map({ basemap: 'dark-gray-vector' })
 
     const mapView = new MapView({
-      container: mapRef.current as HTMLDivElement,
+      container: mapRef.current,
       map,
-      center: [-86.86897349, 35.92531721],
+      center: [site.xCoordinate, site.yCoordinate],
       zoom: 16,
       ui: { components: [] }
     })
 
     mapView.when(() => {
+      const homeWidget = new Home({ view: mapView })
+      const zoomWidget = new Zoom({ view: mapView })
+      const basemapGallery = new BasemapGallery({ view: mapView })
+      const basemapExpand = new Expand({ view: mapView, content: basemapGallery })
+
+      mapView.ui.add(homeWidget, { position: 'bottom-right' })
+      mapView.ui.add(zoomWidget, { position: 'bottom-right' })
+      mapView.ui.add(basemapExpand, { position: 'bottom-right' })
+
       setState(prevState => ({ ...prevState, view: mapView }))
     })
 
@@ -97,7 +106,7 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
         mapView.destroy()
       }, 50)
     }
-  }, [mapRef, basemap, setState])
+  }, [mapRef, setState, site])
 }
 
 const useUpdateMapExtent = (view: __esri.MapView | null, site: AppTypes.SiteInterface) => {

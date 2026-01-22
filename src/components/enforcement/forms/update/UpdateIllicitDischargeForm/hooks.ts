@@ -1,18 +1,21 @@
-import { useCallback, useContext } from "react"
+import { useContext } from "react"
 import { useParams } from "react-router"
-import { useQueryClient } from "react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { useOnCancelBtnClick } from "../../create/CreateViolationForm/hooks"
 import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
-import { errorPopup } from "@/utils/Toast/Toast"
+import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 import { handleUpdateIllicitDischarge } from './utils'
 
 // Types
 import * as AppTypes from '@/context/App/types'
 import { StreamWatershedEnum } from "../../create/CreateIllicitDischargeForm/types"
 
+/**
+* Returns update illicit discharge form methods, form submit function, and cancel button onClick handler
+**/
 export const useHandleUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischargeInterface) => {
   const methods = useUpdateIllicitDischargeForm(illicitDischarge)
   const handleFormSubmit = useHandleFormSubmit()
@@ -21,6 +24,9 @@ export const useHandleUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.I
   return { methods, handleFormSubmit, onCancelBtnClick }
 }
 
+/**
+* Returns update illicit discharge form methods
+**/
 const useUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischargeInterface) => {
   const setStreamWatershed = useSetStreamWatershed(illicitDischarge.streamWatershed) 
 
@@ -42,29 +48,31 @@ const useUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischar
   })
 }
 
+/**
+* Returns update illicit discharge form submit function
+**/
 const useHandleFormSubmit = () => { // Handle form submit
   const { dispatch } = useContext(EnforcementCtx)
 
-  const { enabled, token } = useEnableQuery()
-
   const queryClient = useQueryClient()
-
   const { uuid: siteUUID } = useParams<{ uuid: string }>()
 
-  return useCallback((formData: AppTypes.IllicitDischargeCreateInterface) => {
-    if(!enabled || !token) {
-      return
-    }
+  const { enabled, token } = useEnableQuery()
 
-    handleUpdateIllicitDischarge(formData, token)
-      .then(() => {
-        queryClient.invalidateQueries('getIllicitDischarges')
-        queryClient.invalidateQueries(['getIllicitDischarge', formData.uuid])
-        queryClient.invalidateQueries(['getSite', siteUUID])
-        dispatch({ type: 'RESET_CTX' })
-      })
-      .catch(err => errorPopup(err))
-  }, [enabled, token, queryClient, dispatch, siteUUID])
+  return async (formData: AppTypes.IllicitDischargeCreateInterface) => {
+    if(!enabled || !token) return
+
+    const result = await handleUpdateIllicitDischarge(formData, token)
+
+    if(!result.success) {
+      errorPopup(result.msg)
+    } else savedPopup(result.msg)
+
+    queryClient.invalidateQueries({ queryKey: ['getIllicitDischarges'] })
+    queryClient.invalidateQueries({ queryKey: ['getIllicitDischarge', formData.uuid] })
+    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
+    dispatch({ type: 'RESET_CTX' })
+  }
 }
 
 const useSetStreamWatershed = (streamWatershed: StreamWatershedEnum | string) => {

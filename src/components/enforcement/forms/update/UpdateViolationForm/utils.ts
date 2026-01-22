@@ -1,6 +1,5 @@
 import { authHeaders } from "@/helpers/utils"
 import * as AppActions from '@/context/App/AppActions'
-import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 
 // Types
 import * as AppTypes from '@/context/App/types'
@@ -22,7 +21,7 @@ export const handleUpdateViolation = async (formData: AppTypes.ConstructionViola
         })
       )
     }
+  }
 
-    savedPopup(result.msg)
-  } else errorPopup(result.msg)
+  return result
 }

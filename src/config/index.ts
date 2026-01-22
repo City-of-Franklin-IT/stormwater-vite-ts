@@ -1,7 +1,3 @@
 export const APP_BASE = '/stormwater'
 export const APP_TITLE = 'Stormwater Sites and Enforcement'
-export const API_URL = 'https://dev.franklintn.gov/api/v2/eng/stormwater'
-export const ACTIVE_SITES_URL = 'https://dev.franklintn.gov/api/v2/eng/public/active-sites'
-// export const ACTIVE_SITES_URL = 'https://cofasv38.franklin-gov.com/api/v2/eng/public/active-sites'
-// export const API_URL = 'https://cofasv38.franklin-gov.com/api/v2/eng/stormwater'
 export const NODE_ENV: 'development' | 'test' | 'production' = 'production'

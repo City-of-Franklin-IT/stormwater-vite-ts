@@ -22,9 +22,9 @@ function ComplaintsContainer({ complaints }: { complaints: AppTypes.ComplaintInt
 
   return (
     <Motion animation={'slideInRight'}>
-      <div className="flex flex-col my-10 gap-10 m-auto w-fit">
+      <div className="flex flex-col my-10 gap-10 m-auto w-full max-w-7xl">
         <div className="relative flex flex-col gap-11 p-20 pt-30 bg-neutral/10 shadow-xl">
-          <CreateBtn href={'/create/enforcement/complaint'}>Create New Complaint</CreateBtn>
+          <CreateBtn href={'/create/enforcement/complaints'}>Create New Complaint</CreateBtn>
           <div className="absolute flex items-center gap-3 top-8 right-8">
             <Components.ReportBtn />
             <Components.ExportBtn />

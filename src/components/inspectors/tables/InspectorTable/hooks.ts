@@ -1,4 +1,5 @@
-import React, { useContext, useMemo, useEffect } from "react"
+import { useContext, useMemo, useEffect, useRef } from "react"
+import { useReturnUserRoles } from "@/helpers/hooks"
 import InspectorTableCtx from "./context"
 
 // Types
@@ -11,28 +12,43 @@ export interface InspectorTableData {
   siteId: string
 }
 
-export const useScrollToFormRef = (formRef: React.RefObject<HTMLDivElement>, tableRef: React.RefObject<HTMLDivElement>): void => {
+/**
+* Handles scroll to ref functionality when formOpen is true; returns refs for table and form
+**/
+export const useScrollToFormRef = () => {
   const { formOpen } = useContext(InspectorTableCtx)
+
+  const tableRef = useRef<HTMLDivElement>(null)
+  const formRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => { // Scroll to form if active
     if(formOpen && formRef.current) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     } else tableRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [formOpen, formRef, tableRef])
+
+  return { tableRef, formRef }
 }
 
+/**
+* Returns inspector visibility boolean and input props for create site log column
+**/
 export const useHandleInspectorSiteSelection = (siteId: string) => {
   const { selection, dispatch } = useContext(InspectorTableCtx)
 
-  const selected = !!selection.find(item => item === siteId)
+  const roles = useReturnUserRoles()
 
-  const handleOnChange = () => {
-    if(!selected) {
+  const checked = !!selection.find(item => item === siteId)
+
+  const onChange = () => {
+    if(!checked) {
       dispatch({ type: 'ADD_TO_SELECTION', payload: siteId })
     } else dispatch({ type: 'REMOVE_FROM_SELECTION', payload: siteId })
   }
 
-  return { selected, handleOnChange }
+  const visible = roles.includes('task.write')
+
+  return { checked, onChange, visible }
 }
 
 export const useHandleCreateLogBtn = () => {
@@ -64,4 +80,17 @@ export const useSetInspectorTableData = (sites: AppTypes.SiteInterface[]) => {
   }, [sites, year])
 
   return data
+}
+
+/**
+* Returns className for create site log column; hides column if user does not have write permissions
+**/
+export const useHandleCreateSiteLogColumn = () => {
+  const roles = useReturnUserRoles()
+  const showBtn = roles.includes('task.write')
+  const className = !showBtn ?
+    'hidden' :
+    ''
+
+  return className
 }

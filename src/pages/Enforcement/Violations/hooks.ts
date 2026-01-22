@@ -1,10 +1,18 @@
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import * as AppActions from '@/context/App/AppActions'
 
-export const useGetViolations = () => { // Get construction violations
+/**
+* Returns construction violations from server
+**/
+export const useGetViolations = () => {
   const { enabled, token } = useEnableQuery()
 
-  return useQuery('getViolations', () => AppActions.getViolations(authHeaders(token)), { enabled })
+  return useQuery({
+    queryKey: ['getViolations'],
+    queryFn: () => AppActions.getViolations(authHeaders(token)),
+    enabled,
+    staleTime: Infinity
+  })
 }

@@ -1,30 +1,46 @@
-import { useContext, useCallback, useMemo, useEffect } from "react"
+import { useContext, useMemo, useEffect } from "react"
 import { useReturnUserRoles } from "@/helpers/hooks"
 import ContactsCtx from "../../context"
 
 // Types
 import * as AppTypes from '@/context/App/types'
 
+/**
+* Returns contact page nav button props
+**/
 export const useHandleNavBtns = () => {
   const { currentPage, totalPages, dispatch } = useContext(ContactsCtx)
 
-  const handlePrevBtn = useCallback(() => {
+  const handlePrevBtn = () => {
     if(currentPage !== 1) {
       dispatch({ type: 'SET_CURRENT_PAGE', payload: currentPage - 1 })
     }
-  }, [currentPage, dispatch])
+  }
 
-  const handleNextBtn = useCallback(() => {
+  const handleNextBtn = () => {
     if(currentPage !== totalPages) {
       dispatch({ type: 'SET_CURRENT_PAGE', payload: currentPage + 1 })
     }
-  }, [currentPage, totalPages, dispatch])
+  }
+
+  const prevPageBtnProps = {
+    onClick: handlePrevBtn,
+    disabled: currentPage === 1
+  }
+
+  const nextPageBtnProps = {
+    onClick: handleNextBtn,
+    disabled: !totalPages || currentPage === totalPages
+  }
 
   const label = `Page ${ currentPage } / ${ totalPages }`
 
-  return { handlePrevBtn, handleNextBtn, label }
+  return { btnProps: { prevPageBtnProps, nextPageBtnProps }, label }
 }
 
+/**
+* Returns paginated contacts data; applies filter when active
+**/
 export const useHandleTableData = (contacts: AppTypes.ContactInterface[]) => {
   const { currentPage, searchValue, showInactiveContacts } = useContext(ContactsCtx)
 
@@ -59,17 +75,21 @@ export const useHandleTableData = (contacts: AppTypes.ContactInterface[]) => {
   return data.tableData
 }
 
-export const useOnTableRowClick = (uuid: string) => {
+export const useHandleTableRow = (contact: AppTypes.ContactInterface) => {
   const { dispatch } = useContext(ContactsCtx)
   const roles = useReturnUserRoles()
 
-  return useCallback(() => {
+  const onClick = () => {
     if(!roles.includes('task.write')) {
       return null
     }
     
-    dispatch({ type: 'SET_FORM_UUID', payload: uuid })
-  }, [roles, dispatch, uuid])
+    dispatch({ type: 'SET_FORM_UUID', payload: contact.uuid })
+  }
+
+  const className = `border-b-1 border-neutral-content/50 ${ contact.inactive ? 'opacity-50' : '' }`
+
+  return { onClick, className }
 }
 
 export const useSetTotalPages = (count: number) => { // Set total pages to ctx

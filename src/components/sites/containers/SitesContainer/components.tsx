@@ -1,7 +1,7 @@
-import React, { useContext, useRef } from "react"
+import { useContext, useRef } from "react"
 import SitesCtx from '../../context'
 import { useDebounce } from "@/helpers/hooks"
-import { useSetSitesMapView, useHandleBasemapSelect } from './hooks'
+import { useSetSitesMapView } from './hooks'
 
 // Icons
 import warningPinIcon from '@/assets/icons/pin/warning-pin.png'
@@ -12,7 +12,6 @@ import * as AppTypes from '@/context/App/types'
 
 // Components
 import MapLegend from "@/components/map/MapLegend/index.tsx"
-import BasemapSelector from "@/components/map/BasemapSelector/index.tsx"
 import Loading from "@/components/layout/loading/Loading/index.tsx"
 
 export const Map = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
@@ -22,14 +21,9 @@ export const Map = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
 
   useSetSitesMapView(mapRef, debounced)
 
-  const basemapSelectProps = useHandleBasemapSelect()
-
   return (
     <div className="flex-1 bg-neutral h-full">
       <div ref={mapRef} className="relative w-full h-full">
-        <div className="absolute top-2 right-4 z-10">
-          <BasemapSelector { ...basemapSelectProps } />
-        </div>
         <div className="absolute bottom-4 left-4 z-10">
           <MapLegend sites={debounced} />
         </div>

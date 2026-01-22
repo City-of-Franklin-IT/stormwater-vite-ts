@@ -1,16 +1,39 @@
-import { useCallback, useContext } from "react"
-import { useQueryClient } from "react-query"
+import { useContext } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { useForm, useFormContext } from "react-hook-form"
 import { useNavigate } from "react-router"
 import { useEnableQuery } from "@/helpers/hooks"
+import { useOnCancelBtnClick } from "@/components/enforcement/forms/create/CreateViolationForm/hooks"
 import ContactsCtx from "@/components/contacts/context"
 import { handleCreateContact } from './utils'
-import { errorPopup } from "@/utils/Toast/Toast"
+import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 
 // Types
 import * as AppTypes from '@/context/App/types'
 
-export const useCreateContactForm = () => { // CreateContactForm useform
+/**
+* Returns create contact form methods, form submit function, and cancel button onClick handler
+**/
+export const useHandleCreateContactForm = () => {
+  const methods = useCreateContactForm()
+  const handleFormSubmit = useHandleFormSubmit()
+  const onCancelBtnClick = useOnCancelBtnClick()
+
+  return { methods, handleFormSubmit, onCancelBtnClick }
+}
+
+/**
+* Returns create contact form context
+**/
+export const useCreateContactFormContext = () => {
+  
+  return useFormContext<AppTypes.ContactCreateInterface>()
+}
+
+/**
+* Returns create contact form methods
+**/
+const useCreateContactForm = () => {
 
   return useForm<AppTypes.ContactCreateInterface>({
     mode: 'onBlur',
@@ -23,31 +46,28 @@ export const useCreateContactForm = () => { // CreateContactForm useform
   })
 }
 
-export const useCreateContactFormContext = () => { // CreateContactForm context
-  const methods = useFormContext<AppTypes.ContactCreateInterface>()
-
-  return methods
-}
-
-export const useHandleFormSubmit = () => { // Handle form submit
-  // TODO verify hook
+/**
+* Returns create contact form submit function
+**/
+const useHandleFormSubmit = () => {
   const { dispatch } = useContext(ContactsCtx)
+
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const { enabled, token } = useEnableQuery()
 
-  const queryClient = useQueryClient()
-
-  const navigate = useNavigate()
-
-  return useCallback((formData: AppTypes.ContactCreateInterface) => {
+  return async (formData: AppTypes.ContactCreateInterface) => {
     if(!enabled || !token) return
 
-    handleCreateContact(formData, token)
-      .then(() => {
-        queryClient.invalidateQueries('getContacts')
-        dispatch({ type: 'RESET_CTX' })
-        navigate('/contacts')
-      })
-      .catch(err => errorPopup(err))
-  }, [enabled, token, queryClient, navigate, dispatch])
+    const result = await handleCreateContact(formData, token)
+
+    if(!result.success) {
+      errorPopup(result.msg)
+    } else savedPopup(result.msg)
+
+    queryClient.invalidateQueries({ queryKey: ['getContacts'] })
+    dispatch({ type: 'RESET_CTX' })
+    navigate('/contacts')
+  }
 }

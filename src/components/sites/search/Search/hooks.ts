@@ -5,6 +5,9 @@ export type SearchableCtx = {
   dispatch: React.Dispatch<{ type: 'SET_SEARCH_VALUE', payload: string }>
 }
 
+/**
+* Returns search input props
+**/
 export const useHandleSearch = <T extends SearchableCtx>(ctx: React.Context<T>) => {
   const { searchValue, dispatch } = useContext(ctx)
 
@@ -15,6 +18,9 @@ export const useHandleSearch = <T extends SearchableCtx>(ctx: React.Context<T>) 
   return { onChange, value: searchValue }
 }
 
+/**
+* Returns clear button visibility boolean and onClick handler
+**/
 export const useHandleClearBtn = <T extends SearchableCtx>(ctx: React.Context<T>) => {
   const { searchValue, dispatch } = useContext(ctx)
 

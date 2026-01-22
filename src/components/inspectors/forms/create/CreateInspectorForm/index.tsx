@@ -1,5 +1,5 @@
 import { FormProvider } from 'react-hook-form'
-import { useCreateInspectorForm, useOnCancelBtnClick, useHandleFormSubmit } from './hooks'
+import { useHandleCreateInspectorForm } from './hooks'
 import styles from '@/components/form-elements/Forms.module.css'
 
 // Components
@@ -7,11 +7,7 @@ import FormBtns from '@/components/form-elements/buttons/FormBtns'
 import * as Components from './components'
 
 function CreateInspectorForm() {
-  const methods = useCreateInspectorForm()
-
-  const handleFormSubmit = useHandleFormSubmit()
-
-  const onCancelBtnClick = useOnCancelBtnClick()
+  const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateInspectorForm()
 
   return (
     <div className={styles.container}>

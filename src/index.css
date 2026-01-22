@@ -8,6 +8,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap');
 
 @import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+@import '@arcgis/core/assets/esri/themes/dark/main.css';
 
 @import "tailwindcss";
 @plugin "daisyui";
@@ -47,4 +48,15 @@ body {
               linear-gradient(290deg, hsla(0, 0%, 9%, .9), hsla(210, 64%, 31%, .1) 70.71%),
               linear-gradient(320deg, hsla(210, 64%, 31%, .5), hsla(0, 0%, 9%, .6) 70.71%);
               background-attachment: fixed;
+}
+
+.esri-basemap-gallery {
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.esri-ui-bottom-right {
+  flex-direction: column;
+  gap: 8px;
 }

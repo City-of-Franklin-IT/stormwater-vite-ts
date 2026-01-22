@@ -21,7 +21,7 @@ export const setSiteContactsTableData = (siteContacts: AppTypes.SiteContactInter
     }
   })
 
-  return siteContactsArray.sort(contact => contact.order)
+  return siteContactsArray.sort((a, b) => a.order - b.order)
 }
 
 export const setAllSiteContacts = (siteContacts: AppTypes.SiteContactInterface[]) => { // Return array with all site contact emails

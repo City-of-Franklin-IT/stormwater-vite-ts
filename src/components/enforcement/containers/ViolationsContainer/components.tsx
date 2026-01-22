@@ -49,24 +49,45 @@ export const CreateBtn = (props: CreateBtnProps) => {
 
 export type ViolationTableDataType = AppTypes.ConstructionViolationInterface & { siteUUID: string | undefined, siteName: string | undefined , primaryPermittee: string | undefined | null }
 
-export const ViolationsTable = ({ tableData }: { tableData: ViolationTableDataType[] }) => {
+export const EnforcementTableHeaders = ({ children }: { children: React.ReactNode }) => {
+
+  return (
+    <thead>
+      <tr className="text-warning uppercase border-b-2 border-warning">
+        {children}
+      </tr>
+    </thead>
+  )
+}
+
+export const EnforcementTable = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex flex-col font-[play] gap-6 items-center">
-
       <div className="flex justify-between items-end mb-4 w-full">
         <ShowClosedCheckbox />
         <div className="translate-y-7">
           <PageNavBtns />
         </div>
-      </div>    
-
-      <table className="table text-neutral-content">
-        <TableHeaders />
-        <TableBody tableData={tableData} />
-      </table>
-      
+      </div>
+      <div className="w-full overflow-x-auto">
+        <table className="table w-full text-neutral-content">
+          {children}
+        </table>
+      </div>
     </div>
+  )
+}
+
+export const ViolationsTable = ({ tableData }: { tableData: ViolationTableDataType[] }) => {
+
+  return (
+    <EnforcementTable>
+      <EnforcementTableHeaders>
+        <ViolationsTableHeaders />
+      </EnforcementTableHeaders>
+      <ViolationsTableBody tableData={tableData} />
+    </EnforcementTable>
   )
 }
 
@@ -142,41 +163,36 @@ export const Status = ({ closed }: { closed: boolean | null }) => { // Site issu
   return <td className="text-error font-bold uppercase text-center">Open</td>
 }
 
-const TableBody = ({ tableData }: { tableData: ViolationTableDataType[] }) => { // Sites issues table body
-  
+const ViolationsTableBody = ({ tableData }: { tableData: ViolationTableDataType[] }) => (
+  <tbody>
+    {tableData.map(violation => {
+      if(violation) return (
+        <ViolationsTableRow key={`violation-${ violation.uuid }`} violation={violation} />
+      )
+    })}
+  </tbody>
+)
+
+const ViolationsTableHeaders = () => {
+
   return (
-    <tbody>
-      {tableData.map(violation => {
-        if(violation) return (
-          <TableRow violation={violation} />
-        )
-      })}
-    </tbody>
+    <>
+      <th>Date</th>
+      <th>Site</th>
+      <th>Primary Permitee</th>
+      <th className="text-center">Civil Penalty</th>
+      <th className="text-center">SWO</th>
+      <th className="text-center">Status</th>
+      <th>Inspector</th>
+    </>
   )
 }
 
-const TableHeaders = () => {
-
-  return (
-    <thead>
-      <tr className="text-warning uppercase border-b-2 border-warning">
-        <th>Date</th>
-        <th>Site</th>
-        <th>Primary Permitee</th>
-        <th className="text-center">Civil Penalty</th>
-        <th className="text-center">SWO</th>
-        <th className="text-center">Status</th>
-        <th>Inspector</th>
-      </tr>
-    </thead>
-  )
-}
-
-const TableRow = ({ violation }: { violation: ViolationTableDataType }) => {
+const ViolationsTableRow = ({ violation }: { violation: ViolationTableDataType }) => {
   const handleTableRowClick = useHandleTableRowClick(violation.uuid)
   
   return (
-    <tr 
+    <tr
       title={violation.details} 
       onClick={handleTableRowClick}
       className="border-b-1 border-neutral-content/50">

@@ -1,10 +1,18 @@
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
 import { authHeaders } from "@/helpers/utils"
 import * as AppActions from '@/context/App/AppActions'
 import { useEnableQuery } from '@helpers/hooks'
 
+/**
+* Returns sites from server
+**/
 export const useGetSites = () => { // Get sites
   const { enabled, token } = useEnableQuery()
 
-  return useQuery('getSites', () => AppActions.getSites(authHeaders(token)), { enabled, staleTime: 600000 }) // 10 min stale time to prevent unecessary data fetching and rerenders
+  return useQuery({ 
+    queryKey: ['getSites'], 
+    queryFn: () => AppActions.getSites(authHeaders(token)), 
+    enabled, 
+    staleTime: Infinity 
+  })
 }

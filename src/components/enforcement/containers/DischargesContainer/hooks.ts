@@ -1,6 +1,6 @@
 import { useContext, useMemo, useState, useCallback } from "react"
 import { useParams } from "react-router"
-import { useQueryClient } from "react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import * as AppActions from '@/context/App/AppActions'
 import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
@@ -70,8 +70,8 @@ export const useHandleDeleteBtn = () => {
       const result = await AppActions.deleteIllicitDischarge(formUUID, authHeaders(token))
 
       if(result.success) {
-        queryClient.invalidateQueries('getIllicitDischarges')
-        queryClient.invalidateQueries(['getSite', siteUUID])
+        queryClient.invalidateQueries({ queryKey: ['getIllicitDischarges'] })
+        queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
         dispatch({ type: 'RESET_CTX' })
         savedPopup(result.msg)
       } else errorPopup(result.msg)

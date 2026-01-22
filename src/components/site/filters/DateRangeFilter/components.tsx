@@ -1,52 +1,35 @@
-import { useContext } from "react"
-import SiteCtx from "../../context"
-import { useHandleDateRangeInput } from './hooks'
+import { useHandleDateRangeInput, useHandleClearBtn } from './hooks'
 
 export const DateRangeInputs = () => {
 
   return (
     <div className="flex gap-10">
-      <StartInput />
-      <EndInput />
+      <DateRangeInput param={'start'} />
+      <DateRangeInput param={'end'} />
     </div>
   )
 }
 
-export const ClearBtn = () => { // Clear date range filter button
-  const { dateRangeFilter, dispatch } = useContext(SiteCtx)
+export const ClearBtn = () => {
+  const { visible, onClick } = useHandleClearBtn()
 
-  if(!dateRangeFilter.start || !dateRangeFilter.end) return null
+  if(!visible) return null
 
   return (
-    <ClearFilterBtn onClick={() => dispatch({ type: 'RESET_DATE_RANGE_FILTER' })}>
+    <ClearFilterBtn onClick={onClick}>
       Remove Date Range Filter
     </ClearFilterBtn>
   )
 }
 
-const StartInput = () => { // Date range filter start input
-  const inputParams = useHandleDateRangeInput('start')
+const DateRangeInput = ({ param }: { param: 'start' | 'end' }) => {
+  const inputParams = useHandleDateRangeInput(param)
 
   return (
     <div className="flex flex-col items-center">
-      <label htmlFor="start" className="text-warning">Start:</label>
+      <label htmlFor={param} className="text-warning">{param.toUpperCase()}:</label>
       <input 
-        id="start"
-        type="date"
-        className="input input-warning bg-neutral"
-        { ...inputParams } />
-    </div>
-  )
-}
-
-const EndInput = () => { // Date range filter start input
-  const inputParams = useHandleDateRangeInput('end')
-
-  return (
-    <div className="flex flex-col items-center">
-      <label htmlFor="end" className="text-warning">End:</label>
-      <input 
-        id="end"
+        id={param}
         type="date"
         className="input input-warning bg-neutral"
         { ...inputParams } />

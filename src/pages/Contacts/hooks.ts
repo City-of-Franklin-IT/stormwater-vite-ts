@@ -1,10 +1,18 @@
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
 import { authHeaders } from "@/helpers/utils"
 import { useEnableQuery } from "@/helpers/hooks"
-import { getContacts } from "@/context/App/AppActions"
+import * as AppActions from '@/context/App/AppActions'
 
-export const useGetContacts = () => { // Get contacts
+/**
+* Returns contacts from server
+**/
+export const useGetContacts = () => {
   const { enabled, token } = useEnableQuery()
 
-  return useQuery('getContacts', () => getContacts(authHeaders(token)), { enabled })
+  return useQuery({
+    queryKey: ['getContacts'],
+    queryFn: () => AppActions.getContacts(authHeaders(token)),
+    enabled,
+    staleTime: Infinity
+  })
 }
