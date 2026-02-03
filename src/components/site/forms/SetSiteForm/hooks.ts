@@ -98,7 +98,7 @@ export const useHandleSetUpdateForm = () => {
   }
 
   const visibility = {
-    form: !!activeForm,
+    form: !!activeForm || !!siteUUID,
     updateSite: !!siteUUID
   }
 
