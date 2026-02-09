@@ -16,6 +16,7 @@ import Complaints from "./pages/Enforcement/Complaints"
 import Discharges from "./pages/Enforcement/Discharges"
 import Contacts from "./pages/Contacts"
 import Redirect from "./pages/Redirect"
+import Docs from "./pages/Docs"
 
 const queryClient = new QueryClient()
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/enforcement/complaints" element={<Complaints />} />
           <Route path="/enforcement/discharges" element={<Discharges />} />
           <Route path="/contacts" element={<Contacts />} />
+          <Route path="/docs" element={<Docs />} />
           <Route path="/*" element={<Redirect />} />
         </Routes>
       </Router>

@@ -1,6 +1,29 @@
 // Types
 import { MapHitInterface } from "@/components/sites/containers/SitesContainer/types"
+import { AccountInfo, IPublicClientApplication } from '@azure/msal-browser'
 import { MotionProps } from "motion/react"
+
+export const getUserDepartment = async (instance: IPublicClientApplication, activeAccount: AccountInfo) => {
+  const graphConfig = {
+    graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me?$select=department',
+    scopes: ['User.Read']
+  }
+
+  const accessTokenRequest = {
+    scopes: graphConfig.scopes,
+    account: activeAccount
+  }
+
+  const result = await instance.acquireTokenSilent(accessTokenRequest)
+  const accessToken = result.accessToken
+
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${ accessToken }`)
+  const response = await fetch(graphConfig.graphMeEndpoint, { headers })
+  const data = await response.json()
+
+  return data.department
+}
 
 export const authHeaders = (token: string | undefined) => {
   const headers = new Headers()

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useMsal } from "@azure/msal-react"
+import { AccountInfo } from "@azure/msal-browser"
 import { NODE_ENV } from '@config/index'
+import { getUserDepartment } from "./utils"
 
 export const useGetToken = () => {
   const [state, setState] = useState<{ token: string | undefined, isLoading: boolean }>({ token: undefined, isLoading: true })
@@ -124,6 +126,33 @@ export const useReturnUserRoles = () => {
   const roles = activeAccount?.idTokenClaims?.roles || []
   
   return roles
+}
+
+export const useGetUserDepartment = () => {
+  const [state, setState] = useState<{ department: string | undefined, isLoading: boolean }>({ department: undefined, isLoading: true })
+
+  const { instance, inProgress } = useMsal()
+  const activeAccount = instance.getActiveAccount()
+
+  useEffect(() => {
+    if(NODE_ENV === 'development') {
+      setState({ department: 'IT', isLoading: false })
+      return
+    }
+
+    if(activeAccount && inProgress === 'none' && !state.department) {
+      getUserDepartment(instance, activeAccount as AccountInfo)
+        .then(department => setState({ department, isLoading: false }))
+        .catch((err) => {
+          console.log(err)
+          setState(prev => ({ ...prev, isLoading: false }))
+        })
+    } else if(inProgress === 'none' && !activeAccount) {
+      setState(prev => ({ ...prev, isLoading: false }))
+    }
+  }, [inProgress, state.department])
+
+  return { department: state.department, isLoading: state.isLoading }
 }
 
 export const useDebounce = <T>(value: T, delay: number): T => { // Debouncer
