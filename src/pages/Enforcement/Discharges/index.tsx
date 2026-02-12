@@ -1,5 +1,5 @@
 import { EnforcementProvider } from "@/components/enforcement/context"
-import { useGetDischarges } from './hooks'
+import { useGetDischarges } from "./hooks"
 
 // Components
 import Layout from "../../../components/layout/Layout"
@@ -13,7 +13,7 @@ function Discharges() {
   return (
     <Layout>
       <HandleLoading isSuccess={isSuccess}>
-        <ErrorBoundary href={'/sites'}>
+        <ErrorBoundary href={"/sites"}>
           <EnforcementProvider>
             <DischargesContainer discharges={data?.data || []} />
           </EnforcementProvider>

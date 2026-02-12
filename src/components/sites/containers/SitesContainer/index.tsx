@@ -1,23 +1,23 @@
-import { memo } from 'react'
-import { useHandleSitesContainer } from './hooks'
-import SitesCtx from '../../context'
-import styles from './SitesContainer.module.css'
+import { memo } from "react"
+import { useHandleSitesContainer } from "./hooks"
+import SitesCtx from "../../context"
+import styles from "./SitesContainer.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import Search from '../../search/Search'
+import Search from "../../search/Search"
 import SitesTable from "../../tables/SitesTable"
-import SitesActivityCalendar from '../../calendar/SitesActivityCalendar'
-import Motion from '@/utils/Motion'
-import * as Components from './components'
+import SitesActivityCalendar from "../../calendar/SitesActivityCalendar"
+import Motion from "@/utils/Motion"
+import * as Components from "./components"
 
 function SitesContainer({ sites }: { sites: AppTypes.SiteInterface[] }) {
   const { tableData, activeSitesBtnProps, onOpenIssuesBtnClick } = useHandleSitesContainer(sites)
 
   return (
-    <Motion animation={'fadeInOut'}>
+    <Motion animation={"fadeInOut"}>
       <div className="flex flex-col my-10">
 
         <div className="flex justify-between mb-4 w-full">

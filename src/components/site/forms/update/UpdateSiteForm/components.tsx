@@ -1,5 +1,5 @@
-import styles from '@/components/form-elements/Forms.module.css'
-import { useSetCreateSiteMapView, useHandleInactiveCheckbox } from './hooks'
+import styles from "@/components/form-elements/Forms.module.css"
+import { useSetCreateSiteMapView, useHandleInactiveCheckbox } from "./hooks"
 
 export const Map = () => { // Map input
   const mapRef = useSetCreateSiteMapView()

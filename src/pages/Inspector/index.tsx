@@ -1,14 +1,14 @@
-import { useGetInspector } from './hooks'
-import { InspectorProvider } from '@/components/inspectors/context'
+import { useGetInspector } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import Layout from '../../components/layout/Layout'
-import HandleLoading from '../../utils/HandleLoading'
-import InspectorContainer from '../../components/inspectors/containers/InspectorContainer'
-import ErrorBoundary from '../../components/layout/error/ErrorBoundary'
+import Layout from "../../components/layout/Layout"
+import HandleLoading from "../../utils/HandleLoading"
+import ErrorBoundary from "../../components/layout/error/ErrorBoundary"
+import { InspectorProvider } from "@/components/inspectors/context"
+import InspectorContainer from "../../components/inspectors/containers/InspectorContainer"
 
 function Inspector() {
   const { data, isSuccess } = useGetInspector()
@@ -16,7 +16,7 @@ function Inspector() {
   return (
     <Layout>
       <HandleLoading isSuccess={isSuccess}>
-        <ErrorBoundary href={'/sites'}>
+        <ErrorBoundary href={"/sites"}>
           <InspectorProvider>
             <InspectorContainer 
               sites={data?.data.sites || []}

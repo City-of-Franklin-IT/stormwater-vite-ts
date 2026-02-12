@@ -7,11 +7,11 @@ import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
-import { handleUpdateIllicitDischarge } from './utils'
+import { handleUpdateIllicitDischarge } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
-import { StreamWatershedEnum } from "../../create/CreateIllicitDischargeForm/types"
+import * as AppTypes from "@/context/App/types"
+import { StreamWatershedEnum } from "../../create/CreateIllicitDischargeForm/hooks"
 
 /**
 * Returns update illicit discharge form methods, form submit function, and cancel button onClick handler
@@ -31,12 +31,12 @@ const useUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischar
   const setStreamWatershed = useSetStreamWatershed(illicitDischarge.streamWatershed) 
 
   return useForm<AppTypes.IllicitDischargeCreateInterface>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
       ...illicitDischarge,
       date: formatDate(illicitDischarge.date),
       streamWatershed: setStreamWatershed,
-      otherStreamWatershed: setStreamWatershed === 'Other' ? illicitDischarge.streamWatershed : '',
+      otherStreamWatershed: setStreamWatershed === "Other" ? illicitDischarge.streamWatershed : "",
       penaltyDate: illicitDischarge.penaltyDate ? formatDate(illicitDischarge.penaltyDate) : null,
       penaltyDueDate: illicitDischarge.penaltyDueDate ? formatDate(illicitDischarge.penaltyDueDate) : null,
       paymentReceived: illicitDischarge.paymentReceived ? formatDate(illicitDischarge.paymentReceived) : null,
@@ -51,7 +51,7 @@ const useUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischar
 /**
 * Returns update illicit discharge form submit function
 **/
-const useHandleFormSubmit = () => { // Handle form submit
+const useHandleFormSubmit = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
   const queryClient = useQueryClient()
@@ -62,21 +62,21 @@ const useHandleFormSubmit = () => { // Handle form submit
   return async (formData: AppTypes.IllicitDischargeCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateIllicitDischarge(formData, token)
+    const result = await handleUpdateIllicitDischarge(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
+    if(!result?.success) {
+      errorPopup(result?.msg || "Error Updating Illicit Discharge")
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getIllicitDischarges'] })
-    queryClient.invalidateQueries({ queryKey: ['getIllicitDischarge', formData.uuid] })
-    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
-    dispatch({ type: 'RESET_CTX' })
+    queryClient.invalidateQueries({ queryKey: ["getIllicitDischarges"] })
+    queryClient.invalidateQueries({ queryKey: ["getIllicitDischarge", formData.uuid] })
+    queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    dispatch({ type: "RESET_CTX" })
   }
 }
 
 const useSetStreamWatershed = (streamWatershed: StreamWatershedEnum | string) => {
   if(streamWatershed in StreamWatershedEnum) {
     return streamWatershed as StreamWatershedEnum
-  } else return 'Other'
+  } else return "Other"
 }

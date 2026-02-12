@@ -1,8 +1,8 @@
-import { useGetIllicitDischarge } from './hooks'
+import { useGetIllicitDischarge } from "./hooks"
 
 // Components
-import HandleLoading from '@/utils/HandleLoading'
-import * as Components from './components'
+import HandleLoading from "@/utils/HandleLoading"
+import * as Components from "./components"
 
 type GetIllicitDischargeProps = { handleDeleteBtn: { onClick: React.MouseEventHandler<HTMLButtonElement>, label: string } }
 

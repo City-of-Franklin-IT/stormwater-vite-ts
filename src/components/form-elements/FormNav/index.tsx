@@ -1,7 +1,7 @@
-import { useContext } from 'react'
-import EnforcementCtx from '@/components/enforcement/context'
-import { useHandleFormNav } from './hooks'
-import styles from './FormNav.module.css'
+import { useContext } from "react"
+import EnforcementCtx from "@/components/enforcement/context"
+import { useHandleFormNav } from "./hooks"
+import styles from "./FormNav.module.css"
 
 // Components
 import FormNavBtn from "../buttons/FormNavBtn"
@@ -18,23 +18,23 @@ function FormNav() {
       Select Form Type
       <div className="flex gap-8 w-full">
         <FormNavBtn 
-          isActive={activeForm === 'createSiteLog'}
-          onClick={() => onClick('createSiteLog')}>
+          isActive={activeForm === "createSiteLog"}
+          onClick={() => onClick("createSiteLog")}>
             Site Log
         </FormNavBtn>
         <FormNavBtn 
-          isActive={activeForm === 'createViolation'}
-          onClick={() => onClick('createViolation')}>
+          isActive={activeForm === "createViolation"}
+          onClick={() => onClick("createViolation")}>
             Violation
         </FormNavBtn>
         <FormNavBtn 
-          isActive={activeForm === 'createComplaint'}
-          onClick={() => onClick('createComplaint')}>
+          isActive={activeForm === "createComplaint"}
+          onClick={() => onClick("createComplaint")}>
             Complaint
         </FormNavBtn>
         <FormNavBtn 
-          isActive={activeForm === 'createIllicitDischarge'}
-          onClick={() => onClick('createIllicitDischarge')}>
+          isActive={activeForm === "createIllicitDischarge"}
+          onClick={() => onClick("createIllicitDischarge")}>
             Illicit Discharge
         </FormNavBtn>
       </div>

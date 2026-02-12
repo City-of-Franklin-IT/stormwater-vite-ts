@@ -1,11 +1,11 @@
-import { useHandleDateRangeInput, useHandleClearBtn } from './hooks'
+import { useHandleDateRangeInput, useHandleClearBtn } from "./hooks"
 
 export const DateRangeInputs = () => {
 
   return (
     <div className="flex gap-10">
-      <DateRangeInput param={'start'} />
-      <DateRangeInput param={'end'} />
+      <DateRangeInput param={"start"} />
+      <DateRangeInput param={"end"} />
     </div>
   )
 }
@@ -22,7 +22,7 @@ export const ClearBtn = () => {
   )
 }
 
-const DateRangeInput = ({ param }: { param: 'start' | 'end' }) => {
+const DateRangeInput = ({ param }: { param: "start" | "end" }) => {
   const inputParams = useHandleDateRangeInput(param)
 
   return (

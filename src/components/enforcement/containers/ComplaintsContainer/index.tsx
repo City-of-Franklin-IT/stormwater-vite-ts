@@ -1,17 +1,17 @@
-import { memo } from 'react'
-import { useResetCtx } from '../ViolationsContainer/hooks'
-import { useHandleTableData, useHandleDeleteBtn } from './hooks'
+import { memo } from "react"
+import { useResetCtx } from "../ViolationsContainer/hooks"
+import { useHandleTableData, useHandleDeleteBtn } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import ComplaintsIndicator from '../../indicators/ComplaintsIndicator'
-import DateRangeFilter from '../../filters/DateRangeFilter'
-import { CreateBtn, UpdateForm } from '../ViolationsContainer/components'
-import GetComplaint from '@/components/enforcement/forms/get/GetComplaint'
-import Motion from '@/utils/Motion'
-import * as Components from './components'
+import ComplaintsIndicator from "../../indicators/ComplaintsIndicator"
+import DateRangeFilter from "../../filters/DateRangeFilter"
+import { CreateBtn, UpdateForm } from "../ViolationsContainer/components"
+import GetComplaint from "@/components/enforcement/forms/get/GetComplaint"
+import Motion from "@/utils/Motion"
+import * as Components from "./components"
 
 function ComplaintsContainer({ complaints }: { complaints: AppTypes.ComplaintInterface[] }) {
   const tableData = useHandleTableData(complaints)
@@ -21,10 +21,10 @@ function ComplaintsContainer({ complaints }: { complaints: AppTypes.ComplaintInt
   useResetCtx()
 
   return (
-    <Motion animation={'slideInRight'}>
+    <Motion animation={"slideInRight"}>
       <div className="flex flex-col my-10 gap-10 m-auto w-full max-w-7xl">
         <div className="relative flex flex-col gap-11 p-20 pt-30 bg-neutral/10 shadow-xl">
-          <CreateBtn href={'/create/enforcement/complaints'}>Create New Complaint</CreateBtn>
+          <CreateBtn href={"/create/enforcement/complaints"}>Create New Complaint</CreateBtn>
           <div className="absolute flex items-center gap-3 top-8 right-8">
             <Components.ReportBtn />
             <Components.ExportBtn />

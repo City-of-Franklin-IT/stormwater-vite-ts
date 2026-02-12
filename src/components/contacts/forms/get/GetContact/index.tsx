@@ -2,7 +2,7 @@ import { useGetContact } from "./hooks"
 
 // Components
 import HandleLoading from "@/utils/HandleLoading"
-import * as Components from './components'
+import * as Components from "./components"
 
 function GetContact() {
   const { data, isSuccess } = useGetContact()

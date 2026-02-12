@@ -1,5 +1,5 @@
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import UpdateSiteIllicitDischargeForm from "../../update/UpdateIllicitDischargeForm"

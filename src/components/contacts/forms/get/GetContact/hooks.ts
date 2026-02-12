@@ -2,7 +2,7 @@ import { useContext, useState, useCallback } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import ContactsCtx from "@/components/contacts/context"
 import { authHeaders } from "@/helpers/utils"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 import { useEnableQuery } from "@/helpers/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 
@@ -12,7 +12,7 @@ export const useGetContact = () => { // Get contact
   const { enabled, token } = useEnableQuery()
   
   return useQuery({
-    queryKey: ['getContact', formUUID],
+    queryKey: ["getContact", formUUID],
     queryFn: () => AppActions.getContact(formUUID, authHeaders(token)),
     enabled: enabled && !!formUUID
   })
@@ -39,7 +39,7 @@ export const useHandleDeleteBtnClick = () => {
         savedPopup(result.msg)
       } else errorPopup(result.msg)
 
-      queryClient.invalidateQueries({ queryKey: ['getContacts'] })
+      queryClient.invalidateQueries({ queryKey: ["getContacts"] })
     }
   }, [state.active, enabled, token, formUUID, queryClient])
 

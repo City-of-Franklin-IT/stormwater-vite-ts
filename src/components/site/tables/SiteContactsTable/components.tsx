@@ -1,9 +1,9 @@
 import { formatPhone } from "@/helpers/utils"
-import starIcon from '@/assets/icons/star/star.svg'
+import starIcon from "@/assets/icons/star/star.svg"
 import { setSiteContactsTableData, setAllSiteContacts } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 type SiteContactRoleType = 
   | "Primary"
@@ -71,7 +71,7 @@ const TableRow = ({ siteContact }: { siteContact: SiteContactType }) => {
       <td>
         <div className="flex gap-2">
           <span>{siteContact.role}</span>
-          <PrimaryIcon visible={siteContact.role === 'Primary'} />
+          <PrimaryIcon visible={siteContact.role === "Primary"} />
         </div>
       </td>
     </tr>
@@ -84,7 +84,7 @@ const ContactTableData = ({ siteContact }: { siteContact: SiteContactType }) => 
     <td className="flex flex-col whitespace-nowrap">
       <div className="flex gap-2">
         <span className="font-extrabold whitespace-nowrap">{siteContact.name}</span>
-        <PrimaryIcon visible={siteContact.role === 'Primary'} />
+        <PrimaryIcon visible={siteContact.role === "Primary"} />
       </div>
       <span>{siteContact.company}</span>
       <Phone phone={siteContact.phone} />

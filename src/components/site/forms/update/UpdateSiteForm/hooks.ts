@@ -1,23 +1,23 @@
 import { useContext, useEffect, useState, useRef } from "react"
 import { useForm, useFormContext } from "react-hook-form"
 import { useQueryClient } from "@tanstack/react-query"
-import Map from '@arcgis/core/Map'
-import MapView from '@arcgis/core/views/MapView'
-import Point from '@arcgis/core/geometry/Point'
-import Graphic from '@arcgis/core/Graphic'
-import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import Map from "@arcgis/core/Map"
+import MapView from "@arcgis/core/views/MapView"
+import Point from "@arcgis/core/geometry/Point"
+import Graphic from "@arcgis/core/Graphic"
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
 import { TextSymbol } from "@arcgis/core/symbols"
 import EnforcementCtx from "@/components/enforcement/context"
 import SiteCtx from "@/components/site/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
-import pinWarningIcon from '@/assets/icons/pin/warning-pin.png'
+import pinWarningIcon from "@/assets/icons/pin/warning-pin.png"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 import { handleUpdateSite } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 /**
 * Returns update site form methods, cancel button onClick handler, and form submit function
@@ -68,14 +68,14 @@ export const useSetCreateSiteMapView = () => {
 export const useHandleInactiveCheckbox = () => {
   const { getValues, setValue, watch } = useUpdateSiteFormContext()
 
-  const siteId = getValues('siteId')
+  const siteId = getValues("siteId")
 
-  const checked = !!watch('InactiveSite.siteId')
+  const checked = !!watch("InactiveSite.siteId")
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.checked ? String(siteId) : ''
+    const value = e.currentTarget.checked ? String(siteId) : ""
 
-    setValue('InactiveSite.siteId', value)
+    setValue("InactiveSite.siteId", value)
   }
 
   return { checked, onChange }
@@ -87,7 +87,7 @@ export const useHandleInactiveCheckbox = () => {
 const useUpdateSiteForm = (site: AppTypes.SiteInterface) => { // UpdateSiteForm useForm state
 
   return useForm<AppTypes.SiteCreateInterface>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
       siteId: site.siteId,
       name: site.name,
@@ -115,8 +115,8 @@ const useOnCancelBtnClick = () => {
   const { dispatch: siteDispatch } = useContext(SiteCtx)
 
   const onClick = () => {
-    enforcementDispatch({ type: 'RESET_CTX' })
-    siteDispatch({ type: 'RESET_CTX' })
+    enforcementDispatch({ type: "RESET_CTX" })
+    siteDispatch({ type: "RESET_CTX" })
   }
 
   return onClick
@@ -135,14 +135,14 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.SiteCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateSite(formData, token)
+    const result = await handleUpdateSite(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
+    if(!result?.success) {
+      errorPopup(result?.msg || "Error Updating Site")
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getSite', formData.uuid] })
-    dispatch({ type: 'RESET_CTX' })
+    queryClient.invalidateQueries({ queryKey: ["getSite", formData.uuid] })
+    dispatch({ type: "RESET_CTX" })
   }
 }
 
@@ -152,15 +152,15 @@ const useHandleFormSubmit = () => {
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
   const { setValue, getValues } = useFormContext<AppTypes.SiteCreateInterface>()
 
-  const xCoordinate = getValues('xCoordinate')
-  const yCoordinate = getValues('yCoordinate')
+  const xCoordinate = getValues("xCoordinate")
+  const yCoordinate = getValues("yCoordinate")
 
   useEffect(() => {
     const coordinates = { xCoordinate, yCoordinate }
 
     if(!mapRef?.current || !coordinates) return
 
-    const map = new Map({ basemap: 'dark-gray-vector' })
+    const map = new Map({ basemap: "dark-gray-vector" })
 
     const mapView = new MapView({
       container: mapRef.current,
@@ -172,15 +172,15 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
 
     mapView.when(() => setState(prevState => ({ ...prevState, view: mapView })))
 
-    const pointGraphicsLayer = new GraphicsLayer({ id: 'pointGraphicsLayer' })
-    const textGraphicsLayer = new GraphicsLayer({ id: 'textGraphicsLayer' })
+    const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
+    const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer" })
     map.addMany([pointGraphicsLayer, textGraphicsLayer])
 
     const onMapClick = mapView.on("click", async (e) => {
       const mappoint = e.mapPoint
 
-      setValue('xCoordinate', mappoint.longitude, { shouldValidate: true, shouldDirty: true })
-      setValue('yCoordinate', mappoint.latitude, { shouldValidate: true, shouldDirty: true })
+      setValue("xCoordinate", mappoint.longitude, { shouldValidate: true, shouldDirty: true })
+      setValue("yCoordinate", mappoint.latitude, { shouldValidate: true, shouldDirty: true })
     })
 
     return () => {
@@ -198,16 +198,16 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
 const useSetMapGraphics = (state: { view: __esri.MapView | null }) => {
   const { watch } = useFormContext<AppTypes.SiteCreateInterface>()
 
-  const xCoordinate = watch('xCoordinate')
-  const yCoordinate = watch('yCoordinate')
+  const xCoordinate = watch("xCoordinate")
+  const yCoordinate = watch("yCoordinate")
 
   useEffect(() => {
     if(!state.view) return
 
     const coordinates = { xCoordinate, yCoordinate }
 
-    const pointGraphicsLayer = state.view.map?.findLayerById('pointGraphicsLayer') as GraphicsLayer
-    const textGraphicsLayer = state.view.map?.findLayerById('textGraphicsLayer') as GraphicsLayer
+    const pointGraphicsLayer = state.view.map?.findLayerById("pointGraphicsLayer") as GraphicsLayer
+    const textGraphicsLayer = state.view.map?.findLayerById("textGraphicsLayer") as GraphicsLayer
     pointGraphicsLayer?.removeAll()
     textGraphicsLayer?.removeAll()
 

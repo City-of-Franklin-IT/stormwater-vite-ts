@@ -1,10 +1,10 @@
-import icon from '@/assets/icons/violation/violation.svg'
+import icon from "@/assets/icons/violation/violation.svg"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import * as Components from './components'
+import * as Components from "./components"
 
 function SiteViolationsIndicator({ violations }: { violations: AppTypes.ConstructionViolationInterface[] }) {
 

@@ -32,7 +32,7 @@ export const ClearBtn = () => { // Clear search button
   return (
     <button 
       type="button" 
-      onClick={() => dispatch({ type: 'SET_SEARCH_VALUE', payload: '' })}
+      onClick={() => dispatch({ type: "SET_SEARCH_VALUE", payload: "" })}
       className="btn btn-primary uppercase h-full shadow-xl">
         Clear
     </button>

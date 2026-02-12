@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 import { authHeaders } from "@/helpers/utils"
 import { useEnableQuery } from "../../../helpers/hooks"
 
@@ -10,7 +10,7 @@ export const useGetComplaints = () => {
   const { enabled, token } = useEnableQuery()
 
   return useQuery({
-    queryKey: ['getComplaints'],
+    queryKey: ["getComplaints"],
     queryFn: () => AppActions.getComplaints(authHeaders(token)),
     enabled,
     staleTime: Infinity

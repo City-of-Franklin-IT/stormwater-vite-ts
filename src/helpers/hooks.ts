@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useMsal } from "@azure/msal-react"
 import { AccountInfo } from "@azure/msal-browser"
-import { NODE_ENV } from '@config/index'
+import { NODE_ENV } from "@config/index"
 import { getUserDepartment } from "./utils"
 
 export const useGetToken = () => {
@@ -9,8 +9,8 @@ export const useGetToken = () => {
 
   const { instance, accounts, inProgress } = useMsal()
 
-  if(NODE_ENV === 'development') {
-    return { token: 'dev-token', isLoading: false }
+  if(NODE_ENV === "development") {
+    return { token: "dev-token", isLoading: false }
   }
 
   const checkToken = async () => {
@@ -20,7 +20,7 @@ export const useGetToken = () => {
 
     if(!activeAccount && accounts.length === 0) {
       setState(prevState => ({ ...prevState, isLoading: false }))
-      window.location.href = '/stormwater'
+      window.location.href = "/stormwater"
       return
     }
 
@@ -68,7 +68,7 @@ export const useGetToken = () => {
   }
 
   useEffect(() => {
-    if(inProgress !== 'none') { // Wait for instance to fully initialize
+    if(inProgress !== "none") { // Wait for instance to fully initialize
       return
     }
 
@@ -101,16 +101,16 @@ export const useRedirectAfterLogin = () => {
   const activeAccount = instance.getActiveAccount()
 
   useEffect(() => {
-    if(inProgress === 'none') {
+    if(inProgress === "none") {
 
       if(activeAccount) {
-        const redirectUrl = sessionStorage.getItem('redirectUrl') // Check for redirectUrl
+        const redirectUrl = sessionStorage.getItem("redirectUrl") // Check for redirectUrl
 
         if(redirectUrl) {        
           window.location.href = redirectUrl
-          sessionStorage.removeItem('redirectUrl')
+          sessionStorage.removeItem("redirectUrl")
         }
-      } else window.location.pathname = '/stormwater'
+      } else window.location.pathname = "/stormwater"
     }
   }, [activeAccount, inProgress])
 }
@@ -118,8 +118,8 @@ export const useRedirectAfterLogin = () => {
 export const useReturnUserRoles = () => {
   const { instance } = useMsal()
 
-  if(NODE_ENV === 'development') {
-    return ['task.write']
+  if(NODE_ENV === "development") {
+    return ["task.write"]
   }
   
   const activeAccount = instance.getActiveAccount()
@@ -135,19 +135,19 @@ export const useGetUserDepartment = () => {
   const activeAccount = instance.getActiveAccount()
 
   useEffect(() => {
-    if(NODE_ENV === 'development') {
-      setState({ department: 'IT', isLoading: false })
+    if(NODE_ENV === "development") {
+      setState({ department: "IT", isLoading: false })
       return
     }
 
-    if(activeAccount && inProgress === 'none' && !state.department) {
+    if(activeAccount && inProgress === "none" && !state.department) {
       getUserDepartment(instance, activeAccount as AccountInfo)
         .then(department => setState({ department, isLoading: false }))
         .catch((err) => {
           console.log(err)
           setState(prev => ({ ...prev, isLoading: false }))
         })
-    } else if(inProgress === 'none' && !activeAccount) {
+    } else if(inProgress === "none" && !activeAccount) {
       setState(prev => ({ ...prev, isLoading: false }))
     }
   }, [inProgress, state.department])

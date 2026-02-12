@@ -1,4 +1,4 @@
-import icon from '@/assets/icons/leaf/leaf.svg'
+import icon from "@/assets/icons/leaf/leaf.svg"
 
 function GreenInfrastructure() {
   

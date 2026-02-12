@@ -1,11 +1,11 @@
 import { useGetSiteLog } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import HandleLoading from "@/utils/HandleLoading"
-import * as Components from './components'
+import * as Components from "./components"
 
 function GetSiteLog() {
   const { data, isSuccess } = useGetSiteLog()

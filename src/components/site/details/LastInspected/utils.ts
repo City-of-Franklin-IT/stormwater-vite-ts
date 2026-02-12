@@ -1,7 +1,7 @@
-import icon from '@/assets/icons/inspection/inspection.svg'
+import icon from "@/assets/icons/inspection/inspection.svg"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 export const handleLastInspected = (site: AppTypes.SiteInterface) => {
   const logs = site.Logs
@@ -10,7 +10,7 @@ export const handleLastInspected = (site: AppTypes.SiteInterface) => {
 
   const lastInspectionDate = logs[0].inspectionDate
 
-  const iconClassName = `w-10 ${ !lastInspectionDate ? 'opacity-40' : null }`
+  const iconClassName = `w-10 ${ !lastInspectionDate ? "opacity-40" : null }`
 
   return { lastInspectionDate, iconProps: { src: icon, className: iconClassName } }
 }

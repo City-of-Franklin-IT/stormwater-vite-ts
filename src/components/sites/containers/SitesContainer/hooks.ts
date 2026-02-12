@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from "react"
 import { useNavigate } from "react-router"
-import Map from '@arcgis/core/Map'
-import MapView from '@arcgis/core/views/MapView'
-import Point from '@arcgis/core/geometry/Point'
-import Graphic from '@arcgis/core/Graphic'
-import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import Map from "@arcgis/core/Map"
+import MapView from "@arcgis/core/views/MapView"
+import Point from "@arcgis/core/geometry/Point"
+import Graphic from "@arcgis/core/Graphic"
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
 import Search from "@arcgis/core/widgets/Search"
 import Home from "@arcgis/core/widgets/Home"
@@ -14,12 +14,31 @@ import Expand from "@arcgis/core/widgets/Expand"
 import { TextSymbol } from "@arcgis/core/symbols"
 import { mapHitTest } from "@/helpers/utils"
 import SitesCtx from "../../context"
-import { setSiteMarker } from './utils'
+import { setSiteMarker } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
-import Multipoint from '@arcgis/core/geometry/Multipoint'
-import { MapHitInterface, FilterableCtx } from './types'
+import * as AppTypes from "@/context/App/types"
+import Multipoint from "@arcgis/core/geometry/Multipoint"
+
+export interface MapHitInterface {
+  graphic: {
+    attributes: {
+      name: string
+      hasOpenViolation: boolean
+      uuid: string
+    }
+  }
+}
+
+export type FilterableCtx = {
+  searchValue: string
+  showActiveSitesOnly: boolean
+  showOpenIssuesOnly: boolean
+  dispatch: React.Dispatch<
+    | { type: "TOGGLE_SHOW_ACTIVE_SITES_ONLY" }
+    | { type: "TOGGLE_OPEN_ISSUES_ONLY" }
+  >
+}
 
 /**
 * Returns sites table data, active sites button props, and open issues button onClick handler
@@ -59,10 +78,10 @@ export const useSetTableData = <T extends FilterableCtx>(ctx: React.Context<T>, 
   let array = sites || []
 
   if(searchValue) {
-    const regex = new RegExp(searchValue, 'i')
+    const regex = new RegExp(searchValue, "i")
 
     array = array.filter(site => {
-      const searchableProps: (keyof AppTypes.SiteInterface)[] = ['name', 'cof', 'permit']
+      const searchableProps: (keyof AppTypes.SiteInterface)[] = ["name", "cof", "permit"]
       
       return searchableProps.some(prop => {
         const value = site[prop]
@@ -91,11 +110,11 @@ export const useHandleBtns = <T extends FilterableCtx>(ctx: React.Context<T>) =>
   const { showActiveSitesOnly, dispatch } = useContext(ctx)
 
   const onActiveSitesBtnClick = () => {
-    dispatch({ type: 'TOGGLE_SHOW_ACTIVE_SITES_ONLY' })
+    dispatch({ type: "TOGGLE_SHOW_ACTIVE_SITES_ONLY" })
   }
 
   const onOpenIssuesBtnClick = () => {
-    dispatch({ type: 'TOGGLE_OPEN_ISSUES_ONLY' })
+    dispatch({ type: "TOGGLE_OPEN_ISSUES_ONLY" })
   }
 
   const activeSitesBtnProps = {
@@ -115,7 +134,7 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
   useEffect(() => {
     if(!mapRef?.current) return
 
-    const map = new Map({ basemap: 'dark-gray-vector' })
+    const map = new Map({ basemap: "dark-gray-vector" })
 
     const mapView = new MapView({
       container: mapRef.current,
@@ -132,16 +151,16 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
       const basemapGallery = new BasemapGallery({ view: mapView })
       const basemapExpand = new Expand({ view: mapView, content: basemapGallery })
 
-      mapView.ui.add(searchWidget, { position: 'top-right' })
-      mapView.ui.add(homeWidget, { position: 'top-right' })
-      mapView.ui.add(zoomWidget, { position: 'top-right' })
-      mapView.ui.add(basemapExpand, { position: 'top-right' })
+      mapView.ui.add(searchWidget, { position: "top-right" })
+      mapView.ui.add(homeWidget, { position: "top-right" })
+      mapView.ui.add(zoomWidget, { position: "top-right" })
+      mapView.ui.add(basemapExpand, { position: "top-right" })
 
       setState(prevState => ({ ...prevState, view: mapView }))
     })
 
-    const pointGraphicsLayer = new GraphicsLayer({ id: 'pointGraphicsLayer' })
-    const textGraphicsLayer = new GraphicsLayer({ id: 'textGraphicsLayer', minScale: 20000 })
+    const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
+    const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer", minScale: 20000 })
     map.addMany([pointGraphicsLayer, textGraphicsLayer])
 
     const onMapClick = mapView.on("click", async (e) => {
@@ -197,8 +216,8 @@ const useSetMapGraphics = (sites: AppTypes.SiteInterface[], state: { view: __esr
   useEffect(() => {
     if(!state.view) return
 
-    const pointGraphicsLayer = state.view.map?.findLayerById('pointGraphicsLayer') as GraphicsLayer
-    const textGraphicsLayer = state.view.map?.findLayerById('textGraphicsLayer') as GraphicsLayer
+    const pointGraphicsLayer = state.view.map?.findLayerById("pointGraphicsLayer") as GraphicsLayer
+    const textGraphicsLayer = state.view.map?.findLayerById("textGraphicsLayer") as GraphicsLayer
     pointGraphicsLayer.removeAll()
     textGraphicsLayer.removeAll()
 

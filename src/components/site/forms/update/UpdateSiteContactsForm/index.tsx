@@ -1,7 +1,7 @@
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as Components from './components'
+import * as Components from "./components"
 
 function UpdateSiteContactsForm() {
 

@@ -1,13 +1,13 @@
 import { FormProvider } from "react-hook-form"
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 import { useHandleUpdateSiteLogForm } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
-import { DateInput } from '../../../../enforcement/forms/create/CreateSiteLogForm/components'
+import { DateInput } from "../../../../enforcement/forms/create/CreateSiteLogForm/components"
 
 function UpdateSiteLogForm({ siteLog }: { siteLog: AppTypes.SiteLogInterface }) {
   const { methods, onCancelBtnClick, handleFormSubmit } = useHandleUpdateSiteLogForm(siteLog)

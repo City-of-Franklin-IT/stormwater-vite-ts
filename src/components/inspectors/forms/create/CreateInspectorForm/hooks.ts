@@ -3,10 +3,10 @@ import { useNavigate } from "react-router"
 import { useForm, useFormContext } from "react-hook-form"
 import { useEnableQuery } from "@/helpers/hooks"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
-import { handleCreateInspectorFormSubmit } from './utils'
+import { handleCreateInspectorFormSubmit } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 /**
 * Returns create inspector form methods, form submit function, and cancel button onClick handler
@@ -34,10 +34,10 @@ export const useCreateInspectorFormContext = () => { // CreateInspectorForm cont
 const useCreateInspectorForm = () => {
 
   return useForm<AppTypes.InspectorCreateInterface>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
-      name: '',
-      email: ''
+      name: "",
+      email: ""
     }
   })
 }
@@ -48,7 +48,7 @@ const useCreateInspectorForm = () => {
 const useOnCancelBtnClick = () => {
   const navigate = useNavigate()
 
-  return () => navigate('/sites')
+  return () => navigate("/sites")
 }
 
 /**
@@ -63,15 +63,14 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.InspectorCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleCreateInspectorFormSubmit(formData, token)
+    const result = await handleCreateInspectorFormSubmit(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
-      navigate('/sites')
-      return
+    if(!result?.success) {
+      errorPopup(result?.msg || "Error Creating Inspector")
+      navigate("/sites")
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getInspectors'] })
-    navigate(`/inspectors/${ result.data.slug }`)
+    queryClient.invalidateQueries({ queryKey: ["getInspectors"] })
+    navigate(`/inspectors/${ result?.data.slug }`)
   }
 }

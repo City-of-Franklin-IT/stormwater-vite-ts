@@ -1,10 +1,10 @@
 // Icons
-import warningPinIcon from '../../../assets/icons/pin/warning-pin.png'
-import errorPinIcon from '../../../assets/icons/pin/error-pin.png'
-import neutralContentPinIcon from '../../../assets/icons/pin/neutral-content-pin.png'
+import warningPinIcon from "../../../assets/icons/pin/warning-pin.png"
+import errorPinIcon from "../../../assets/icons/pin/error-pin.png"
+import neutralContentPinIcon from "../../../assets/icons/pin/neutral-content-pin.png"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 export const LegendItems = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
 

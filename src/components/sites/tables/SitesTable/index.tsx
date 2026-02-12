@@ -1,11 +1,11 @@
-import { memo } from 'react'
-import styles from './SitesTable.module.css'
+import { memo } from "react"
+import styles from "./SitesTable.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import * as Components from './components'
+import * as Components from "./components"
 
 function SitesTable({ tableData }: { tableData: AppTypes.SiteInterface[] }) {
 

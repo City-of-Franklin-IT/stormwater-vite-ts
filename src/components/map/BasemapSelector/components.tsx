@@ -1,8 +1,8 @@
-import { basemapSelectOptions } from './utils'
+import { basemapSelectOptions } from "./utils"
 
 // Types
-import { BasemapType } from '@/components/sites/context'
-import { BasemapSelectProps } from './utils'
+import { BasemapType } from "@/components/sites/context"
+import { BasemapSelectProps } from "./utils"
 
 export const BasemapSelect = (props: BasemapSelectProps) => {
 

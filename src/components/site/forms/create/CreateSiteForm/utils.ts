@@ -1,8 +1,8 @@
-import * as AppActions from '@/context/App/AppActions'
-import { authHeaders } from '@/helpers/utils'
+import * as AppActions from "@/context/App/AppActions"
+import { authHeaders } from "@/helpers/utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 export const handleCreateSite = async (formData: AppTypes.SiteCreateInterface, token: string) => {
   const result = await AppActions.createSite(formData, authHeaders(token))

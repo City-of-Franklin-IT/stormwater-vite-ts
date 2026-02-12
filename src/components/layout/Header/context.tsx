@@ -4,11 +4,11 @@ import { createContext, useReducer } from "react"
 import { ReactNode, Reducer, Dispatch } from "react"
 
 export type PagesType =
-  | 'Sites'
-  | 'Contacts'
-  | 'Inspectors'
-  | 'Enforcement'
-  | 'Create'
+  | "Sites"
+  | "Contacts"
+  | "Inspectors"
+  | "Enforcement"
+  | "Create"
 
 type HeaderCtx = {
   dispatch: Dispatch<HeaderAction>
@@ -16,14 +16,14 @@ type HeaderCtx = {
   expanded: boolean
 }
 
-type HeaderState = Omit<HeaderCtx, 'dispatch'>
+type HeaderState = Omit<HeaderCtx, "dispatch">
 
 type HeaderAction =
-  | { type: 'SET_ACTIVE_PAGE', payload: PagesType }
-  | { type: 'TOGGLE_EXPANDED' }
+  | { type: "SET_ACTIVE_PAGE", payload: PagesType }
+  | { type: "TOGGLE_EXPANDED" }
 
 const initialState: HeaderState = {
-  activePage: 'Sites',
+  activePage: "Sites",
   expanded: true
 }
 
@@ -36,12 +36,12 @@ const HeaderCtx = createContext<HeaderCtx>({
 const HeaderReducer = (state: HeaderState, action: HeaderAction) => {
 
   switch(action.type) {
-    case 'SET_ACTIVE_PAGE':
+    case "SET_ACTIVE_PAGE":
       return {
         ...state,
         activePage: action.payload
       }
-    case 'TOGGLE_EXPANDED':
+    case "TOGGLE_EXPANDED":
       return {
         ...state,
         expanded: !state.expanded

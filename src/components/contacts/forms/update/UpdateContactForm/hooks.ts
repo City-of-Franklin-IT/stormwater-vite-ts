@@ -3,10 +3,10 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import ContactsCtx from "@/components/contacts/context"
 import { useEnableQuery } from "@/helpers/hooks"
-import { handleUpdateContact } from './utils'
+import { handleUpdateContact } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 
 /**
@@ -26,7 +26,7 @@ export const useHandleUpdateContactForm = (contact: AppTypes.ContactInterface) =
 const useUpdateContactForm = (contact: AppTypes.ContactInterface) => {
 
   return useForm<AppTypes.ContactCreateInterface>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
       name: contact.name,
       company: contact.company,
@@ -44,7 +44,7 @@ const useUpdateContactForm = (contact: AppTypes.ContactInterface) => {
 const useOnCancelBtnClick = () => {
   const { dispatch } = useContext(ContactsCtx)
 
-  return () => dispatch({ type: 'RESET_CTX' })
+  return () => dispatch({ type: "RESET_CTX" })
 }
 
 /**
@@ -60,14 +60,14 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.ContactCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateContact(formData, token)
+    const result = await handleUpdateContact(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
+    if(!result?.success) {
+      errorPopup(result?.msg)
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getContacts'] })
-    queryClient.invalidateQueries({ queryKey: ['getContact', formData.uuid] })
-    dispatch({ type: 'RESET_CTX' })
+    queryClient.invalidateQueries({ queryKey: ["getContacts"] })
+    queryClient.invalidateQueries({ queryKey: ["getContact", formData.uuid] })
+    dispatch({ type: "RESET_CTX" })
   }
 }

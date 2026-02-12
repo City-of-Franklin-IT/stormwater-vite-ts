@@ -1,10 +1,10 @@
-import { memo } from 'react'
+import { memo } from "react"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import * as Components from './components'
+import * as Components from "./components"
 
 function SiteContactsTable({ siteContacts }: { siteContacts: AppTypes.SiteContactInterface[] }) {
 

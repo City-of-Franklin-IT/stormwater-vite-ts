@@ -1,11 +1,11 @@
-import { HeaderProvider } from '../Header/context'
+import { HeaderProvider } from "../Header/context"
 
 // Components
-import Header from '../Header'
-import Footer from '../Footer'
+import Header from "../Header"
+import Footer from "../Footer"
 
 // Types
-import { ReactNode } from 'react'
+import { ReactNode } from "react"
 
 function Layout({ children }: { children: ReactNode }) {
 

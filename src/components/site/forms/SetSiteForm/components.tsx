@@ -1,7 +1,7 @@
-import { useHandleForm, useHandleSetCreateForm, useOnDeleteBtnClick, useHandleSetUpdateForm } from './hooks'
+import { useHandleForm, useHandleSetCreateForm, useOnDeleteBtnClick, useHandleSetUpdateForm } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import FormContainer from "../../../form-elements/FormContainer"
@@ -72,11 +72,11 @@ const SetUpdateForm = ({ site }: { site: AppTypes.SiteInterface }) => {
   }
 
   switch(activeForm) { 
-    case 'updateSiteLog':
+    case "updateSiteLog":
       return <GetSiteLog />
-    case 'updateViolation':
+    case "updateViolation":
       return <GetViolation handleDeleteBtn={deleteBtnProps.violation} />
-    case 'updateComplaint':
+    case "updateComplaint":
       return <GetComplaint handleDeleteBtn={deleteBtnProps.complaint} />
     default:
       return <GetIllicitDischarge handleDeleteBtn={deleteBtnProps.illicit} />

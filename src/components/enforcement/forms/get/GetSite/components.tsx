@@ -1,10 +1,10 @@
-import { useContext } from 'react'
-import EnforcementCtx from '@/components/enforcement/context'
-import { useGetActiveSiteNames, useGetSelectedSite, useNoSiteBtnVisibility } from './hooks'
-import { useSetFormType, useResetCtx } from './hooks'
+import { useContext } from "react"
+import EnforcementCtx from "@/components/enforcement/context"
+import { useGetActiveSiteNames, useGetSelectedSite, useNoSiteBtnVisibility } from "./hooks"
+import { useSetFormType, useResetCtx } from "./hooks"
 
 // Components
-import Motion from '@/utils/Motion'
+import Motion from "@/utils/Motion"
 import FormContainer from "../../../../form-elements/FormContainer"
 
 export const SiteSelect = ({ onSelect, onNoSiteSelect }: { onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void, onNoSiteSelect: () => void }) => { // Site select
@@ -58,7 +58,7 @@ export const Form = ({ visible }: { visible: boolean }) => { // Set form
   if(!visible || !Component || isFetching) return null
 
   return (
-    <Motion animation={'fadeInOut'}>
+    <Motion animation={"fadeInOut"}>
       <div className="m-auto w-4/5 mb-10 2xl:w-3/5">
         <FormContainer>
           <Component site={data?.data} />

@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "react-router"
 import EnforcementCtx from "@/components/enforcement/context"
 import SiteCtx from "../../context"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
@@ -38,14 +38,14 @@ export const useOnDeleteBtnClick = () => {
         savedPopup(result.msg)
       } else errorPopup(result.msg)
 
-      queryClient.invalidateQueries({ queryKey: ['getSites'] })
-      navigate('/sites')
+      queryClient.invalidateQueries({ queryKey: ["getSites"] })
+      navigate("/sites")
     }
   }, [state.active, enabled, token, siteUUID, queryClient, navigate])
   
   const label = !state.active ?
-    'Delete Site' : 
-    'Confirm Delete Site'
+    "Delete Site" : 
+    "Confirm Delete Site"
 
   return { onClick, label }
 }
@@ -58,7 +58,7 @@ export const useHandleForm = () => {
   const { siteUUID } = useContext(SiteCtx)
 
   const visible = activeForm || siteUUID
-  const createFormActive = activeForm && !activeForm?.includes('update')
+  const createFormActive = activeForm && !activeForm?.includes("update")
 
   return { visible, createFormActive }
 }

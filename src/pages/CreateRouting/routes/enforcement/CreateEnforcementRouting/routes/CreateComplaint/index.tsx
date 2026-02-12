@@ -7,7 +7,7 @@ function CreateComplaint() {
 
   return (
     <Layout>
-      <ErrorBoundary href={'/enforcement/complaints'}>
+      <ErrorBoundary href={"/enforcement/complaints"}>
         <GetSite />
       </ErrorBoundary>
     </Layout>

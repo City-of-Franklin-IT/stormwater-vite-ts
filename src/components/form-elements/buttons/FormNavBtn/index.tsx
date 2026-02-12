@@ -1,4 +1,4 @@
-import styles from './FormNavBtn.module.css'
+import styles from "./FormNavBtn.module.css"
 
 type FormNavBtnProps = { isActive: boolean, onClick: React.MouseEventHandler<HTMLButtonElement>, children: React.ReactNode }
 

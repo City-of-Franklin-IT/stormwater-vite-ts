@@ -1,4 +1,4 @@
-import icon from '@/assets/icons/required/required.svg'
+import icon from "@/assets/icons/required/required.svg"
 
 function RequiredIcon() {
 

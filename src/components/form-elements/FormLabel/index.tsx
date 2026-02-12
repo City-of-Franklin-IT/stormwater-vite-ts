@@ -1,11 +1,11 @@
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import { Path } from 'react-hook-form'
-import * as AppTypes from '@/context/App/types'
+import { Path } from "react-hook-form"
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import RequiredIcon from '../RequiredIcon'
+import RequiredIcon from "../RequiredIcon"
 
 type FormLabelProps = { name: Path<AppTypes.SiteCreateInterface|AppTypes.ConstructionViolationCreateInterface|AppTypes.ComplaintCreateInterface|AppTypes.IllicitDischargeCreateInterface|AppTypes.SiteLogCreateInterface|AppTypes.ContactCreateInterface>, required?: boolean, children: React.ReactNode }
 

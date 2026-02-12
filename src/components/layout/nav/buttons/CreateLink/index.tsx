@@ -1,5 +1,5 @@
-import { Link } from 'react-router'
-import styles from './CreateLink.module.css'
+import { Link } from "react-router"
+import styles from "./CreateLink.module.css"
 
 type CreateLinkProps = { href: string, children: React.ReactNode }
 

@@ -3,7 +3,7 @@ import { useGetSites } from "./hooks"
 
 // Components
 import Layout from "@/components/layout/Layout"
-import HandleLoading from '../../utils/HandleLoading'
+import HandleLoading from "../../utils/HandleLoading"
 import SitesContainer from "@/components/sites/containers/SitesContainer"
 import ErrorBoundary from "@/components/layout/error/ErrorBoundary"
 
@@ -13,7 +13,7 @@ function Sites() {
   return (
     <Layout>
       <HandleLoading isSuccess={isSuccess}>
-        <ErrorBoundary href={'/'}>
+        <ErrorBoundary href={"/"}>
           <SitesProvider>
             <SitesContainer sites={data?.data || []} />
           </SitesProvider>

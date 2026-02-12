@@ -7,7 +7,7 @@ function CreateIlllicitDischarge() {
   
   return (
     <Layout>
-      <ErrorBoundary href={'/enforcement/discharges'}>
+      <ErrorBoundary href={"/enforcement/discharges"}>
         <GetSite />
       </ErrorBoundary>
     </Layout>

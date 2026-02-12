@@ -5,11 +5,11 @@ export default () => {
   const { instance, inProgress } = useMsal()
 
   return () => {
-    if(inProgress === 'none') {
+    if(inProgress === "none") {
       instance
         .loginRedirect({
           ...loginRequest,
-          prompt: 'create'
+          prompt: "create"
         })
         .catch((error) => console.log(error))
     } else console.log(inProgress)

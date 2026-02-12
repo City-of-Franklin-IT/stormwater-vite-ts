@@ -7,7 +7,7 @@ import { FormType } from "@/components/site/context"
 export const useHandleFormNav = () => {
   const { activeForm, dispatch } = useContext(EnforcementCtx)
 
-  const showNav = activeForm?.includes('update') ? false : true
+  const showNav = activeForm?.includes("update") ? false : true
 
-  return { showNav, onClick: (formType: FormType) => dispatch({ type: 'SET_ACTIVE_FORM', payload: formType }) }
+  return { showNav, onClick: (formType: FormType) => dispatch({ type: "SET_ACTIVE_FORM", payload: formType }) }
 }

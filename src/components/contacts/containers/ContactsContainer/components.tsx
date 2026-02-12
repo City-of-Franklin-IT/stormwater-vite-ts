@@ -1,19 +1,19 @@
-import { useContext, useRef } from 'react'
-import { Link } from 'react-router'
-import ContactsCtx from '../../context'
-import { useScrollToFormRef } from '@/components/enforcement/containers/ViolationsContainer/hooks'
-import { useHandleNavBtns, useHandleTableRow } from './hooks'
-import { formatPhone } from '@/helpers/utils'
+import { useContext, useRef } from "react"
+import { Link } from "react-router"
+import ContactsCtx from "../../context"
+import { useScrollToFormRef } from "@/components/enforcement/containers/ViolationsContainer/hooks"
+import { useHandleNavBtns, useHandleTableRow } from "./hooks"
+import { formatPhone } from "@/helpers/utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
-import { FormProps } from '@/components/enforcement/containers/ViolationsContainer/components'
+import * as AppTypes from "@/context/App/types"
+import { FormProps } from "@/components/enforcement/containers/ViolationsContainer/components"
 
 // Components
-import Search from '../../search/Search'
+import Search from "../../search/Search"
 import FormContainer from "@/components/form-elements/FormContainer"
-import PrevPageBtn from '@/components/layout/nav/buttons/PrevPageBtn'
-import NextPageBtn from '@/components/layout/nav/buttons/NextPageBtn'
+import PrevPageBtn from "@/components/layout/nav/buttons/PrevPageBtn"
+import NextPageBtn from "@/components/layout/nav/buttons/NextPageBtn"
 
 export const ContactsTable = ({ contacts }: { contacts: AppTypes.ContactInterface[] }) => {
 
@@ -189,7 +189,7 @@ export const ShowInactiveCheckbox = ({ children }: { children: React.ReactNode }
         type="checkbox"
         className="checkbox checkbox-secondary"
         checked={showInactiveContacts}
-        onChange={() => dispatch({ type: 'TOGGLE_SHOW_INACTIVE_CONTACTS' })} />
+        onChange={() => dispatch({ type: "TOGGLE_SHOW_INACTIVE_CONTACTS" })} />
     </div>
   )
 }

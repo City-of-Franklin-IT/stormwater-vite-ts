@@ -1,7 +1,7 @@
-import { SearchableCtx } from './hooks'
+import { SearchableCtx } from "./hooks"
 
 // Components
-import * as Components from './components'
+import * as Components from "./components"
 
 function Search<T extends SearchableCtx>({ ctx }: { ctx: React.Context<T> }) {
 

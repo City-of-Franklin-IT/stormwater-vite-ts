@@ -1,9 +1,9 @@
-import { useOnRowClick } from './hooks'
-import { typeIconMap } from './utils'
+import { useOnRowClick } from "./hooks"
+import { typeIconMap } from "./utils"
 
 // Types
-import { FormType } from '../../context'
-import { IssueTableDataType } from './types'
+import { FormType } from "../../context"
+import { IssueTableDataType } from "./hooks"
 
 export const Table = ({ tableData }: { tableData: IssueTableDataType[] }) => {
 

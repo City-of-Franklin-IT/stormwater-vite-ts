@@ -1,11 +1,11 @@
-import { useRedirect } from '../Redirect/hooks'
+import { useRedirect } from "../Redirect/hooks"
 
 // Components
-import Layout from '@/components/layout/Layout'
-import LoginForm from '@/components/login/forms/LoginForm'
+import Layout from "@/components/layout/Layout"
+import LoginForm from "@/components/login/forms/LoginForm"
 
 function Login() {
-  useRedirect('/sites')
+  useRedirect("/sites")
 
   return (
     <Layout>

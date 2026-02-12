@@ -1,5 +1,5 @@
-import { useCreateComplaintFormContext } from '../../create/CreateComplaintForm/hooks'
-import styles from '@/components/form-elements/Forms.module.css'
+import { useCreateComplaintFormContext } from "../../create/CreateComplaintForm/hooks"
+import styles from "@/components/form-elements/Forms.module.css"
 
 export const CheckboxInputs = () => {
 
@@ -20,7 +20,7 @@ const ComplianceCheckbox = () => { // Compliance checkbox
       <input
         type="checkbox"
         className="checkbox checkbox-warning"
-        { ...methods.register('compliance') } />
+        { ...methods.register("compliance") } />
     </div>
   )
 }
@@ -34,7 +34,7 @@ const ClosedCheckbox = () => { // Closed checkbox
       <input
         type="checkbox"
         className="checkbox checkbox-warning"
-        { ...methods.register('closed') } />
+        { ...methods.register("closed") } />
     </div>
   )
 }

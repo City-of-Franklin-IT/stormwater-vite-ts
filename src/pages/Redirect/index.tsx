@@ -1,7 +1,7 @@
-import { useRedirect } from './hooks'
+import { useRedirect } from "./hooks"
 
 function Redirect() {
-  useRedirect('/sites')
+  useRedirect("/sites")
 
   return null
 }

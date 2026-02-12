@@ -3,7 +3,7 @@ import { useReturnUserRoles } from "@/helpers/hooks"
 import ContactsCtx from "../../context"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 /**
 * Returns contact page nav button props
@@ -13,13 +13,13 @@ export const useHandleNavBtns = () => {
 
   const handlePrevBtn = () => {
     if(currentPage !== 1) {
-      dispatch({ type: 'SET_CURRENT_PAGE', payload: currentPage - 1 })
+      dispatch({ type: "SET_CURRENT_PAGE", payload: currentPage - 1 })
     }
   }
 
   const handleNextBtn = () => {
     if(currentPage !== totalPages) {
-      dispatch({ type: 'SET_CURRENT_PAGE', payload: currentPage + 1 })
+      dispatch({ type: "SET_CURRENT_PAGE", payload: currentPage + 1 })
     }
   }
 
@@ -48,10 +48,10 @@ export const useHandleTableData = (contacts: AppTypes.ContactInterface[]) => {
     let contactsArray: AppTypes.ContactInterface[]
 
     if(searchValue) { // Search value
-      const regex = new RegExp(searchValue, 'i')
+      const regex = new RegExp(searchValue, "i")
 
       contactsArray = contacts.filter(contact => {
-        const searchableProps: (keyof AppTypes.ContactInterface)[] = ['name', 'company']
+        const searchableProps: (keyof AppTypes.ContactInterface)[] = ["name", "company"]
 
         return searchableProps.some(prop => {
           const value = contact[prop]
@@ -80,14 +80,14 @@ export const useHandleTableRow = (contact: AppTypes.ContactInterface) => {
   const roles = useReturnUserRoles()
 
   const onClick = () => {
-    if(!roles.includes('task.write')) {
+    if(!roles.includes("task.write")) {
       return null
     }
     
-    dispatch({ type: 'SET_FORM_UUID', payload: contact.uuid })
+    dispatch({ type: "SET_FORM_UUID", payload: contact.uuid })
   }
 
-  const className = `border-b-1 border-neutral-content/50 ${ contact.inactive ? 'opacity-50' : '' }`
+  const className = `border-b-1 border-neutral-content/50 ${ contact.inactive ? "opacity-50" : "" }`
 
   return { onClick, className }
 }
@@ -96,6 +96,6 @@ export const useSetTotalPages = (count: number) => { // Set total pages to ctx
   const { dispatch } = useContext(ContactsCtx)
 
   useEffect(() => {
-    dispatch({ type: 'SET_TOTAL_PAGES', payload: Math.ceil(count / 50) })
+    dispatch({ type: "SET_TOTAL_PAGES", payload: Math.ceil(count / 50) })
   }, [count, dispatch])
 }

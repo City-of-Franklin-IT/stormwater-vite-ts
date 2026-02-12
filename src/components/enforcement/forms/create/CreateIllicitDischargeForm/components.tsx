@@ -1,9 +1,9 @@
 import { useRef } from "react"
 import { useCreateIllicitDischargeFormContext, useSetInspectorOptions, useSetIllicitDischargeMapView } from "./hooks"
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import { StreamWatershedEnum } from "./types"
+import { StreamWatershedEnum } from "./hooks"
 
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
@@ -50,18 +50,18 @@ export const DetailsInput = () => { // Details input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'details'}
+          name={"details"}
           required={true}>
             Details:
         </FormLabel>
         <textarea
           className={styles.input}
           rows={4}
-          { ...register('details', {
-          required: 'Violation details is required',
+          { ...register("details", {
+          required: "Violation details is required",
           maxLength: {
             value: 2000,
-            message: 'Violation details must be 2000 characters or less'
+            message: "Violation details must be 2000 characters or less"
           }
         }) } />
       </div>
@@ -78,16 +78,16 @@ export const StreamWatershedSelect = () => { // Stream / watershed select
       <div className={styles.inputSection}>
         <div className="flex w-full">
           <FormLabel
-            name={'streamWatershed'}
+            name={"streamWatershed"}
             required={true}>
               Stream / Watershed:
           </FormLabel>
           <select 
             className={styles.input}
-            { ...register('streamWatershed', {
-              required: 'Stream / watershed is required',
+            { ...register("streamWatershed", {
+              required: "Stream / watershed is required",
             }) }>
-            <option value={''}></option>
+            <option value={""}></option>
             {Object.values(StreamWatershedEnum).map(streamWatershed => (
               <option key={streamWatershed} value={streamWatershed}>{streamWatershed}</option>
             ))}
@@ -134,15 +134,15 @@ const DateInput = () => { // Illicit discharge date
     <div className="flex-1 flex flex-col">
       <div className="flex">
         <FormLabel
-          name={'date'}
+          name={"date"}
           required={true}>
             Illicit Discharge Date:
         </FormLabel>
         <input 
           type="date"
           className={styles.input}
-          { ...register('date', {
-            required: 'Violation date is required',
+          { ...register("date", {
+            required: "Violation date is required",
           }) } />
       </div>
       <FormError error={errors.date?.message} />
@@ -160,13 +160,13 @@ const InspectorSelect = ({ visible }: { visible: boolean }) => { // Inspector se
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex">
-        <FormLabel name={'inspectorId'}>
+        <FormLabel name={"inspectorId"}>
           Inspector:
         </FormLabel>
         <select 
           className={styles.input}
-          { ...methods.register('inspectorId') }>
-            <option value={''}></option>
+          { ...methods.register("inspectorId") }>
+            <option value={""}></option>
             {inspectorOptions.map((inspector) => (
               <option key={inspector.value} value={inspector.value}>{inspector.text}</option>
             ))}
@@ -179,7 +179,7 @@ const InspectorSelect = ({ visible }: { visible: boolean }) => { // Inspector se
 const OtherStreamWatershedInput = () => { // Other stream / watershed input
   const { register, watch, formState: { errors } } = useCreateIllicitDischargeFormContext()
 
-  const visible = watch('streamWatershed') === StreamWatershedEnum.Other
+  const visible = watch("streamWatershed") === StreamWatershedEnum.Other
 
   if(!visible) return null
 
@@ -187,18 +187,18 @@ const OtherStreamWatershedInput = () => { // Other stream / watershed input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel 
-          name={'otherStreamWatershed'}
+          name={"otherStreamWatershed"}
           required={true}>
             Other Steam / Watershed:
         </FormLabel>
         <input 
           type="text" 
           className={styles.input}
-          { ...register('otherStreamWatershed', {
-            required: 'Stream / Watershed is required',
+          { ...register("otherStreamWatershed", {
+            required: "Stream / Watershed is required",
             maxLength: {
               value: 50,
-              message: 'Stream / Watershed must be 50 characters or less'
+              message: "Stream / Watershed must be 50 characters or less"
             }
           }) } />
       </div>
@@ -212,13 +212,13 @@ const PenaltyDateInput = () => { // Penalty date input
 
   return (
     <div className="flex-2 flex w-full">
-      <FormLabel name={'penaltyDate'}>
+      <FormLabel name={"penaltyDate"}>
         Date
       </FormLabel>
       <input
         type="date"
         className={styles.input}
-        { ...methods.register('penaltyDate') } />
+        { ...methods.register("penaltyDate") } />
     </div>
   )
 }
@@ -226,7 +226,7 @@ const PenaltyDateInput = () => { // Penalty date input
 const PenaltyAmountInput = () => { // Penalty amount input
   const { watch, register, formState: { errors } } = useCreateIllicitDischargeFormContext()
 
-  const visible = !!watch('penaltyDate')
+  const visible = !!watch("penaltyDate")
 
   if(!visible) return null
 
@@ -234,15 +234,15 @@ const PenaltyAmountInput = () => { // Penalty amount input
     <div className="flex-1 flex flex-col gap-2">
       <div className="flex">
         <FormLabel
-          name={'penaltyAmount'}
+          name={"penaltyAmount"}
           required={true}>
             Amount:
         </FormLabel>
         <input
           type="number"
           className={styles.input}
-          { ...register('penaltyAmount', {
-            required: 'Penalty amount is required'
+          { ...register("penaltyAmount", {
+            required: "Penalty amount is required"
           }) } />
       </div>
       <FormError error={errors.penaltyAmount?.message} />
@@ -253,7 +253,7 @@ const PenaltyAmountInput = () => { // Penalty amount input
 const PenaltyDueDate = () => { // Penalty due date input
   const { watch, register, formState: { errors } } = useCreateIllicitDischargeFormContext()
 
-  const visible = !!watch('penaltyDate')
+  const visible = !!watch("penaltyDate")
 
   if(!visible) return null
 
@@ -261,15 +261,15 @@ const PenaltyDueDate = () => { // Penalty due date input
     <div className="flex-1 flex flex-col gap-2">
       <div className="flex">
         <FormLabel
-          name={'penaltyDueDate'}
+          name={"penaltyDueDate"}
           required={true}>
             Due Date:
         </FormLabel>
         <input
           type="date"
           className={styles.input}
-          { ...register('penaltyDueDate', {
-            required: 'Penalty due date is required'
+          { ...register("penaltyDueDate", {
+            required: "Penalty due date is required"
           }) } />
       </div>
       <FormError error={errors.penaltyDueDate?.message} />
@@ -280,19 +280,19 @@ const PenaltyDueDate = () => { // Penalty due date input
 const PaymentReceivedDateInput = () => { // Payment received date input
   const methods = useCreateIllicitDischargeFormContext()
 
-  const visible = !!methods.watch('penaltyDate')
+  const visible = !!methods.watch("penaltyDate")
 
   if(!visible) return null
 
   return (
     <div className="flex-1 flex w-full">
-      <FormLabel name={'paymentReceived'}>
+      <FormLabel name={"paymentReceived"}>
         Received Date:
       </FormLabel>
       <input
         type="date"
         className={styles.input}
-        { ...methods.register('paymentReceived') } />
+        { ...methods.register("paymentReceived") } />
     </div>
   )
 }
@@ -303,16 +303,16 @@ const LocationDescriptionInput = () => { // Location description input
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex">
-        <FormLabel name={'locationDescription'}>
+        <FormLabel name={"locationDescription"}>
           Location Description:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('locationDescription', {
+          { ...register("locationDescription", {
             maxLength: {
               value: 50,
-              message: 'Location description must be 50 characters or less'
+              message: "Location description must be 50 characters or less"
             }
           }) } />
       </div>
@@ -327,16 +327,16 @@ const ResponsiblePartyInput = () => { // Responsible party input
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex">
-        <FormLabel name={'responsibleParty'}>
+        <FormLabel name={"responsibleParty"}>
           Responsible Party:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('responsibleParty', {
+          { ...register("responsibleParty", {
             maxLength: {
               value: 50,
-              message: 'Responsible party must be 50 characters or less'
+              message: "Responsible party must be 50 characters or less"
             },
           }) } />
       </div>
@@ -351,16 +351,16 @@ const EnforcementActionInput = () => { // Enforcement action input
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'enforcementAction'}>
+        <FormLabel name={"enforcementAction"}>
           Action:
         </FormLabel>
         <textarea
           className={styles.input}
           rows={4}
-          { ...register('enforcementAction', {
+          { ...register("enforcementAction", {
             maxLength: {
               value: 2000,
-              message: 'Enforcement action must be 2000 characters or less'
+              message: "Enforcement action must be 2000 characters or less"
             }
           }) } />
       </div>

@@ -1,7 +1,7 @@
 // Types
 import { Dispatch } from "react"
-import { StreamWatershedEnum } from "@/components/enforcement/forms/create/CreateIllicitDischargeForm/types"
-import { ConcernEnum } from "@/components/enforcement/forms/create/CreateComplaintForm/types"
+import { StreamWatershedEnum } from "@/components/enforcement/forms/create/CreateIllicitDischargeForm/hooks"
+import { ConcernEnum } from "@/components/enforcement/forms/create/CreateComplaintForm/hooks"
 
 export interface SiteInterface extends BaseInterface {
   siteId: string
@@ -27,7 +27,7 @@ export interface SiteInterface extends BaseInterface {
   InactiveSite?: InactiveSiteInterface
 }
 
-export interface SiteCreateInterface extends Omit<SiteInterface, 'siteId' | 'inactive' | 'hasOpenViolation' | 'hasOpenComplaint' | 'hasOpenIllicitDischarge' | 'Logs' | 'ConstructionViolations' | 'Complaints' | 'IllicitDischarges' | 'SiteContacts' | 'Inspector' | 'InactiveSite' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface SiteCreateInterface extends Omit<SiteInterface, "siteId" | "inactive" | "hasOpenViolation" | "hasOpenComplaint" | "hasOpenIllicitDischarge" | "Logs" | "ConstructionViolations" | "Complaints" | "IllicitDischarges" | "SiteContacts" | "Inspector" | "InactiveSite" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   siteId?: string
   inactive?: boolean
   Logs?: SiteLogCreateInterface[]
@@ -50,7 +50,7 @@ export interface InspectorInterface extends BaseInterface {
   IllicitDischarges?: IllicitDischargeInterface[]
 }
 
-export interface InspectorCreateInterface extends Omit<InspectorInterface, 'inspectorId' | 'slug' | 'inactive' | 'Sites' | 'Complaints' | 'IllicitDischarges' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface InspectorCreateInterface extends Omit<InspectorInterface, "inspectorId" | "slug" | "inactive" | "Sites" | "Complaints" | "IllicitDischarges" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   inspectorId?: string
 }
 
@@ -64,7 +64,7 @@ export interface SiteContactInterface extends BaseInterface {
   Contact?: ContactInterface
 }
 
-export interface SiteContactCreateInterface extends Omit<SiteContactInterface, 'isPrimary' | 'isContractor' | 'isInspector' | 'Site' | 'Contact' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface SiteContactCreateInterface extends Omit<SiteContactInterface, "isPrimary" | "isContractor" | "isInspector" | "Site" | "Contact" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   isPrimary?: boolean | null
   isContractor?: boolean | null
   isInspector?: boolean | null
@@ -77,7 +77,7 @@ export interface SiteLogInterface extends BaseInterface {
   inspectionDate: string
 }
 
-export interface SiteLogCreateInterface extends Omit<SiteLogInterface, 'logId' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface SiteLogCreateInterface extends Omit<SiteLogInterface, "logId" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   logId?: string
   uuid?: string
 }
@@ -101,7 +101,7 @@ export interface ConstructionViolationInterface extends BaseInterface {
   Site?: SiteInterface
 }
 
-export interface ConstructionViolationCreateInterface extends Omit<ConstructionViolationInterface, 'violationId' | 'FollowUpDates' | 'Site' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface ConstructionViolationCreateInterface extends Omit<ConstructionViolationInterface, "violationId" | "FollowUpDates" | "Site" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   readonly violationId: string
   FollowUpDates: FollowUpCreateInterface[]
   uuid?: string
@@ -131,7 +131,7 @@ export interface ComplaintInterface extends BaseInterface {
   Site?: SiteInterface
 }
 
-export interface ComplaintCreateInterface extends Omit<ComplaintInterface, 'complaintId' | 'Inspector' | 'FollowUpDates' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface ComplaintCreateInterface extends Omit<ComplaintInterface, "complaintId" | "Inspector" | "FollowUpDates" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   readonly complaintId: string
   FollowUpDates: FollowUpCreateInterface[]
   uuid?: string
@@ -163,7 +163,7 @@ export interface IllicitDischargeInterface extends BaseInterface {
   Site?: SiteInterface
 }
 
-export interface IllicitDischargeCreateInterface extends Omit<IllicitDischargeInterface, 'illicitId' | 'FollowUpDates' | 'Site' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface IllicitDischargeCreateInterface extends Omit<IllicitDischargeInterface, "illicitId" | "FollowUpDates" | "Site" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   readonly illicitId?: string
   FollowUpDates: FollowUpCreateInterface[]
   uuid?: string
@@ -177,7 +177,7 @@ export interface FollowUpInterface extends BaseInterface {
   followUpDate: string
 }
 
-export interface FollowUpCreateInterface extends Omit<FollowUpInterface, 'followUpId' | 'violationId' | 'complaintId' | 'illicitId' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface FollowUpCreateInterface extends Omit<FollowUpInterface, "followUpId" | "violationId" | "complaintId" | "illicitId" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   violationId?: string | null
   complaintId?: string | null
   illicitId?: string | null
@@ -194,7 +194,7 @@ export interface ContactInterface extends BaseInterface {
   SiteContacts?: SiteContactInterface[]
 }
 
-export interface ContactCreateInterface extends Omit<ContactInterface, 'contactId' | 'inactive' | 'SiteContacts' | 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface ContactCreateInterface extends Omit<ContactInterface, "contactId" | "inactive" | "SiteContacts" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   readonly contactid: string
   inactive?: boolean
   uuid?: string
@@ -204,7 +204,7 @@ export interface InactiveSiteInterface extends BaseInterface {
   siteId: string
 }
 
-export interface InactiveSiteCreateInterface extends Omit<InactiveSiteInterface, 'uuid' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'>{
+export interface InactiveSiteCreateInterface extends Omit<InactiveSiteInterface, "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   uuid?: string
 }
 
@@ -228,7 +228,7 @@ export interface AppContext { // App ctx
   showSiteViolations: boolean
 }
 
-export interface AppState extends Omit<AppContext, 'dispatch'>{}
+export interface AppState extends Omit<AppContext, "dispatch">{}
 
 export interface AppReducerProps { // AppReducer props
   state: AppState
@@ -249,20 +249,20 @@ export interface BaseInterface {
 }
 
 export type AppAction =
-  | { type: 'SET_ACTIVE_PAGE', payload: PageType }
-  | { type: 'SET_SEARCH_VALUE', payload: string }
-  | { type: 'TOGGLE_SHOW_OPEN_ISSUES_ONLY', payload: undefined }
-  | { type: 'TOGGLE_SHOW_ACTIVE_SITES_ONLY', payload: undefined }
-  | { type: 'SET_HOVERED_SITE', payload: string | undefined }
-  | { type: 'TOGGLE_SHOW_SITE_COMPLAINTS', payload: undefined }
-  | { type: 'TOGGLE_SHOW_SITE_VIOLATIONS', payload: undefined }
-  | { type: 'TOGGLE_SHOW_SITE_ILLICIT_DISCHARGES', payload: undefined }
-  | { type: 'TOGGLE_SHOW_CLOSED_SITE_ISSUES', payload: undefined }
-  | { type: 'TOGGLE_SHOW_MENU', payload: undefined }
-  | { type: 'SET_INSPECTOR_OPTIONS', payload: { text: string, value: string }[] }
-  | { type: 'SET_CONTACT_OPTIONS', payload: { text: string, value: string }[] }
-  | { type: 'SET_DATE_RANGE_FILTER', payload: { start: string | undefined, end: string | undefined } }
-  | { type: 'RESET_CTX', payload: undefined }
+  | { type: "SET_ACTIVE_PAGE", payload: PageType }
+  | { type: "SET_SEARCH_VALUE", payload: string }
+  | { type: "TOGGLE_SHOW_OPEN_ISSUES_ONLY", payload: undefined }
+  | { type: "TOGGLE_SHOW_ACTIVE_SITES_ONLY", payload: undefined }
+  | { type: "SET_HOVERED_SITE", payload: string | undefined }
+  | { type: "TOGGLE_SHOW_SITE_COMPLAINTS", payload: undefined }
+  | { type: "TOGGLE_SHOW_SITE_VIOLATIONS", payload: undefined }
+  | { type: "TOGGLE_SHOW_SITE_ILLICIT_DISCHARGES", payload: undefined }
+  | { type: "TOGGLE_SHOW_CLOSED_SITE_ISSUES", payload: undefined }
+  | { type: "TOGGLE_SHOW_MENU", payload: undefined }
+  | { type: "SET_INSPECTOR_OPTIONS", payload: { text: string, value: string }[] }
+  | { type: "SET_CONTACT_OPTIONS", payload: { text: string, value: string }[] }
+  | { type: "SET_DATE_RANGE_FILTER", payload: { start: string | undefined, end: string | undefined } }
+  | { type: "RESET_CTX", payload: undefined }
 
 export type PageType =
   | "Sites"

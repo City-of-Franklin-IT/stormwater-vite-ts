@@ -4,7 +4,7 @@ import { useReturnUserRoles } from "@/helpers/hooks"
 import { setTableDataStyle } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 /**
 * Returns sites table row onClick handler and className
@@ -14,7 +14,7 @@ export const useHandleTableRow = (site: AppTypes.SiteInterface, index: number) =
   const roles = useReturnUserRoles()
 
   const onClick = () => {
-    if(!roles.includes('task.write')) {
+    if(!roles.includes("task.write")) {
       return null
     }
 

@@ -1,7 +1,7 @@
-import { handleLastInspected } from './utils'
+import { handleLastInspected } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 function LastInspected({ site }: { site: AppTypes.SiteInterface }) {
   const props = handleLastInspected(site)

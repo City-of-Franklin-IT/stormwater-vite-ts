@@ -1,7 +1,7 @@
-import { useRef } from 'react'
-import { useSetInspectorOptions } from '@/components/enforcement/forms/create/CreateIllicitDischargeForm/hooks'
-import styles from '@/components/form-elements/Forms.module.css'
-import { useCreateSiteFormContext, useSetCreateSiteMapView } from './hooks'
+import { useRef } from "react"
+import { useSetInspectorOptions } from "@/components/enforcement/forms/create/CreateIllicitDischargeForm/hooks"
+import styles from "@/components/form-elements/Forms.module.css"
+import { useCreateSiteFormContext, useSetCreateSiteMapView } from "./hooks"
 
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
@@ -24,18 +24,18 @@ export const NameInput = () => { // Site name input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'name'}
+          name={"name"}
           required={true}>
             Site Name:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('name', {
-            required: 'Site name is required',
+          { ...register("name", {
+            required: "Site name is required",
             maxLength: {
               value: 100,
-              message: 'Site name must be 100 characters or less'
+              message: "Site name must be 100 characters or less"
             },
           }) } />
       </div>
@@ -51,18 +51,18 @@ export const LocationInput = () => { // Site location description
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'location'}
+          name={"location"}
           required={true}>
             Location:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('location', {
-            required: 'Site location is required',
+          { ...register("location", {
+            required: "Site location is required",
             maxLength: {
               value: 100,
-              message: 'Site location must be 100 characters or less'
+              message: "Site location must be 100 characters or less"
             },
           }) } />
       </div>
@@ -78,15 +78,15 @@ export const PreconDateInput = () => { // Site precon date input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'preconDate'}
+          name={"preconDate"}
           required={true}>
             Precon Date:
         </FormLabel>
         <input 
           type="date"
           className={styles.input}
-          { ...register('preconDate', {
-            required: 'Precon date is required',
+          { ...register("preconDate", {
+            required: "Precon date is required",
           }) } />
       </div>
       <FormError error={errors.preconDate?.message} />
@@ -100,12 +100,12 @@ export const GreenInfrastructureSelect = () => { // Green infrastructure select
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'greenInfrastructure'}>
+        <FormLabel name={"greenInfrastructure"}>
           Green Infrastructure:
         </FormLabel>
         <select 
           className={styles.input}
-          { ...methods.register('greenInfrastructure') }>
+          { ...methods.register("greenInfrastructure") }>
             <option value=""></option>
             <option value={"false"}>No</option>
             <option value={"true"}>Yes</option>
@@ -121,16 +121,16 @@ export const PermitInput = () => { // Permit input
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'permit'}>
+        <FormLabel name={"permit"}>
           Permit #:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('permit', {
+          { ...register("permit", {
             maxLength: {
               value: 20,
-              message: 'Permit must be 20 characters or less'
+              message: "Permit must be 20 characters or less"
             }
           }) } />
       </div>
@@ -145,16 +145,16 @@ export const COFInput = () => { // COF number input
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'cof'}>
+        <FormLabel name={"cof"}>
           COF #:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('cof', {
+          { ...register("cof", {
             maxLength: {
               value: 10,
-              message: 'COF # must be 10 characters or less'
+              message: "COF # must be 10 characters or less"
             }
           }) } />
       </div>
@@ -169,16 +169,16 @@ export const TNQInput = () => { // TNQ input
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'tnq'}>
+        <FormLabel name={"tnq"}>
           TNQ #:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('tnq', {
+          { ...register("tnq", {
             maxLength: {
               value: 20,
-              message: 'TNQ # must be 20 characters or less'
+              message: "TNQ # must be 20 characters or less"
             },
           }) } />
       </div>
@@ -195,12 +195,12 @@ export const InspectorSelect = () => { // Inspector select
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'inspectorId'}>
+        <FormLabel name={"inspectorId"}>
           Inspector:
         </FormLabel>
         <select 
           className={styles.input}
-          { ...methods.register('inspectorId') }>
+          { ...methods.register("inspectorId") }>
           <option value=""></option>
           {inspectors.map(inspector => {
             return (

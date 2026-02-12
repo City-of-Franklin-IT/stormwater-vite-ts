@@ -7,20 +7,20 @@ export const useHandleClearBtn = () => {
   const visible = dateRangeFilter.start || dateRangeFilter.end
 
   const onClick = () => {
-    dispatch({ type: 'RESET_DATE_RANGE_FILTER' })
+    dispatch({ type: "RESET_DATE_RANGE_FILTER" })
   }
 
   return { visible, onClick }
 }
 
-export const useHandleDateInput = (field: 'start' | 'end') => {
+export const useHandleDateInput = (field: "start" | "end") => {
   const { dateRangeFilter: { start, end }, dispatch } = useContext(EnforcementCtx)
 
-  const onChange = field === 'start' ?
-    (e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_DATE_RANGE_FILTER_START', payload: e.currentTarget.value }) :
-    (e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_DATE_RANGE_FILTER_END', payload: e.currentTarget.value })
+  const onChange = field === "start" ?
+    (e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: "SET_DATE_RANGE_FILTER_START", payload: e.currentTarget.value }) :
+    (e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: "SET_DATE_RANGE_FILTER_END", payload: e.currentTarget.value })
 
-  const value = field === 'start' ? start : end
+  const value = field === "start" ? start : end
 
   return { onChange, value }
 }

@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 
 /**
 * Returns docs from server
@@ -11,7 +11,7 @@ export const useGetDocs = () => {
   const { enabled, token } = useEnableQuery()
 
   return useQuery({
-    queryKey: ['getDocs'],
+    queryKey: ["getDocs"],
     queryFn: () => AppActions.getDocs(authHeaders(token)),
     enabled: enabled && !!token
   })

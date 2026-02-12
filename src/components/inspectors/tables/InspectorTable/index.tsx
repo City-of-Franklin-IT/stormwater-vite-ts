@@ -1,12 +1,12 @@
 import { useSetInspectorTableData, useScrollToFormRef } from "./hooks"
-import styles from './InspectorTable.module.css'
+import styles from "./InspectorTable.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import InspectorTableYearBtns from "../../buttons/InspectorTableYearBtns"
-import * as Components from './components'
+import * as Components from "./components"
 
 function InspectorTable({ sites }: { sites: AppTypes.SiteInterface[] }) {
   const tableData = useSetInspectorTableData(sites)

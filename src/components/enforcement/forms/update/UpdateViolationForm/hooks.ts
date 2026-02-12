@@ -7,10 +7,10 @@ import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
-import { handleUpdateViolation } from './utils'
+import { handleUpdateViolation } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 /**
 * Returns update violation form methods, form submit function, and cancel button onClick handler
@@ -29,7 +29,7 @@ export const useHandleUpdateViolationForm = (violation: AppTypes.ConstructionVio
 const useUpdateViolationForm = (violation: AppTypes.ConstructionViolationInterface) => {
 
   return useForm<AppTypes.ConstructionViolationCreateInterface>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
       ...violation,
       date: formatDate(violation.date),
@@ -60,15 +60,15 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.ConstructionViolationCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateViolation(formData, token)
+    const result = await handleUpdateViolation(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
+    if(!result?.success) {
+      errorPopup(result?.msg || "Error Updating Violation")
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getViolations'] })
-    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
-    queryClient.invalidateQueries({ queryKey: ['getViolation', formData.uuid] })
-    dispatch({ type: 'RESET_CTX' })
+    queryClient.invalidateQueries({ queryKey: ["getViolations"] })
+    queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    queryClient.invalidateQueries({ queryKey: ["getViolation", formData.uuid] })
+    dispatch({ type: "RESET_CTX" })
   }
 }

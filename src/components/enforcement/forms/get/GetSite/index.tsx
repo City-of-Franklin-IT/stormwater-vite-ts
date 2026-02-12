@@ -1,7 +1,7 @@
-import { useHandleSiteSelection } from './hooks'
+import { useHandleSiteSelection } from "./hooks"
 
 // Components
-import * as Components from './components'
+import * as Components from "./components"
 
 function GetSite() {
   const { selectionMade, onSelect, onNoSiteSelect } = useHandleSiteSelection()

@@ -1,12 +1,12 @@
 import { useContext, useState, useRef } from "react"
 import InspectorCtx from "../../context"
 import { InspectorTableProvider } from "../../tables/InspectorTable/context"
-import { useReturnUserRoles, useDebounce } from '@/helpers/hooks'
+import { useReturnUserRoles, useDebounce } from "@/helpers/hooks"
 import { useScrollToFormRef } from "@/components/enforcement/containers/ViolationsContainer/hooks"
-import { useSetInspectorMapView, useHandleDeleteBtn } from './hooks'
+import { useSetInspectorMapView, useHandleDeleteBtn } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 import { FormProps } from "@/components/enforcement/containers/ViolationsContainer/components"
 
 // Components
@@ -36,7 +36,7 @@ export const Map = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
 }
 
 export const Header = ({ inspector }: { inspector: AppTypes.InspectorInterface }) => {
-  const name = inspector.name.split(' ')[0]
+  const name = inspector.name.split(" ")[0]
 
   return (
     <div className="flex-1 flex">
@@ -46,20 +46,20 @@ export const Header = ({ inspector }: { inspector: AppTypes.InspectorInterface }
 }
 
 export const CalendarAndTable = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => {
-  const [state, setState] = useState<{ view: 'calendar' | 'table' }>({ view: 'calendar' })
+  const [state, setState] = useState<{ view: "calendar" | "table" }>({ view: "calendar" })
 
-  const label = state.view === 'calendar' ? 'Switch To Table View' : 'Switch To Calendar View'
+  const label = state.view === "calendar" ? "Switch To Table View" : "Switch To Calendar View"
 
   return (
     <>
-      <SwitchViewBtn onClick={() => setState(prevState => ({ view: prevState.view === 'calendar' ? 'table' : 'calendar' }))}>
+      <SwitchViewBtn onClick={() => setState(prevState => ({ view: prevState.view === "calendar" ? "table" : "calendar" }))}>
         {label}
       </SwitchViewBtn>
       <Calendar 
-        visible={state.view === 'calendar'}
+        visible={state.view === "calendar"}
         tableData={tableData} />
       <Table
-        visible={state.view === 'table'}
+        visible={state.view === "table"}
         tableData={tableData} />
     </>
   )
@@ -93,10 +93,10 @@ export const UpdateInspectorBtn = ({ inspector }: { inspector: AppTypes.Inspecto
 
   const roles = useReturnUserRoles()
 
-  if(!roles.includes('task.write')) return null // Viewers
+  if(!roles.includes("task.write")) return null // Viewers
 
   return (
-    <UpdateBtn onClick={() => dispatch({ type: 'SET_INSPECTOR_ID', payload: inspector.inspectorId })}>
+    <UpdateBtn onClick={() => dispatch({ type: "SET_INSPECTOR_ID", payload: inspector.inspectorId })}>
       Update Inspector
     </UpdateBtn>
   )

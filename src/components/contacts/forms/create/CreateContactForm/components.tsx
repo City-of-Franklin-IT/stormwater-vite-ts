@@ -1,9 +1,9 @@
-import { useCreateContactFormContext } from './hooks'
-import styles from '@/components/form-elements/Forms.module.css'
+import { useCreateContactFormContext } from "./hooks"
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Components
-import FormLabel from '@/components/form-elements/FormLabel'
-import FormError from '@/components/form-elements/FormError'
+import FormLabel from "@/components/form-elements/FormLabel"
+import FormError from "@/components/form-elements/FormError"
 
 export const NameInput = () => { // Contact name input
   const { register, formState: { errors } } = useCreateContactFormContext()
@@ -12,22 +12,22 @@ export const NameInput = () => { // Contact name input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'name'}
+          name={"name"}
           required={true}>
             Contact Name:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('name', {
-            required: 'Contact name is required',
+          { ...register("name", {
+            required: "Contact name is required",
             maxLength: {
               value: 50,
-              message: 'Contact name must be 50 characters or less'
+              message: "Contact name must be 50 characters or less"
             },
             pattern: {
               value: /^[A-Za-z\s]+$/,
-              message: 'No special characters or numbers'
+              message: "No special characters or numbers"
             },
           }) } />
       </div>
@@ -42,20 +42,20 @@ export const CompanyInput = () => { // Company input
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'company'}>
+        <FormLabel name={"company"}>
           Company:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('company', {
+          { ...register("company", {
             maxLength: {
               value: 50,
-              message: 'Company must be 50 characters or less'
+              message: "Company must be 50 characters or less"
             },
             pattern: {
               value: /^[A-Za-z\s]+$/,
-              message: 'No special characters or numbers'
+              message: "No special characters or numbers"
             },
           }) } />
       </div>
@@ -80,24 +80,24 @@ const PhoneInput = () => { // Phone input
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'phone'}>
+        <FormLabel name={"phone"}>
           Phone:
         </FormLabel>
         <input 
           type="tel"
           className={styles.input}
-          { ...register('phone', {
+          { ...register("phone", {
             minLength: {
               value: 10,
-              message: 'Required format ex: 6155506691'
+              message: "Required format ex: 6155506691"
             },
             maxLength: {
               value: 10,
-              message: 'Required format ex: 6155506691'
+              message: "Required format ex: 6155506691"
             },
             pattern: {
               value: /^[0-9]{10}$/,
-              message: 'Required format ex: 6155506691'
+              message: "Required format ex: 6155506691"
             },
           }) } />
       </div>
@@ -112,20 +112,20 @@ const EmailInput = () => { // Email input
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'email'}>
+        <FormLabel name={"email"}>
           Email:
         </FormLabel>
         <input 
           type="email"
           className={styles.input}
-          { ...register('email', {
+          { ...register("email", {
             maxLength: {
               value: 50,
-              message: 'Email must be 50 characters or less'
+              message: "Email must be 50 characters or less"
             },
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Required format ex: bin.franklin@franklintn.gov'
+              message: "Required format ex: bin.franklin@franklintn.gov"
             },
           }) } />
       </div>

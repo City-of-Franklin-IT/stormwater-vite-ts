@@ -1,13 +1,13 @@
 import { FormProvider } from "react-hook-form"
 import { useHandleCreateSiteLogForm } from "./hooks"
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
-import * as Components from './components'
+import * as Components from "./components"
 
 function CreateSiteLogForm({ site }: { site: AppTypes.SiteInterface }) {
   const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateSiteLogForm(site)

@@ -1,13 +1,13 @@
 import Layout from "@/components/layout/Layout"
-import { useGetDocs } from './hooks'
+import { useGetDocs } from "./hooks"
 
 // Types
-import { CollectionType } from './utils'
+import { CollectionType } from "./utils"
 
 // Components
 import HandleLoading from "@/utils/HandleLoading"
 import ErrorBoundary from "@/components/layout/error/ErrorBoundary"
-import * as Components from './components'
+import * as Components from "./components"
 
 function Documentation() {
   const { data, isSuccess } = useGetDocs()
@@ -15,7 +15,7 @@ function Documentation() {
 
   return (
     <Layout>
-      <ErrorBoundary href={'/sites'}>
+      <ErrorBoundary href={"/sites"}>
         <HandleLoading isSuccess={isSuccess}>
           <div className="container font-[play] text-primary-content mx-auto mt-4 mb-6 p-6 max-w-5xl">
             <h1 className="text-3xl font-bold mb-2">{collection?.info.name} API</h1>

@@ -2,20 +2,20 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { useForm, useFormContext } from "react-hook-form"
 import { useQueryClient } from "@tanstack/react-query"
-import Map from '@arcgis/core/Map'
-import MapView from '@arcgis/core/views/MapView'
-import Point from '@arcgis/core/geometry/Point'
-import Graphic from '@arcgis/core/Graphic'
-import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import Map from "@arcgis/core/Map"
+import MapView from "@arcgis/core/views/MapView"
+import Point from "@arcgis/core/geometry/Point"
+import Graphic from "@arcgis/core/Graphic"
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
 import Search from "@arcgis/core/widgets/Search"
 import { TextSymbol } from "@arcgis/core/symbols"
 import { useEnableQuery } from "@/helpers/hooks"
-import pinWarningIcon from '@/assets/icons/pin/warning-pin.png'
+import pinWarningIcon from "@/assets/icons/pin/warning-pin.png"
 import { handleCreateSite } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 
 /**
@@ -63,7 +63,7 @@ const useOnCancelBtnClick = () => {
   const navigate = useNavigate()
 
   const onClick = () => {
-    navigate('/sites')
+    navigate("/sites")
   }
 
   return onClick
@@ -75,17 +75,17 @@ const useOnCancelBtnClick = () => {
 const useCreateSiteForm = () => { // CreateSiteForm useForm state
 
   return useForm<AppTypes.SiteCreateInterface>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
-      inspectorId: '',
-      name: '',
-      preconDate: '',
-      location: '',
+      inspectorId: "",
+      name: "",
+      preconDate: "",
+      location: "",
       xCoordinate: undefined,
       yCoordinate: undefined,
-      permit: '',
-      cof: '',
-      tnq: '',
+      permit: "",
+      cof: "",
+      tnq: "",
       greenInfrastructure: null,
       SiteContacts: [],
     }
@@ -104,15 +104,15 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.SiteCreateInterface) => {
     if(!enabled || !token) return 
 
-    const result = await handleCreateSite(formData, token)
+    const result = await handleCreateSite(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
-      navigate('/sites')
+    if(!result?.success) {
+      errorPopup(result?.msg || 'Error Creating Site')
+      navigate("/sites")
       return
-    } else savedPopup(result.msg)
+    } else savedPopup(result?.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getSites'] })
+    queryClient.invalidateQueries({ queryKey: ["getSites"] })
     navigate(`/site/${ result.data.uuid }`)
   }
 }
@@ -126,7 +126,7 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
   useEffect(() => {
     if(!mapRef?.current) return
 
-    const map = new Map({ basemap: 'dark-gray-vector' })
+    const map = new Map({ basemap: "dark-gray-vector" })
 
     const mapView = new MapView({
       container: mapRef.current,
@@ -140,21 +140,21 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
 
     mapView.when(() => {
       mapView.ui.add(searchWidget, {
-        position: 'top-left'
+        position: "top-left"
       })
 
       setState(prevState => ({ ...prevState, view: mapView }))
     })
 
-    const pointGraphicsLayer = new GraphicsLayer({ id: 'pointGraphicsLayer' })
-    const textGraphicsLayer = new GraphicsLayer({ id: 'textGraphicsLayer' })
+    const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
+    const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer" })
     map.addMany([pointGraphicsLayer, textGraphicsLayer])
 
     const onMapClick = mapView.on("click", async (e) => {
       const mappoint = e.mapPoint
 
-      setValue('xCoordinate', mappoint.longitude, { shouldValidate: true, shouldDirty: true })
-      setValue('yCoordinate', mappoint.latitude, { shouldValidate: true, shouldDirty: true })
+      setValue("xCoordinate", mappoint.longitude, { shouldValidate: true, shouldDirty: true })
+      setValue("yCoordinate", mappoint.latitude, { shouldValidate: true, shouldDirty: true })
     })
 
     return () => {
@@ -173,16 +173,16 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
 const useSetMapGraphics = (state: { view: __esri.MapView | null }) => {
   const { watch } = useFormContext<AppTypes.SiteCreateInterface>()
 
-  const xCoordinate = watch('xCoordinate')
-  const yCoordinate = watch('yCoordinate')
+  const xCoordinate = watch("xCoordinate")
+  const yCoordinate = watch("yCoordinate")
 
   useEffect(() => {
     if(!state.view) return
 
     const coordinates = { xCoordinate, yCoordinate }
 
-    const pointGraphicsLayer = state.view.map?.findLayerById('pointGraphicsLayer') as GraphicsLayer
-    const textGraphicsLayer = state.view.map?.findLayerById('textGraphicsLayer') as GraphicsLayer
+    const pointGraphicsLayer = state.view.map?.findLayerById("pointGraphicsLayer") as GraphicsLayer
+    const textGraphicsLayer = state.view.map?.findLayerById("textGraphicsLayer") as GraphicsLayer
     pointGraphicsLayer.removeAll()
     textGraphicsLayer.removeAll()
 

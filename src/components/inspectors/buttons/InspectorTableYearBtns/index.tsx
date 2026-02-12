@@ -1,4 +1,4 @@
-import { useHandleInspectorTableYearBtns } from './hooks'
+import { useHandleInspectorTableYearBtns } from "./hooks"
 
 // Components
 import PrevPageBtn from "@/components/layout/nav/buttons/PrevPageBtn"

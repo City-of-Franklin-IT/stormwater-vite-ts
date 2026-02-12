@@ -1,4 +1,4 @@
-import styles from './UpdateBtn.module.css'
+import styles from "./UpdateBtn.module.css"
 
 type UpdateBtnProps = { onClick: React.MouseEventHandler<HTMLButtonElement>, disabled?: boolean, children: React.ReactNode }
 

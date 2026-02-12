@@ -1,14 +1,14 @@
 import { useContext, useRef } from "react"
-import SitesCtx from '../../context'
+import SitesCtx from "../../context"
 import { useDebounce } from "@/helpers/hooks"
-import { useSetSitesMapView } from './hooks'
+import { useSetSitesMapView } from "./hooks"
 
 // Icons
-import warningPinIcon from '@/assets/icons/pin/warning-pin.png'
-import errorPinIcon from '@/assets/icons/pin/error-pin.png'
+import warningPinIcon from "@/assets/icons/pin/warning-pin.png"
+import errorPinIcon from "@/assets/icons/pin/error-pin.png"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import MapLegend from "@/components/map/MapLegend/index.tsx"
@@ -35,7 +35,7 @@ export const Map = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
 type ActiveSitesBtnProps = { showActiveSitesOnly: boolean, onClick: React.MouseEventHandler<HTMLButtonElement> }
 
 export const ActiveSitesBtn = (props: ActiveSitesBtnProps) => {
-  const label = props.showActiveSitesOnly ? 'Show Inactive Sites' : 'Hide Inactive Sites'
+  const label = props.showActiveSitesOnly ? "Show Inactive Sites" : "Hide Inactive Sites"
 
   return (
     <button 

@@ -8,7 +8,7 @@ function CreateInspector() {
 
   return (
     <Layout>
-      <Motion animation={'fadeInOut'}>
+      <Motion animation={"fadeInOut"}>
         <div className="m-auto my-10 w-3/4 2xl:w-3/5">
           <FormContainer>
             <CreateInspectorForm />

@@ -7,10 +7,10 @@ import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
-import { handleUpdateComplaint } from './utils'
+import { handleUpdateComplaint } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 /**
 * Returns update complaint form methods, form submit function, and cancel button onClick handler
@@ -43,7 +43,7 @@ const useUpdateComplaintForm = (complaint: AppTypes.ComplaintInterface) => {
 /**
 * Returns update complaint form submit function
 **/
-const useHandleFormSubmit = () => { // Handle form submit
+const useHandleFormSubmit = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
   const queryClient = useQueryClient()
@@ -54,15 +54,15 @@ const useHandleFormSubmit = () => { // Handle form submit
   return async (formData: AppTypes.ComplaintCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateComplaint(formData, token)
+    const result = await handleUpdateComplaint(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
+    if(!result?.success) {
+      errorPopup(result?.msg || "Error Updating Complaint")
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getComplaints'] })
-    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
-    queryClient.invalidateQueries({ queryKey: ['getComplaint', formData.uuid] })
-    dispatch({ type: 'RESET_CTX' })
+    queryClient.invalidateQueries({ queryKey: ["getComplaints"] })
+    queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    queryClient.invalidateQueries({ queryKey: ["getComplaint", formData.uuid] })
+    dispatch({ type: "RESET_CTX" })
   }
 }

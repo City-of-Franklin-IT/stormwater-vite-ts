@@ -1,10 +1,10 @@
 import { useRef } from "react"
 import { useSetInspectorOptions } from "../CreateIllicitDischargeForm/hooks"
 import { useCreateComplaintFormContext, useSetComplaintsMapView } from "./hooks"
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import { ConcernEnum } from "./types"
+import { ConcernEnum } from "./hooks"
 
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
@@ -61,18 +61,18 @@ export const DetailsInput = () => { // Complaint details input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'details'}
+          name={"details"}
           required={true}>
             Details:
         </FormLabel>
         <textarea 
           rows={3} 
           className={styles.input}
-          { ...register('details', {
-            required: 'Complaint details is required',
+          { ...register("details", {
+            required: "Complaint details is required",
             maxLength: {
               value: 2000,
-              message: 'Complaint details must be 2000 characters or less'
+              message: "Complaint details must be 2000 characters or less"
             },
           }) } />
       </div>
@@ -87,16 +87,16 @@ export const CommentsInput = () => { // Comments input
   return (
     <div className={styles.inputSection}>
       <div className="flex">
-        <FormLabel name={'comments'}>
+        <FormLabel name={"comments"}>
           Comments:
         </FormLabel>
         <textarea 
           rows={3} 
           className={styles.input}
-          { ...register('comments', {
+          { ...register("comments", {
             maxLength: {
               value: 2000,
-              message: 'Comments must be 2000 characters or less'
+              message: "Comments must be 2000 characters or less"
             }
           }) } />
       </div>
@@ -128,15 +128,15 @@ const DateInput = () => { // Illicit discharge date
     <div className="flex-1 flex flex-col">
       <div className="flex">
         <FormLabel
-          name={'date'}
+          name={"date"}
           required={true}>
             Complaint Date:
         </FormLabel>
         <input 
           type="date"
           className={styles.input}
-          { ...register('date', {
-            required: 'Complaint date is required',
+          { ...register("date", {
+            required: "Complaint date is required",
           }) } />
       </div>
       <FormError error={errors.date?.message} />
@@ -154,13 +154,13 @@ const InspectorSelect = ({ visible }: { visible: boolean }) => { // Inspector se
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex">
-        <FormLabel name={'inspectorId'}>
+        <FormLabel name={"inspectorId"}>
           Inspector:
         </FormLabel>
         <select 
           className={styles.input}
-          { ...methods.register('inspectorId') }>
-            <option value={''}></option>
+          { ...methods.register("inspectorId") }>
+            <option value={""}></option>
             {inspectorOptions.map((inspector) => (
               <option key={inspector.value} value={inspector.value}>{inspector.text}</option>
             ))}
@@ -176,16 +176,16 @@ const LocationDescriptionInput = () => { // Location description input
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex">
-        <FormLabel name={'locationDescription'}>
+        <FormLabel name={"locationDescription"}>
           Location Description:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('locationDescription', {
+          { ...register("locationDescription", {
             maxLength: {
               value: 50,
-              message: 'Location description must be 50 characters or less'
+              message: "Location description must be 50 characters or less"
             }
           }) } />
       </div>
@@ -200,16 +200,16 @@ const ResponsiblePartyInput = () => { // Responsible party input
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex">
-        <FormLabel name={'responsibleParty'}>
+        <FormLabel name={"responsibleParty"}>
           Responsible Party:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('responsibleParty', {
+          { ...register("responsibleParty", {
             maxLength: {
               value: 50,
-              message: 'Responsible party must be 50 characters or less'
+              message: "Responsible party must be 50 characters or less"
             },
           }) } />
       </div>
@@ -225,16 +225,16 @@ const ConcernSelect = () => { // Concern type select
     <div className="flex-1 flex flex-col">
       <div className="flex">
         <FormLabel
-          name={'concern'}
+          name={"concern"}
           required={true}>
             Concern:
         </FormLabel>
         <select 
           className={styles.input}
-          { ...register('concern', {
-            required: 'Concern is required',
+          { ...register("concern", {
+            required: "Concern is required",
           }) }>
-            <option value={''}></option>
+            <option value={""}></option>
             {Object.values(ConcernEnum).map((concern) => (
               <option key={concern} value={concern}>{concern}</option>
             ))}
@@ -248,7 +248,7 @@ const ConcernSelect = () => { // Concern type select
 const OtherConcernInput = () => { // Other concern type input
   const { register, watch, formState: { errors } } = useCreateComplaintFormContext()
 
-  const visible = watch('concern') === 'Other'
+  const visible = watch("concern") === "Other"
 
   if(!visible) return null
 
@@ -256,18 +256,18 @@ const OtherConcernInput = () => { // Other concern type input
     <div className="flex-1 flex flex-col">
       <div className="flex">
         <FormLabel
-          name={'otherConcern'}
+          name={"otherConcern"}
           required={true}>
             Other Concern:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('otherConcern', {
-            required: 'Other concern is required',
+          { ...register("otherConcern", {
+            required: "Other concern is required",
             maxLength: {
               value: 50,
-              message: 'Other concern must be 50 characters or less'
+              message: "Other concern must be 50 characters or less"
             },
           }) } />
       </div>
@@ -282,16 +282,16 @@ const ComplaintantNameInput = () => { // Complaintant name input
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="flex">
-        <FormLabel name={'name'}>
+        <FormLabel name={"name"}>
           Full Name:
         </FormLabel>
         <input
           type="text"
           className={styles.input}
-          { ...register('name', {
+          { ...register("name", {
             maxLength: {
               value: 50,
-              message: 'Name must be 50 characters or less'
+              message: "Name must be 50 characters or less"
             }
           }) } />
       </div>
@@ -306,16 +306,16 @@ const ComplaintantAddressInput = () => { // Complaintant address input
   return (
     <div className="flex-1 flex flex-col gap-2">
       <div className="flex">
-        <FormLabel name={'address'}>
+        <FormLabel name={"address"}>
           Address:
         </FormLabel>
         <input
           type="text"
           className={styles.input}
-          { ...register('address', {
+          { ...register("address", {
             maxLength: {
               value: 100,
-              message: 'Address must be 100 characters or less'
+              message: "Address must be 100 characters or less"
             }
           }) } />
       </div>
@@ -330,24 +330,24 @@ const ComplaintantPhoneInput = () => { // Complaintant phone input
   return (
     <div className="flex-1 flex flex-col gap-2">
       <div className="flex">
-        <FormLabel name={'phone'}>
+        <FormLabel name={"phone"}>
           Phone:
         </FormLabel>
         <input
           type="text"
           className={styles.input}
-            { ...register('phone', {
+            { ...register("phone", {
             pattern: {
               value: /^[0-9]*$/,
-              message: 'Phone must contain only numbers'
+              message: "Phone must contain only numbers"
             },
             minLength: {
               value: 10,
-              message: 'Phone must be 10 characters'
+              message: "Phone must be 10 characters"
             },
             maxLength: {
               value: 10,
-              message: 'Phone must be 10 characters'
+              message: "Phone must be 10 characters"
             },
             }) } />
       </div>
@@ -362,16 +362,16 @@ const ComplaintantEmailInput = () => { // Complaintant email input
   return (
     <div className="flex-1 flex flex-col gap-2">
       <div className="flex">
-        <FormLabel name={'email'}>
+        <FormLabel name={"email"}>
           Email:
         </FormLabel>
         <input
           type="text"
           className={styles.input}
-          { ...register('email', {
+          { ...register("email", {
             maxLength: {
               value: 50,
-              message: 'Email must be 50 characters or less'
+              message: "Email must be 50 characters or less"
             }
           }) } />
       </div>

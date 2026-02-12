@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState, useCallback } from "react"
 import { useParams } from "react-router"
 import { useQueryClient } from "@tanstack/react-query"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import EnforcementCtx from "../../context"
@@ -9,7 +9,7 @@ import { useSetTotalPages } from "../ViolationsContainer/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 import { IllicitDischargesTableDataType } from "./components"
 
 export const useHandleTableData = (discharges: AppTypes.IllicitDischargeInterface[]) => { // Illciit discharges table data
@@ -20,7 +20,7 @@ export const useHandleTableData = (discharges: AppTypes.IllicitDischargeInterfac
         ...discharge,
         siteUUID: discharge.Site?.uuid,
         siteName: discharge.Site?.name,
-        primaryPermitee: discharge.responsibleParty || discharge.Site?.SiteContacts?.find(contact => contact.isPrimary)?.Contact?.company || '-'
+        primaryPermitee: discharge.responsibleParty || discharge.Site?.SiteContacts?.find(contact => contact.isPrimary)?.Contact?.company || "-"
       }))
 
       if(!showClosedSiteIssues) {
@@ -70,15 +70,15 @@ export const useHandleDeleteBtn = () => {
       const result = await AppActions.deleteIllicitDischarge(formUUID, authHeaders(token))
 
       if(result.success) {
-        queryClient.invalidateQueries({ queryKey: ['getIllicitDischarges'] })
-        queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
-        dispatch({ type: 'RESET_CTX' })
+        queryClient.invalidateQueries({ queryKey: ["getIllicitDischarges"] })
+        queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+        dispatch({ type: "RESET_CTX" })
         savedPopup(result.msg)
       } else errorPopup(result.msg)
     }
   }, [state.active, enabled, token, formUUID, queryClient, siteUUID])
 
-  const label = !state.active ? 'Delete Illicit Discharge' : 'Confirm Delete'
+  const label = !state.active ? "Delete Illicit Discharge" : "Confirm Delete"
 
   return { onClick, label }
 }

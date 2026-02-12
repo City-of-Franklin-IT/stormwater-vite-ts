@@ -1,7 +1,7 @@
-import { handlePermitNumber } from './utils'
+import { handlePermitNumber } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 function PermitNumber({ site }: { site: AppTypes.SiteInterface }) {
   const { iconProps } = handlePermitNumber(site)

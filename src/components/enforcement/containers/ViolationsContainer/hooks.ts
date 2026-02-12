@@ -1,13 +1,13 @@
 import React, { useContext, useCallback, useMemo, useEffect, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import EnforcementCtx from "../../context"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 import { ViolationTableDataType } from "./components"
 import { useParams } from "react-router"
 
@@ -16,19 +16,17 @@ export const useHandleNavBtns = () => {
 
   const handlePrevBtn = useCallback(() => {
     if(currentPage !== 1) {
-      dispatch({ type: 'SET_CURRENT_PAGE', payload: currentPage - 1 })
+      dispatch({ type: "SET_CURRENT_PAGE", payload: currentPage - 1 })
     }
   }, [currentPage, dispatch])
 
   const handleNextBtn = useCallback(() => {
     if(currentPage !== totalPages) {
-      dispatch({ type: 'SET_CURRENT_PAGE', payload: currentPage + 1 })
+      dispatch({ type: "SET_CURRENT_PAGE", payload: currentPage + 1 })
     }
   }, [currentPage, totalPages, dispatch])
 
-  const label = useMemo(() => {
-    return `Page ${ currentPage } / ${ totalPages }`
-  }, [currentPage, totalPages])
+  const label = `Page ${ currentPage } / ${ totalPages }`
 
   return { handlePrevBtn, handleNextBtn, label }
 }
@@ -36,7 +34,7 @@ export const useHandleNavBtns = () => {
 export const useHandleTableRowClick = (uuid: string) => {
   const { dispatch } = useContext(EnforcementCtx)
 
-  return () => dispatch({ type:  'SET_FORM_UUID', payload: uuid })
+  return () => dispatch({ type:  "SET_FORM_UUID", payload: uuid })
 }
 
 export const useHandleTableData = (violations: AppTypes.ConstructionViolationInterface[]) => { // Construction violations table data
@@ -83,8 +81,8 @@ export const useScrollToFormRef = (props: UseScrollToFormRefProps) => {
 
   useEffect(() => { // Scroll to form if active
     if(props.activeForm && props.formRef.current) {
-      props.formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    } else window.scrollTo({ top: 0, behavior: 'smooth' })
+      props.formRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+    } else window.scrollTo({ top: 0, behavior: "smooth" })
   }, [props.activeForm, props.formRef])
 }
 
@@ -92,7 +90,7 @@ export const useResetCtx = () => { // Reset EnforcementCtx on enforcement page c
   const { dispatch } = useContext(EnforcementCtx)
 
   useEffect(() => {
-    return () => dispatch({ type: 'RESET_CTX' })
+    return () => dispatch({ type: "RESET_CTX" })
   }, [dispatch])
 }
 
@@ -100,7 +98,7 @@ export const useSetTotalPages = (count: number) => { // Set total pages to ctx
   const { dispatch, showClosedSiteIssues } = useContext(EnforcementCtx)
 
   useEffect(() => {
-    dispatch({ type: 'SET_TOTAL_PAGES', payload: Math.ceil(count / 20) })
+    dispatch({ type: "SET_TOTAL_PAGES", payload: Math.ceil(count / 20) })
   }, [showClosedSiteIssues, count, dispatch])
 }
 
@@ -124,15 +122,15 @@ export const useHandleDeleteBtn = () => {
       const result = await AppActions.deleteViolation(formUUID, authHeaders(token))
 
       if(result.success) {
-        queryClient.invalidateQueries({ queryKey: ['getViolations'] })
-        queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
-        dispatch({ type: 'RESET_CTX' })
+        queryClient.invalidateQueries({ queryKey: ["getViolations"] })
+        queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+        dispatch({ type: "RESET_CTX" })
         savedPopup(result.msg)
       } else errorPopup(result.msg)
     }
   }, [state.active, enabled, token, formUUID, queryClient, siteUUID])
 
-  const label = !state.active ? 'Delete Violation' : 'Confirm Delete'
+  const label = !state.active ? "Delete Violation" : "Confirm Delete"
 
   return { onClick, label}
 }

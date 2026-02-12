@@ -1,7 +1,7 @@
-import { useHandleStats } from './hooks'
+import { useHandleStats } from "./hooks"
 
 // Types
-import { SiteIssuesType } from './hooks'
+import { SiteIssuesType } from "./hooks"
 
 export const Stats = ({ issues }: { issues: SiteIssuesType[] }) => {
   const tickets = useHandleStats(issues)

@@ -1,14 +1,14 @@
 import { FormProvider } from "react-hook-form"
 import { useHandleUpdateContactForm } from "./hooks"
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
-import * as CreateContactForm from '../../create/CreateContactForm/components'
-import * as Components from './components'
+import * as CreateContactForm from "../../create/CreateContactForm/components"
+import * as Components from "./components"
 
 function UpdateContactForm({ contact }: { contact: AppTypes.ContactInterface }) {
   const { methods, handleFormSubmit, onCancelBtnClick } = useHandleUpdateContactForm(contact)

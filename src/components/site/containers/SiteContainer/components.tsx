@@ -1,26 +1,26 @@
-import { useRef } from 'react'
-import { Link } from 'react-router'
-import inspectorIcon from '@/assets/icons/inspector/inspector.svg'
-import { useScrollToFormRef } from '@/components/enforcement/containers/ViolationsContainer/hooks'
-import { useHandleForm, useHandleButtons, useHandleSiteIssuesCheckbox, useSetSiteMapView } from './hooks'
+import { useRef } from "react"
+import { Link } from "react-router"
+import inspectorIcon from "@/assets/icons/inspector/inspector.svg"
+import { useScrollToFormRef } from "@/components/enforcement/containers/ViolationsContainer/hooks"
+import { useHandleForm, useHandleButtons, useHandleSiteIssuesCheckbox, useSetSiteMapView } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import SetSiteForm from "../../forms/SetSiteForm"
 import BackToHomeBtn from "@/components/layout/nav/buttons/BackToHomeBtn"
 import UpdateBtn from "@/components/form-elements/buttons/UpdateBtn"
-import ViolationsIndicator from '@/components/enforcement/indicators/ViolationsIndicator'
-import ComplaintsIndicator from '@/components/enforcement/indicators/ComplaintsIndicator'
-import IllicitDischargesIndicator from '@/components/enforcement/indicators/llicitDischargesIndicator'
-import SiteDetails from '../../details/SiteDetails'
-import SitesActivityCalendar from '@/components/sites/calendar/SitesActivityCalendar'
-import DateRangeFilter from '../../filters/DateRangeFilter'
-import SiteIssuesTable from '../../tables/SiteIssuesTable'
+import ViolationsIndicator from "@/components/enforcement/indicators/ViolationsIndicator"
+import ComplaintsIndicator from "@/components/enforcement/indicators/ComplaintsIndicator"
+import IllicitDischargesIndicator from "@/components/enforcement/indicators/IllicitDischargesIndicator"
+import SiteDetails from "../../details/SiteDetails"
+import SitesActivityCalendar from "@/components/sites/calendar/SitesActivityCalendar"
+import DateRangeFilter from "../../filters/DateRangeFilter"
+import SiteIssuesTable from "../../tables/SiteIssuesTable"
 
 export const Header = ({ site }: { site: AppTypes.SiteInterface }) => {
-  const label = !site.InactiveSite ? 'Active Site' : 'Inactive Site'
+  const label = !site.InactiveSite ? "Active Site" : "Inactive Site"
 
   return (
     <div className="flex gap-20 justify-between items-end">
@@ -31,7 +31,7 @@ export const Header = ({ site }: { site: AppTypes.SiteInterface }) => {
         <div className="flex flex-col">
           <h2 className="font-[shrikhand] text-4xl">{site.name}</h2>
 
-          <span className={`text-xl font-[play] font-bold italic ${ !site.InactiveSite ? 'text-success animate-pulse' : 'text-error font-normal' }`}>{label}</span>
+          <span className={`text-xl font-[play] font-bold italic ${ !site.InactiveSite ? "text-success animate-pulse" : "text-error font-normal" }`}>{label}</span>
         </div>
         <InspectorBtn inspector={site.Inspector} />
       </div>

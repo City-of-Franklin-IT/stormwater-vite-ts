@@ -1,15 +1,15 @@
 import { FormProvider } from "react-hook-form"
-import { useHandleUpdateIllicitDischargeForm } from './hooks'
-import styles from '@/components/form-elements/Forms.module.css'
+import { useHandleUpdateIllicitDischargeForm } from "./hooks"
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
-import { Map, DateAndInspectorInputs, LocationAndResponsiblePartyInputs, DetailsInput, StreamWatershedSelect, EnforcementInputs, PenaltyInputs } from '../../create/CreateIllicitDischargeForm/components'
-import { FollowUpInputs } from "../../create/CreateViolationForm/components"
-import { CheckboxInputs } from "../UpdateViolationForm/components"
+import * as CreateIllicitDischargeForm from "../../create/CreateIllicitDischargeForm/components"
+import * as CreateViolationForm from "../../create/CreateViolationForm/components"
+import * as UpdateViolationForm from "../UpdateViolationForm/components"
 
 function UpdateIllicitDischargeForm({ illicitDischarge }: { illicitDischarge: AppTypes.IllicitDischargeInterface }) {
   const { methods, handleFormSubmit, onCancelBtnClick } = useHandleUpdateIllicitDischargeForm(illicitDischarge)
@@ -21,15 +21,15 @@ function UpdateIllicitDischargeForm({ illicitDischarge }: { illicitDischarge: Ap
       <FormProvider { ...methods }>
         <form onSubmit={methods.handleSubmit(handleFormSubmit)} className={styles.body}>
 
-          <Map visible={!illicitDischarge.siteId} />
-          <DateAndInspectorInputs siteId={illicitDischarge.siteId} />
-          <LocationAndResponsiblePartyInputs />
-          <DetailsInput />
-          <StreamWatershedSelect />
-          <EnforcementInputs />
-          <PenaltyInputs />
-          <FollowUpInputs />
-          <CheckboxInputs />
+          <CreateIllicitDischargeForm.Map visible={!illicitDischarge.siteId} />
+          <CreateIllicitDischargeForm.DateAndInspectorInputs siteId={illicitDischarge.siteId} />
+          <CreateIllicitDischargeForm.LocationAndResponsiblePartyInputs />
+          <CreateIllicitDischargeForm.DetailsInput />
+          <CreateIllicitDischargeForm.StreamWatershedSelect />
+          <CreateIllicitDischargeForm.EnforcementInputs />
+          <CreateIllicitDischargeForm.PenaltyInputs />
+          <CreateViolationForm.FollowUpInputs />
+          <UpdateViolationForm.CheckboxInputs />
 
           <FormBtns onCancelBtnClick={onCancelBtnClick} />
 

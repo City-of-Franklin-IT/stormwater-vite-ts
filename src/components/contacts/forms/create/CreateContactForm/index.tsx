@@ -1,10 +1,10 @@
 import { FormProvider } from "react-hook-form"
-import { useHandleCreateContactForm } from './hooks'
-import styles from '@/components/form-elements/Forms.module.css'
+import { useHandleCreateContactForm } from "./hooks"
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
-import * as Components from './components'
+import * as Components from "./components"
 
 function CreateContactForm() {
   const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateContactForm()

@@ -1,6 +1,6 @@
 // Types
-import * as AppTypes from '@/context/App/types'
-import { SiteContactType } from './components'
+import * as AppTypes from "@/context/App/types"
+import { SiteContactType } from "./components"
 
 export const setSiteContactsTableData = (siteContacts: AppTypes.SiteContactInterface[]) => {
   const siteContactsArray: SiteContactType[] = []
@@ -29,34 +29,34 @@ export const setAllSiteContacts = (siteContacts: AppTypes.SiteContactInterface[]
     return contact.Contact?.email as string
   })
 
-  const href = `mailto:${ emailArray.join(';') }`
+  const href = `mailto:${ emailArray.join(";") }`
 
   return href
 }
 
 const setRole = (siteContact: AppTypes.SiteContactInterface, obj: SiteContactType) => {
   if(siteContact.isPrimary) { // Primary
-    obj.role = 'Primary'
+    obj.role = "Primary"
     obj.order = 0
 
     return obj
   }
 
   if(siteContact.isContractor) { // Contactor
-    obj.role = 'Contractor'
+    obj.role = "Contractor"
     obj.order = 1
 
     return obj
   }
 
   if(siteContact.isInspector) { // Inspector
-    obj.role = 'Inspector'
+    obj.role = "Inspector"
     obj.order = 2
 
     return obj
   }
 
-  obj.role = 'Other' // Other
+  obj.role = "Other" // Other
   obj.order = 3
 
   return obj

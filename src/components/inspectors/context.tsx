@@ -13,20 +13,20 @@ type InspectorCtx = {
   showOpenIssuesOnly: boolean
 }
 
-type InspectorState = Omit<InspectorCtx, 'dispatch'>
+type InspectorState = Omit<InspectorCtx, "dispatch">
 
 type InspectorAction =
-  | { type: 'SET_SEARCH_VALUE', payload: string }
-  | { type: 'TOGGLE_SHOW_ACTIVE_SITES_ONLY' }
-  | { type: 'TOGGLE_OPEN_ISSUES_ONLY' }
-  | { type: 'SET_INSPECTOR_ID', payload: string }
-  | { type: 'SET_BASEMAP', payload: BasemapType }
-  | { type: 'RESET_CTX' }
+  | { type: "SET_SEARCH_VALUE", payload: string }
+  | { type: "TOGGLE_SHOW_ACTIVE_SITES_ONLY" }
+  | { type: "TOGGLE_OPEN_ISSUES_ONLY" }
+  | { type: "SET_INSPECTOR_ID", payload: string }
+  | { type: "SET_BASEMAP", payload: BasemapType }
+  | { type: "RESET_CTX" }
 
 const initialState: InspectorState = {
-  basemap: 'dark-gray-vector',
-  inspectorId: '',
-  searchValue: '',
+  basemap: "dark-gray-vector",
+  inspectorId: "",
+  searchValue: "",
   showActiveSitesOnly: true,
   showOpenIssuesOnly: false
 }
@@ -39,32 +39,32 @@ const InspectorCtx = createContext<InspectorCtx>({
 const inspectoReducer = (state: InspectorState, action: InspectorAction) => {
 
   switch(action.type) {
-    case 'SET_SEARCH_VALUE':
+    case "SET_SEARCH_VALUE":
       return {
         ...state,
         searchValue: action.payload
       }
-    case 'TOGGLE_SHOW_ACTIVE_SITES_ONLY':
+    case "TOGGLE_SHOW_ACTIVE_SITES_ONLY":
       return {
         ...state,
         showActiveSitesOnly: !state.showActiveSitesOnly
       }
-    case 'TOGGLE_OPEN_ISSUES_ONLY':
+    case "TOGGLE_OPEN_ISSUES_ONLY":
       return {
         ...state,
         showOpenIssuesOnly: !state.showOpenIssuesOnly
       }
-    case 'SET_INSPECTOR_ID':
+    case "SET_INSPECTOR_ID":
       return {
         ...state,
         inspectorId: action.payload
       }
-    case 'SET_BASEMAP':
+    case "SET_BASEMAP":
       return {
         ...state,
         basemap: action.payload
       }
-    case 'RESET_CTX':
+    case "RESET_CTX":
       return initialState
     default:
       return state

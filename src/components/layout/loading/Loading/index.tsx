@@ -1,4 +1,4 @@
-import icon from '@/assets/icons/loading/loading.svg'
+import icon from "@/assets/icons/loading/loading.svg"
 
 function Loading() {
   

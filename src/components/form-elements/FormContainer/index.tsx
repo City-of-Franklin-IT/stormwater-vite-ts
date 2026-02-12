@@ -1,5 +1,5 @@
-import cofIcon from '../../../assets/icons/cof/cof.svg'
-import styles from './FormContainer.module.css'
+import cofIcon from "../../../assets/icons/cof/cof.svg"
+import styles from "./FormContainer.module.css"
 
 function FormContainer({ children }: { children: React.ReactNode }) {
 

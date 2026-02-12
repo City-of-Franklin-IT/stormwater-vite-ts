@@ -1,14 +1,14 @@
 import { FormProvider } from "react-hook-form"
-import { useHandleCreateComplaintForm } from './hooks'
-import styles from '@/components/form-elements/Forms.module.css'
+import { useHandleCreateComplaintForm } from "./hooks"
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
-import { FollowUpInputs } from "../CreateViolationForm/components"
-import * as Components from './components'
+import * as CreateViolationForm from "../CreateViolationForm/components"
+import * as Components from "./components"
 
 function CreateComplaintForm({ site }: { site: AppTypes.SiteInterface | undefined }) {
   const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateComplaintForm(site)
@@ -26,7 +26,7 @@ function CreateComplaintForm({ site }: { site: AppTypes.SiteInterface | undefine
           <Components.ConcernInputs />
           <Components.CommentsInput />
           <Components.ComplaintantInputs />
-          <FollowUpInputs />
+          <CreateViolationForm.FollowUpInputs />
 
           <FormBtns onCancelBtnClick={onCancelBtnClick} />
 

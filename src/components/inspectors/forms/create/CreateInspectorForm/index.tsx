@@ -1,10 +1,10 @@
-import { FormProvider } from 'react-hook-form'
-import { useHandleCreateInspectorForm } from './hooks'
-import styles from '@/components/form-elements/Forms.module.css'
+import { FormProvider } from "react-hook-form"
+import { useHandleCreateInspectorForm } from "./hooks"
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Components
-import FormBtns from '@/components/form-elements/buttons/FormBtns'
-import * as Components from './components'
+import FormBtns from "@/components/form-elements/buttons/FormBtns"
+import * as Components from "./components"
 
 function CreateInspectorForm() {
   const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateInspectorForm()

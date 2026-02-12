@@ -1,7 +1,7 @@
-import { handleNavDropdown } from './utils'
+import { handleNavDropdown } from "./utils"
 
 // Types
-import { PagesType } from '../../Header/context'
+import { PagesType } from "../../Header/context"
 
 type NavDropdownProps = { label: PagesType, active: boolean, children: React.ReactNode }
 

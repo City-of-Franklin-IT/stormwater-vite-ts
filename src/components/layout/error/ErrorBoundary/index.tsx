@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router'
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
+import { useNavigate } from "react-router"
+import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary"
 
 type ErrorBoundaryProps = { href: string, children: React.ReactNode }
 

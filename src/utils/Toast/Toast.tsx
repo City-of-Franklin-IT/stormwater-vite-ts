@@ -1,17 +1,17 @@
-import { toast } from 'react-toastify'
-import styles from './Toast.module.css'
+import { toast } from "react-toastify"
+import styles from "./Toast.module.css"
 
 // Icons
-import savedIcon from '../../assets/icons/saved/saved.svg'
-import authIcon from '../../assets/icons/auth/auth.svg'
-import infoIcon from '../../assets/icons/info/info.svg'
-import errorIcon from '../../assets/icons/error/error.svg'
+import savedIcon from "../../assets/icons/saved/saved.svg"
+import authIcon from "../../assets/icons/auth/auth.svg"
+import infoIcon from "../../assets/icons/info/info.svg"
+import errorIcon from "../../assets/icons/error/error.svg"
 
 export const savedPopup = (msg: string | undefined): void => { // Saved popup
   const content = (
     <div className={`${ styles.popup } ${ styles.savedPopup }`}>
       <img src={savedIcon} alt="saved icon" className={styles.icon} />
-      <div className="text-center">{msg || 'Saved'}</div>
+      <div className="text-center">{msg || "Saved"}</div>
     </div>
   )
 

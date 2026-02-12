@@ -1,10 +1,10 @@
-import styles from './BasemapSelector.module.css'
+import styles from "./BasemapSelector.module.css"
 
 // Components
-import * as Components from './components'
+import * as Components from "./components"
 
 // Types
-import { BasemapSelectProps } from './utils'
+import { BasemapSelectProps } from "./utils"
 
 function BasemapSelector(props: BasemapSelectProps) {
 

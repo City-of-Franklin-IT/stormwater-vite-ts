@@ -2,10 +2,10 @@ import { useContext, useEffect, useState } from "react"
 import { useLocation } from "react-router"
 import { useQuery } from "@tanstack/react-query"
 import EnforcementCtx from "@/components/enforcement/context"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 import { authHeaders } from "@/helpers/utils"
 import { useEnableQuery } from "@/helpers/hooks"
-import { createFormMap } from './utils'
+import { createFormMap } from "./utils"
 
 // Types
 import { CreateFormType } from "./utils"
@@ -14,7 +14,7 @@ export const useGetActiveSiteNames = () => { // Get active site names
   const { enabled, token } = useEnableQuery()
 
   return useQuery({
-    queryKey: ['getActiveSiteName'],
+    queryKey: ["getActiveSiteName"],
     queryFn: () => AppActions.getActiveSiteNames(authHeaders(token)),
     enabled
   })
@@ -26,9 +26,9 @@ export const useGetSelectedSite = () => {
   const { enabled, token } = useEnableQuery()
 
   return useQuery({
-    queryKey: ['getSite', selectedSite],
+    queryKey: ["getSite", selectedSite],
     queryFn: () => AppActions.getSite(selectedSite, authHeaders(token)),
-    enabled: enabled && !!selectedSite && selectedSite !== 'No Site'
+    enabled: enabled && !!selectedSite && selectedSite !== "No Site"
   })
 }
 
@@ -39,27 +39,27 @@ export const useHandleSiteSelection = () => {
 
   const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setState({ selectionMade: true })
-    dispatch({ type: 'SET_SELECTED_SITE', payload: e.currentTarget.value })
+    dispatch({ type: "SET_SELECTED_SITE", payload: e.currentTarget.value })
   }
 
   const onNoSiteSelect = () => {
     setState({ selectionMade: true })
-    dispatch({ type: 'SET_SELECTED_SITE', payload: 'No Site' })
+    dispatch({ type: "SET_SELECTED_SITE", payload: "No Site" })
   }
 
   return { selectionMade: state.selectionMade, onSelect, onNoSiteSelect }
 }
 
 export const useNoSiteBtnVisibility = () => {
-  const location = useLocation().pathname.split('/')[3]
+  const location = useLocation().pathname.split("/")[3]
 
-  const visible = location !== 'violations'
+  const visible = location !== "violations"
 
   return visible
 }
 
 export const useSetFormType = () => {
-  const location = useLocation().pathname.split('/')[3]
+  const location = useLocation().pathname.split("/")[3]
 
   const Component = createFormMap.get(location as CreateFormType)
 
@@ -70,6 +70,6 @@ export const useResetCtx = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
   useEffect(() => {
-    return () => dispatch({ type: 'RESET_CTX' })
+    return () => dispatch({ type: "RESET_CTX" })
   }, [dispatch])
 }

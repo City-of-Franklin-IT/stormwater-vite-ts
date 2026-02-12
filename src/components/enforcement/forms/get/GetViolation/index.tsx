@@ -1,8 +1,8 @@
-import { useGetViolation } from './hooks'
+import { useGetViolation } from "./hooks"
 
 // Components
-import HandleLoading from '@/utils/HandleLoading'
-import * as Components from './components'
+import HandleLoading from "@/utils/HandleLoading"
+import * as Components from "./components"
 
 type GetViolationProps = { handleDeleteBtn: { onClick: React.MouseEventHandler<HTMLButtonElement>, label: string } }
 

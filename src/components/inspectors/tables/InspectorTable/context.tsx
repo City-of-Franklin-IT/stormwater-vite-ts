@@ -10,14 +10,14 @@ type InspectorTableCtx = {
   year: number
 }
 
-type InspectorTableState = Omit<InspectorTableCtx, 'dispatch'>
+type InspectorTableState = Omit<InspectorTableCtx, "dispatch">
 
 type InspectorTableAction =
-  | { type: 'ADD_TO_SELECTION', payload: string }
-  | { type: 'REMOVE_FROM_SELECTION', payload: string }
-  | { type: 'TOGGLE_FORM_OPEN' }
-  | { type: 'SET_YEAR', payload: number }
-  | { type: 'RESET_CTX' }
+  | { type: "ADD_TO_SELECTION", payload: string }
+  | { type: "REMOVE_FROM_SELECTION", payload: string }
+  | { type: "TOGGLE_FORM_OPEN" }
+  | { type: "SET_YEAR", payload: number }
+  | { type: "RESET_CTX" }
 
 const initialState: InspectorTableState = {
   selection: [],
@@ -33,27 +33,27 @@ const InspectorTableCtx = createContext<InspectorTableCtx>({
 const inspectorTableReducer = (state: InspectorTableState, action: InspectorTableAction) => {
   
   switch(action.type) {
-    case 'ADD_TO_SELECTION':
+    case "ADD_TO_SELECTION":
       return {
         ...state,
         selection: [ ...state.selection, action.payload ]
       }
-    case 'REMOVE_FROM_SELECTION':
+    case "REMOVE_FROM_SELECTION":
       return {
         ...state,
         selection: state.selection.filter(item => item !== action.payload)
       }
-    case 'TOGGLE_FORM_OPEN':
+    case "TOGGLE_FORM_OPEN":
       return {
         ...state,
         formOpen: !state.formOpen
       }
-    case 'SET_YEAR':
+    case "SET_YEAR":
       return {
         ...state,
         year: action.payload
       }
-    case 'RESET_CTX':
+    case "RESET_CTX":
       return initialState
     default:
       return state

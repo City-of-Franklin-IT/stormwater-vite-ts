@@ -1,8 +1,8 @@
-import styles from './SitesTable.module.css'
+import styles from "./SitesTable.module.css"
 import { useHandleTableRow, useHandleTableData } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import SiteDetails from "@/components/site/details/SiteDetails"

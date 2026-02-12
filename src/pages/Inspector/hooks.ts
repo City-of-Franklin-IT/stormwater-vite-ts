@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 import { useEnableQuery } from "../../helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 
@@ -13,7 +13,7 @@ export const useGetInspector = () => {
   const { slug } = useParams<{ slug: string }>()
 
   return useQuery({
-    queryKey: ['getInspector', slug],
+    queryKey: ["getInspector", slug],
     queryFn: () => AppActions.getInspector(slug as string, authHeaders(token)),
     enabled: enabled && !!slug,
     staleTime: Infinity

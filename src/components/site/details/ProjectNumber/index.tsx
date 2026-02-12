@@ -1,7 +1,7 @@
-import { handleProjectNumber } from './utils'
+import { handleProjectNumber } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 function ProjectNumber({ site }: { site: AppTypes.SiteInterface }) {
   const props = handleProjectNumber(site)

@@ -1,9 +1,9 @@
-import { Link } from 'react-router'
-import { docColorsMap } from './utils'
-import { useHandleEndpointItem } from './hooks'
+import { Link } from "react-router"
+import { docColorsMap } from "./utils"
+import { useHandleEndpointItem } from "./hooks"
 
 // Types
-import { MethodsType, RequestItemType, CollectionType } from './utils'
+import { MethodsType, RequestItemType, CollectionType } from "./utils"
 
 export const EndpointItems = ({ collection }: { collection: CollectionType }) => {
 
@@ -26,7 +26,7 @@ export const MethodBadge = ({ method }: { method: MethodsType }) => {
 export const CloseDocsBtn = () => {
 
   return (
-    <Link to={'/sites'} className="btn btn-primary w-full">
+    <Link to={"/sites"} className="btn btn-primary w-full">
       Close API Documentation
     </Link>
   )

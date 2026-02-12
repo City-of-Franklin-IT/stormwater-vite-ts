@@ -1,17 +1,17 @@
-import { memo } from 'react'
+import { memo } from "react"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import SiteContactsTable from '../../tables/SiteContactsTable'
-import Motion from '@/utils/Motion'
-import * as Components from './components'
+import SiteContactsTable from "../../tables/SiteContactsTable"
+import Motion from "@/utils/Motion"
+import * as Components from "./components"
 
 function SiteContainer({ site }: { site: AppTypes.SiteInterface }) {
 
   return (
-    <Motion animation={'fadeInOut'}>
+    <Motion animation={"fadeInOut"}>
       <div className="flex flex-col my-10 gap-10">
         <Components.Header site={site} />
         

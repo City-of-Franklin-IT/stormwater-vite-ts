@@ -2,7 +2,7 @@ import { Link } from "react-router"
 import { useHandleTableRowClick } from "../ViolationsContainer/hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import { EnforcementTableHeaders, EnforcementTable, CivilPenalty, Status } from "../ViolationsContainer/components"

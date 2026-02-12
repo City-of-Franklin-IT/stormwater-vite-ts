@@ -1,13 +1,13 @@
-import { faker } from '@faker-js/faker'
+import { faker } from "@faker-js/faker"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 export const createMockSite = (): AppTypes.SiteInterface => ({
   siteId: faker.string.alphanumeric(),
   inspectorId: faker.string.alphanumeric(),
   name: faker.string.alphanumeric({ length: 20 }),
-  preconDate: faker.date.anytime().toISOString().split('T')[0],
+  preconDate: faker.date.anytime().toISOString().split("T")[0],
   location: faker.location.streetAddress(),
   xCoordinate: faker.number.float(),
   yCoordinate: faker.number.float(),

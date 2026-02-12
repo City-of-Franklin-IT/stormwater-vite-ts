@@ -2,16 +2,16 @@ import { useContext, useMemo, useState, useCallback } from "react"
 import { useParams, useLocation } from "react-router"
 import { useQueryClient } from "@tanstack/react-query"
 import EnforcementCtx from "../../context"
-import * as AppActions from '@/context/App/AppActions'
+import * as AppActions from "@/context/App/AppActions"
 import { authHeaders } from "@/helpers/utils"
 import { useEnableQuery } from "@/helpers/hooks"
 import { useSetTotalPages } from "../ViolationsContainer/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
-import { enforcementPathMap } from './utils'
+import { enforcementPathMap } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
-import { ComplaintsTableDataType } from './components'
+import * as AppTypes from "@/context/App/types"
+import { ComplaintsTableDataType } from "./components"
 
 /**
 * Returns paginated complaints table data; applies filters when applicable
@@ -24,7 +24,7 @@ export const useHandleTableData = (complaints: AppTypes.ComplaintInterface[]) =>
         ...complaint,
         siteUUID: complaint.Site?.uuid,
         siteName: complaint.Site?.name,
-        primaryPermitee: complaint.responsibleParty || complaint.Site?.SiteContacts?.find(contact => contact.isPrimary)?.Contact?.company || '-'
+        primaryPermitee: complaint.responsibleParty || complaint.Site?.SiteContacts?.find(contact => contact.isPrimary)?.Contact?.company || "-"
       }))
 
       if(!showClosedSiteIssues) {
@@ -77,17 +77,17 @@ export const useHandleDeleteBtn = () => {
       const result = await AppActions.deleteComplaint(formUUID, authHeaders(token))
 
       if(result.success) {
-        queryClient.invalidateQueries({ queryKey: ['getComplaints'] })
-        queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
-        dispatch({ type: 'RESET_CTX' })
+        queryClient.invalidateQueries({ queryKey: ["getComplaints"] })
+        queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+        dispatch({ type: "RESET_CTX" })
         savedPopup(result.msg)
       } else errorPopup(result.msg)
     }
   }, [state.active, enabled, token, formUUID, queryClient, siteUUID])
 
   const label = !state.active ? 
-    'Delete Complaint' : 
-    'Confirm Delete'
+    "Delete Complaint" : 
+    "Confirm Delete"
 
   return { onClick, label }
 }
@@ -100,21 +100,21 @@ export const useHandleReportParams = () => {
   const setParams = () => {
     const params = new URLSearchParams()
 
-    const path = pathname.split('/').pop()?.toLowerCase()
+    const path = pathname.split("/").pop()?.toLowerCase()
 
     const enforcmentType = enforcementPathMap.get(String(path))
 
     if(enforcmentType) { // Enforcement type
-      params.append('Enforcement_type', enforcmentType)
+      params.append("Enforcement_type", enforcmentType)
     }
 
     if(start && end) { // Date range filter applied
-      params.append('startDate', start)
-      params.append('endDate', end)
+      params.append("startDate", start)
+      params.append("endDate", end)
     }
 
     if(!showClosedSiteIssues) { // Hide closed
-      params.append('closed', 'False')
+      params.append("closed", "False")
     }
 
     return params

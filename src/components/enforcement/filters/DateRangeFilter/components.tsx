@@ -1,4 +1,4 @@
-import { useHandleClearBtn, useHandleDateInput } from './hooks'
+import { useHandleClearBtn, useHandleDateInput } from "./hooks"
 
 export const DateRangeInputs = () => {
 
@@ -23,7 +23,7 @@ export const ClearBtn = () => { // Clear date range filter button
 }
 
 const StartInput = () => { // Date range filter start input
-  const inputProps = useHandleDateInput('start')
+  const inputProps = useHandleDateInput("start")
 
   return (
     <div className="flex flex-col items-center">
@@ -38,7 +38,7 @@ const StartInput = () => { // Date range filter start input
 }
 
 const EndInput = () => { // Date range filter start input
-  const inputProps = useHandleDateInput('end')
+  const inputProps = useHandleDateInput("end")
 
   return (
     <div className="flex flex-col items-center">

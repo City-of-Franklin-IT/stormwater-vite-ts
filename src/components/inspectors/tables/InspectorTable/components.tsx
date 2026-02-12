@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { Link } from "react-router"
-import { useHandleInspectorSiteSelection, useHandleCreateLogBtn, useHandleCreateSiteLogColumn } from './hooks'
+import { useHandleInspectorSiteSelection, useHandleCreateLogBtn, useHandleCreateSiteLogColumn } from "./hooks"
 import InspectorTableCtx from "./context"
 
 // Types

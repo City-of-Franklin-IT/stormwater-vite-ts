@@ -2,10 +2,10 @@ import React, { useContext, useRef } from "react"
 import EnforcementCtx from "../../context"
 import { Link } from "react-router"
 import { useReturnUserRoles } from "@/helpers/hooks"
-import { useHandleNavBtns, useHandleTableRowClick, useScrollToFormRef } from './hooks'
+import { useHandleNavBtns, useHandleTableRowClick, useScrollToFormRef } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import FormContainer from "../../../form-elements/FormContainer"
@@ -38,7 +38,7 @@ type CreateBtnProps = { href: string, children: React.ReactNode }
 export const CreateBtn = (props: CreateBtnProps) => {
   const roles = useReturnUserRoles()
 
-  if(!roles.includes('task.write')) return null // Viewers
+  if(!roles.includes("task.write")) return null // Viewers
 
   return (
     <div className="absolute top-8 left-1/2 -translate-x-1/2">
@@ -101,7 +101,7 @@ export const ShowClosedCheckbox = () => { // Show closed site issues checkbox
         type="checkbox"
         className="checkbox checkbox-secondary"
         checked={showClosedSiteIssues}
-        onChange={() => dispatch({ type: 'TOGGLE_SHOW_CLOSED_SITE_ISSUES' })} />
+        onChange={() => dispatch({ type: "TOGGLE_SHOW_CLOSED_SITE_ISSUES" })} />
     </div>
   )
 }

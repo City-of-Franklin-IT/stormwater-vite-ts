@@ -2,7 +2,7 @@ import { useGetComplaint } from "./hooks"
 
 // Components
 import HandleLoading from "@/utils/HandleLoading"
-import * as Components from './components'
+import * as Components from "./components"
 
 type GetComplaintProps = { handleDeleteBtn: { onClick: React.MouseEventHandler<HTMLButtonElement>, label: string } }
 

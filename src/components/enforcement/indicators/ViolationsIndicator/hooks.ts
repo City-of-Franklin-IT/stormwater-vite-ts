@@ -2,7 +2,7 @@ import { useContext } from "react"
 import EnforcementCtx from "../../context"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 export type SiteIssuesType = AppTypes.ConstructionViolationInterface | AppTypes.IllicitDischargeInterface | AppTypes.ComplaintInterface | undefined
 

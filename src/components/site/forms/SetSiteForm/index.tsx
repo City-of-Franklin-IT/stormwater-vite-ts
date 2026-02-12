@@ -1,8 +1,8 @@
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
-import { Form } from './components'
+import { Form } from "./components"
 
 function SetSiteForm({ site }: { site: AppTypes.SiteInterface }) {
 

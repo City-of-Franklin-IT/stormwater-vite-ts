@@ -3,24 +3,41 @@ import { useParams, useNavigate } from "react-router"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm, useFormContext } from "react-hook-form"
 import EnforcementCtx from "@/components/enforcement/context"
-import Map from '@arcgis/core/Map'
-import MapView from '@arcgis/core/views/MapView'
-import Point from '@arcgis/core/geometry/Point'
-import Graphic from '@arcgis/core/Graphic'
-import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import Map from "@arcgis/core/Map"
+import MapView from "@arcgis/core/views/MapView"
+import Point from "@arcgis/core/geometry/Point"
+import Graphic from "@arcgis/core/Graphic"
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
 import Search from "@arcgis/core/widgets/Search"
 import { TextSymbol } from "@arcgis/core/symbols"
-import pinErrorIcon from '@/assets/icons/pin/error-pin.png'
+import pinErrorIcon from "@/assets/icons/pin/error-pin.png"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
 import { errorPopup, infoPopup, savedPopup } from "@/utils/Toast/Toast"
 import { useOnCancelBtnClick } from "../CreateViolationForm/hooks"
 import { handleCreateIllicitDischarge } from "../CreateIllicitDischargeForm/utils"
-import { handleCreateComplaint } from './utils'
+import { handleCreateComplaint } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
+
+export enum ConcernEnum {
+  AssistanceRequest = "Assistance Request",
+  Buffer = "Buffer",
+  Draining = "Draining",
+  Dumping = "Dumping",
+  ErosionSedimentConstruction = "Erosion / Sediment / Construction",
+  FishKillSpill = "Fish Kill / Spill",
+  FloodingDraining = "Flooding / Draining",
+  GarbageDebris = "Garbage / Debris",
+  IllicitDischargeSpill = "Illicit Discharge / Spill",
+  Leak = "Leak",
+  Mosquitoes = "Mosquitoes",
+  PostConstructionStormwaterPTP = "Post-construction Stormwater / PTP",
+  WaterLineBreak = "Water Line Break",
+  Other = "Other"
+}
 
 /**
 * Returns create complaint form methods, form submit function, and cancel button onClick handler
@@ -67,23 +84,23 @@ const useCreateComplaintForm = (site: AppTypes.SiteInterface | undefined) => {
   const { formDate } = useContext(EnforcementCtx)
 
   return useForm<AppTypes.ComplaintCreateInterface>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
       siteId: site?.siteId || null,
       date: formatDate(formDate),
-      details: '',
+      details: "",
       inspectorId: site?.inspectorId || null,
-      name: '',
-      address: '',
-      phone: '',
-      email: '',
+      name: "",
+      address: "",
+      phone: "",
+      email: "",
       xCoordinate: site?.xCoordinate || null,
       yCoordinate: site?.yCoordinate || null,
-      locationDescription: '',
+      locationDescription: "",
       concern: undefined,
-      otherConcern: '',
-      responsibleParty: '',
-      comments: '',
+      otherConcern: "",
+      responsibleParty: "",
+      comments: "",
       compliance: null,
       closed: null,
       FollowUpDates: []
@@ -109,11 +126,11 @@ const useHandleFormSubmit = () => {
 
     if(!result?.success) {
       errorPopup(result?.msg)
-      navigate('/enforcement/complaints')
+      navigate("/enforcement/complaints")
       return
     }
 
-    if(result.data && formData.concern === 'Illicit Discharge / Spill') {
+    if(result.data && formData.concern === "Illicit Discharge / Spill") {
       const illicitData: AppTypes.IllicitDischargeCreateInterface = {
         complaintId: result.data.complaintId,
         siteId: formData.siteId,
@@ -124,9 +141,9 @@ const useHandleFormSubmit = () => {
         inspectorId: formData.inspectorId,
         details: formData.details,
         responsibleParty: formData.responsibleParty,
-        volumeLost: '',
-        streamWatershed: '',
-        otherStreamWatershed: '',
+        volumeLost: "",
+        streamWatershed: "",
+        otherStreamWatershed: "",
         enforcementAction: null,
         penaltyDate: null,
         penaltyAmount: null,
@@ -143,17 +160,17 @@ const useHandleFormSubmit = () => {
         errorPopup(illicitRes?.msg)
       }
 
-      queryClient.invalidateQueries({ queryKey: ['getIllicitDischarges'] })
-      infoPopup('Illicit Discharge Created')
+      queryClient.invalidateQueries({ queryKey: ["getIllicitDischarges"] })
+      infoPopup("Illicit Discharge Created")
     }
 
-    queryClient.invalidateQueries({ queryKey: ['getComplaints'] })
-    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
+    queryClient.invalidateQueries({ queryKey: ["getComplaints"] })
+    queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
     savedPopup(result.msg)
 
-    const href = formData.concern !== 'Illicit Discharge / Spill' ?
-      '/enforcement/complaints' :
-      '/enforcement/discharges'
+    const href = formData.concern !== "Illicit Discharge / Spill" ?
+      "/enforcement/complaints" :
+      "/enforcement/discharges"
 
     navigate(href)
   }
@@ -168,7 +185,7 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
   useEffect(() => {
     if(!mapRef?.current || !mapRef.current.isConnected) return
 
-    const map = new Map({ basemap: 'dark-gray-vector' })
+    const map = new Map({ basemap: "dark-gray-vector" })
 
     const mapView = new MapView({
       container: mapRef.current,
@@ -182,13 +199,13 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
 
     mapView.when(() => {
       mapView.ui.add(searchWidget, {
-        position: 'top-left'
+        position: "top-left"
       })
 
       setState(prevState => ({ ...prevState, view: mapView }))
     })
 
-    const pointGraphicsLayer = new GraphicsLayer({ id: 'pointGraphicsLayer' })
+    const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
     map.add(pointGraphicsLayer)
 
     setState(prevState => ({ ...prevState, view: mapView }))
@@ -196,8 +213,8 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
     const onMapClick = mapView.on("click", (e) => {
       const mappoint = e.mapPoint
 
-      setValue('xCoordinate', mappoint.longitude, { shouldValidate: true, shouldDirty: true })
-      setValue('yCoordinate', mappoint.latitude, { shouldValidate: true, shouldDirty: true })
+      setValue("xCoordinate", mappoint.longitude, { shouldValidate: true, shouldDirty: true })
+      setValue("yCoordinate", mappoint.latitude, { shouldValidate: true, shouldDirty: true })
     })
 
     return () => {
@@ -214,14 +231,14 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
 const useSetMapGraphics = (state: { view: __esri.MapView | null }) => {
   const { watch } = useFormContext<AppTypes.ComplaintCreateInterface>()
 
-  const xCoordinate = watch('xCoordinate')
-  const yCoordinate = watch('yCoordinate')
+  const xCoordinate = watch("xCoordinate")
+  const yCoordinate = watch("yCoordinate")
 
 
   useEffect(() => {
-    if(!state.view) return
+    if(!state?.view?.map) return
 
-    const pointGraphicsLayer = state.view.map.findLayerById('pointGraphicsLayer') as GraphicsLayer
+    const pointGraphicsLayer = state.view.map.findLayerById("pointGraphicsLayer") as GraphicsLayer
     pointGraphicsLayer.removeAll()
 
     const coordinates = { xCoordinate, yCoordinate }
@@ -245,7 +262,7 @@ const useSetMapGraphics = (state: { view: __esri.MapView | null }) => {
       })
 
       const labelText = new TextSymbol({
-        text: 'Complaint Location',
+        text: "Complaint Location",
         color: "#FFFFFF",
         yoffset: -14,
         font: { size: 10 }

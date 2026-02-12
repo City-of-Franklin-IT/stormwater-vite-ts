@@ -1,5 +1,5 @@
 // Components
-import Loading from '@/components/layout/loading/Loading'
+import Loading from "@/components/layout/loading/Loading"
 
 type HandleLoadingProps = { isSuccess: boolean, children: React.ReactNode }
 

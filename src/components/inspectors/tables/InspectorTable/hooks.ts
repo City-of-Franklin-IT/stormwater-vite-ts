@@ -3,7 +3,7 @@ import { useReturnUserRoles } from "@/helpers/hooks"
 import InspectorTableCtx from "./context"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 export interface InspectorTableData {
   site: string
@@ -23,8 +23,8 @@ export const useScrollToFormRef = () => {
 
   useEffect(() => { // Scroll to form if active
     if(formOpen && formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    } else tableRef.current?.scrollIntoView({ behavior: 'smooth' })
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+    } else tableRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [formOpen, formRef, tableRef])
 
   return { tableRef, formRef }
@@ -42,11 +42,11 @@ export const useHandleInspectorSiteSelection = (siteId: string) => {
 
   const onChange = () => {
     if(!checked) {
-      dispatch({ type: 'ADD_TO_SELECTION', payload: siteId })
-    } else dispatch({ type: 'REMOVE_FROM_SELECTION', payload: siteId })
+      dispatch({ type: "ADD_TO_SELECTION", payload: siteId })
+    } else dispatch({ type: "REMOVE_FROM_SELECTION", payload: siteId })
   }
 
-  const visible = roles.includes('task.write')
+  const visible = roles.includes("task.write")
 
   return { checked, onChange, visible }
 }
@@ -56,9 +56,9 @@ export const useHandleCreateLogBtn = () => {
 
   if(!selection.length) return {}
 
-  const label = selection.length === 1 ? 'Create Site Log' : 'Create Site Logs'
+  const label = selection.length === 1 ? "Create Site Log" : "Create Site Logs"
 
-  return { label, onClick: () => dispatch({ type: 'TOGGLE_FORM_OPEN' }) }
+  return { label, onClick: () => dispatch({ type: "TOGGLE_FORM_OPEN" }) }
 }
 
 export const useSetInspectorTableData = (sites: AppTypes.SiteInterface[]) => {
@@ -87,10 +87,10 @@ export const useSetInspectorTableData = (sites: AppTypes.SiteInterface[]) => {
 **/
 export const useHandleCreateSiteLogColumn = () => {
   const roles = useReturnUserRoles()
-  const showBtn = roles.includes('task.write')
+  const showBtn = roles.includes("task.write")
   const className = !showBtn ?
-    'hidden' :
-    ''
+    "hidden" :
+    ""
 
   return className
 }

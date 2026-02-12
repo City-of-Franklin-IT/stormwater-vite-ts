@@ -5,10 +5,10 @@ import { useForm } from "react-hook-form"
 import { useEnableQuery } from "@/helpers/hooks"
 import EnforcementCtx from "@/components/enforcement/context"
 import { formatDate } from "@/helpers/utils"
-import { handleUpdateSiteLog } from './utils'
+import { handleUpdateSiteLog } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 
 /**
@@ -43,7 +43,7 @@ const useOnCancelBtnClick = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
   const onClick = () => {
-    dispatch({ type: 'RESET_CTX' })
+    dispatch({ type: "RESET_CTX" })
   }
 
   return onClick
@@ -63,13 +63,13 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.SiteLogCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateSiteLog(formData, token)
+    const result = await handleUpdateSiteLog(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
+    if(!result?.success) {
+      errorPopup(result?.msg || "Error Updating Log")
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
-    dispatch({ type: 'RESET_CTX' })
+    queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    dispatch({ type: "RESET_CTX" })
   }
 }

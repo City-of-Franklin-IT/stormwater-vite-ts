@@ -1,8 +1,8 @@
-import { useFormContext } from 'react-hook-form'
-import styles from '@/components/form-elements/Forms.module.css'
+import { useFormContext } from "react-hook-form"
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 export const CheckboxInputs = () => {
 
@@ -23,7 +23,7 @@ const ComplianceCheckbox = () => { // Compliance checkbox
       <input
         type="checkbox"
         className="checkbox checkbox-warning"
-        { ...methods.register('compliance') } />
+        { ...methods.register("compliance") } />
     </div>
   )
 }
@@ -37,7 +37,7 @@ const ClosedCheckbox = () => { // Closed checkbox
       <input
         type="checkbox"
         className="checkbox checkbox-warning"
-        { ...methods.register('closed') } />
+        { ...methods.register("closed") } />
     </div>
   )
 }

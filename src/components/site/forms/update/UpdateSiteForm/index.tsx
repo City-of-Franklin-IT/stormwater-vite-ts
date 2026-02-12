@@ -1,15 +1,15 @@
 import { FormProvider } from "react-hook-form"
 import { useHandleUpdateSiteForm } from "./hooks"
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
 import UpdateSiteContactsForm from "../UpdateSiteContactsForm"
-import * as CreateSiteForm from '../../create/CreateSiteForm/components'
-import * as Components from './components'
+import * as CreateSiteForm from "../../create/CreateSiteForm/components"
+import * as Components from "./components"
 
 function UpdateSiteForm({ site }: { site: AppTypes.SiteInterface }) {
   const { methods, onCancelBtnClick, handleFormSubmit } = useHandleUpdateSiteForm(site)

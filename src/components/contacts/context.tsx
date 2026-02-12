@@ -12,20 +12,20 @@ type ContactsCtx = {
   showInactiveContacts: boolean
 }
 
-type ContactsState = Omit<ContactsCtx, 'dispatch'>
+type ContactsState = Omit<ContactsCtx, "dispatch">
 
 type ContactsAction =
-  | { type: 'SET_SEARCH_VALUE', payload: string }
-  | { type: 'TOGGLE_SHOW_INACTIVE_CONTACTS' }
-  | { type: 'SET_FORM_UUID', payload: string }
-  | { type: 'SET_TOTAL_PAGES', payload: number }
-  | { type: 'SET_CURRENT_PAGE', payload: number }
-  | { type: 'RESET_CTX' }
+  | { type: "SET_SEARCH_VALUE", payload: string }
+  | { type: "TOGGLE_SHOW_INACTIVE_CONTACTS" }
+  | { type: "SET_FORM_UUID", payload: string }
+  | { type: "SET_TOTAL_PAGES", payload: number }
+  | { type: "SET_CURRENT_PAGE", payload: number }
+  | { type: "RESET_CTX" }
 
 const initialState: ContactsState = {
   currentPage: 1,
-  formUUID: '',
-  searchValue: '',
+  formUUID: "",
+  searchValue: "",
   showInactiveContacts: false,
   totalPages: 1
 }
@@ -38,32 +38,32 @@ const ContactsCtx = createContext<ContactsCtx>({
 const contactsReducer = (state: ContactsState, action: ContactsAction) => {
 
   switch(action.type) {
-    case 'SET_SEARCH_VALUE':
+    case "SET_SEARCH_VALUE":
       return {
         ...state,
         searchValue: action.payload
       }
-    case 'TOGGLE_SHOW_INACTIVE_CONTACTS':
+    case "TOGGLE_SHOW_INACTIVE_CONTACTS":
       return {
         ...state,
         showInactiveContacts: !state.showInactiveContacts
       }
-    case 'SET_FORM_UUID':
+    case "SET_FORM_UUID":
       return {
         ...state,
         formUUID: action.payload
       }
-    case 'SET_TOTAL_PAGES':
+    case "SET_TOTAL_PAGES":
       return {
         ...state,
         totalPages: action.payload
       }
-    case 'SET_CURRENT_PAGE':
+    case "SET_CURRENT_PAGE":
       return {
         ...state,
         currentPage: action.payload
       }
-    case 'RESET_CTX':
+    case "RESET_CTX":
       return initialState 
     default:
       return state

@@ -1,4 +1,4 @@
-import { vi } from 'vitest'
+import { vi } from "vitest"
 
 export const mockLayout = vi.fn(({ children }: { children: React.ReactNode }) => 
   <div data-testid="layout">{children}</div>

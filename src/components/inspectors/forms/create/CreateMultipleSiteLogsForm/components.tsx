@@ -1,5 +1,5 @@
 import { useCreateMultipleSiteLogsFormContext } from "./hooks"
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
@@ -12,15 +12,15 @@ export const DateInput = () => { // Inspection date input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'inspectionDate'}
+          name={"inspectionDate"}
           required={true}>
             Inspection Date:
         </FormLabel>
         <input 
           type="date"
           className={styles.input}
-          { ...register('inspectionDate', {
-            required: 'Inspection date is required'
+          { ...register("inspectionDate", {
+            required: "Inspection date is required"
           }) } />
       </div>
       <FormError error={errors.inspectionDate?.message} />

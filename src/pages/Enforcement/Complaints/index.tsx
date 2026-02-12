@@ -1,5 +1,5 @@
-import { EnforcementProvider } from '@/components/enforcement/context'
-import { useGetComplaints } from './hooks'
+import { EnforcementProvider } from "@/components/enforcement/context"
+import { useGetComplaints } from "./hooks"
 
 // Components
 import Layout from "../../../components/layout/Layout"
@@ -13,7 +13,7 @@ function Complaints() {
   return (
     <Layout>
       <HandleLoading isSuccess={isSuccess}>
-        <ErrorBoundary href={'/sites'}>
+        <ErrorBoundary href={"/sites"}>
           <EnforcementProvider>
             <ComplaintsContainer complaints={data?.data || []} />
           </EnforcementProvider>

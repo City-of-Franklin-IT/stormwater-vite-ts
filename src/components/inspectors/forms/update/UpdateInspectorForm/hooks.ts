@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEnableQuery } from "@/helpers/hooks"
 import InspectorCtx from "@/components/inspectors/context"
-import { useOnCancelBtnClick } from '@/components/inspectors/containers/InspectorContainer/hooks'
+import { useOnCancelBtnClick } from "@/components/inspectors/containers/InspectorContainer/hooks"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
-import { handleUpdateInspector } from './utils'
+import { handleUpdateInspector } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 /**
 * Returns update inspector form methods, cancel button onClick handler, and form submit function
@@ -28,7 +28,7 @@ export const useHandleUpdateInspectorForm = (inspector: AppTypes.InspectorInterf
 const useUpdateInspectorForm = (inspector: AppTypes.InspectorInterface) => { 
   
   return useForm<AppTypes.InspectorInterface>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
       name: inspector.name,
       email: inspector.email,
@@ -52,14 +52,14 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.InspectorCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateInspector(formData, token)
+    const result = await handleUpdateInspector(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
+    if(!result?.success) {
+      errorPopup(result?.msg || "Error Updating Inspector")
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getInspectors'] })
-    queryClient.invalidateQueries({ queryKey: ['getInspector', slug] })
-    dispatch({ type: 'RESET_CTX' })
+    queryClient.invalidateQueries({ queryKey: ["getInspectors"] })
+    queryClient.invalidateQueries({ queryKey: ["getInspector", slug] })
+    dispatch({ type: "RESET_CTX" })
   }
 }

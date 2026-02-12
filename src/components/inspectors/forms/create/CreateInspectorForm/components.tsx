@@ -1,5 +1,5 @@
 import { useCreateInspectorFormContext } from "./hooks"
-import styles from '@/components/form-elements/Forms.module.css'
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
@@ -12,18 +12,18 @@ export const NameInput = () => { // Inspector name input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'name'}
+          name={"name"}
           required={true}>
             Name:
         </FormLabel>
         <input 
           type="text"
           className={styles.input}
-          { ...register('name', {
-            required: 'Inspector name is required',
+          { ...register("name", {
+            required: "Inspector name is required",
             maxLength: {
               value: 50,
-              message: 'Site name must be 50 characters or less'
+              message: "Site name must be 50 characters or less"
             }
           }) } />
       </div>
@@ -39,18 +39,18 @@ export const EmailInput = () => { // Inspector email input
     <div className={styles.inputSection}>
       <div className="flex">
         <FormLabel
-          name={'email'}
+          name={"email"}
           required={true}>
             Email:
         </FormLabel>
         <input 
           type="email"
           className={styles.input}
-          { ...register('email', {
-            required: 'Inspector email is required',
+          { ...register("email", {
+            required: "Inspector email is required",
             maxLength: {
               value: 50,
-              message: 'Inspector email must be 50 characters or less'
+              message: "Inspector email must be 50 characters or less"
             }
           }) } />
       </div>

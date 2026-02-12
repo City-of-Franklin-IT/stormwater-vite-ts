@@ -1,10 +1,10 @@
 import { memo } from "react"
 import InspectorCtx from "../../context"
-import styles from './InspectorContainer.module.css'
-import { useHandleInspectorContainer } from './hooks'
+import styles from "./InspectorContainer.module.css"
+import { useHandleInspectorContainer } from "./hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 // Components
 import Search from "@/components/sites/search/Search"
@@ -12,13 +12,13 @@ import UpdateInspectorForm from "../../forms/update/UpdateInspectorForm"
 import SitesTable from "@/components/sites/tables/SitesTable"
 import Motion from "@/utils/Motion"
 import { ActiveSitesBtn, OpenIssuesBtn } from "@/components/sites/containers/SitesContainer/components"
-import * as Components from './components'
+import * as Components from "./components"
 
 function InspectorContainer({ sites, inspector }: { sites: AppTypes.SiteInterface[], inspector: AppTypes.InspectorInterface }) {
   const { tableData, activeSitesBtnProps, onOpenIssuesBtnClick } = useHandleInspectorContainer(sites)
 
   return (
-    <Motion animation={'fadeInOut'}>
+    <Motion animation={"fadeInOut"}>
       <div className="flex flex-col my-10">
         <Components.Header inspector={inspector} />
 

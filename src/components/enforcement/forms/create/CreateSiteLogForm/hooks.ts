@@ -6,10 +6,10 @@ import EnforcementCtx from "@/components/enforcement/context"
 import { useEnableQuery } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
-import { handleCreateSiteLog } from './utils'
+import { handleCreateSiteLog } from "./utils"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 /**
 * Returns create site log form methods, form submit function, and cancel button onClick handler
@@ -28,7 +28,7 @@ export const useHandleCreateSiteLogForm = (site: AppTypes.SiteInterface) => {
 export const useOnCancelBtnClick = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
-  return () => dispatch({ type: 'RESET_CTX' })
+  return () => dispatch({ type: "RESET_CTX" })
 }
 
 /**
@@ -59,13 +59,13 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.SiteLogCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleCreateSiteLog(formData, token)
+    const result = await handleCreateSiteLog(formData, token).catch(err => console.log(err))
 
-    if(!result.success) {
-      errorPopup(result.msg)
+    if(!result?.success) {
+      errorPopup(result?.msg || "Unable To Create Log")
     } else savedPopup(result.msg)
 
-    queryClient.invalidateQueries({ queryKey: ['getSite', siteUUID] })
-    dispatch({ type: 'RESET_CTX' })
+    queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    dispatch({ type: "RESET_CTX" })
   }
 }

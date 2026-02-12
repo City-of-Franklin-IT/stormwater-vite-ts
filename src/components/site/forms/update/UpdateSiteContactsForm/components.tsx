@@ -1,6 +1,6 @@
 import { Select } from "@mobiscroll/react"
-import { useSetSiteContactOptions, useHandlePrimaryContactSelect, useHandleContractorSelect, useHandleInspectorSelect, useHandleOtherContactSelect } from './hooks'
-import styles from '@/components/form-elements/Forms.module.css'
+import { useSetSiteContactOptions, useHandlePrimaryContactSelect, useHandleContractorSelect, useHandleInspectorSelect, useHandleOtherContactSelect } from "./hooks"
+import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
 import { ContactOptionsType } from "./hooks"

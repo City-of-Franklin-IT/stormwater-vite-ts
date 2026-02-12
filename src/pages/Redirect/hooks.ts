@@ -8,13 +8,13 @@ export const useRedirect = (href: string) => {
 
   const navigate = useNavigate()
 
-  const isReady = instance && inProgress === 'none'
+  const isReady = instance && inProgress === "none"
 
   useEffect(() => {
     if(isReady) {
       if(activeAccount) {
         navigate(href)
-      } else navigate('/')
+      } else navigate("/")
     }
   }, [isReady, activeAccount, navigate, href])
 }

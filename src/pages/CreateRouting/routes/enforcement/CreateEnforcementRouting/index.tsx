@@ -1,7 +1,7 @@
-import { EnforcementProvider } from '@/components/enforcement/context'
+import { EnforcementProvider } from "@/components/enforcement/context"
 
 // Components
-import * as Components from './components'
+import * as Components from "./components"
 
 function CreateEnforcementRouting() {
 

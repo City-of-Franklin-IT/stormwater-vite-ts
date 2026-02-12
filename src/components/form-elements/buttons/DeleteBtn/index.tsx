@@ -1,6 +1,6 @@
-import React from 'react'
-import icon from '../../../../assets/icons/recycle/recycle.svg'
-import styles from './DeleteBtn.module.css'
+import React from "react"
+import icon from "../../../../assets/icons/recycle/recycle.svg"
+import styles from "./DeleteBtn.module.css"
 
 type DeleteBtnProps = { onClick: React.MouseEventHandler<HTMLButtonElement>, children: React.ReactNode }
 

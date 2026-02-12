@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState, useRef } from "react"
-import Map from '@arcgis/core/Map'
-import MapView from '@arcgis/core/views/MapView'
-import Point from '@arcgis/core/geometry/Point'
-import Graphic from '@arcgis/core/Graphic'
-import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import Map from "@arcgis/core/Map"
+import MapView from "@arcgis/core/views/MapView"
+import Point from "@arcgis/core/geometry/Point"
+import Graphic from "@arcgis/core/Graphic"
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
 import Home from "@arcgis/core/widgets/Home"
 import Zoom from "@arcgis/core/widgets/Zoom"
@@ -16,7 +16,7 @@ import SiteCtx from "../../context"
 import { useReturnUserRoles } from "@/helpers/hooks"
 
 // Types
-import * as AppTypes from '@/context/App/types'
+import * as AppTypes from "@/context/App/types"
 
 export const useSetSiteMapView = (mapRef: React.RefObject<HTMLDivElement>, site: AppTypes.SiteInterface) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
@@ -51,11 +51,11 @@ export const useHandleButtons = (uuid: string) => {
   const roles = useReturnUserRoles()
 
   const onClick = () => {
-    const payload = !siteUUID ? uuid : ''
-    dispatch({ type: 'SET_SITE_UUID', payload })
+    const payload = !siteUUID ? uuid : ""
+    dispatch({ type: "SET_SITE_UUID", payload })
   }
 
-  const visible = roles.includes('task.write')
+  const visible = roles.includes("task.write")
 
   return { onClick, visible }
 }
@@ -64,7 +64,7 @@ export const useHandleSiteIssuesCheckbox = () => {
   const { showClosedSiteIssues, dispatch } = useContext(SiteCtx)
 
   const onChange = () => {
-    dispatch({ type: 'TOGGLE_SHOW_CLOSED_SITE_ISSUES' })
+    dispatch({ type: "TOGGLE_SHOW_CLOSED_SITE_ISSUES" })
   }
 
   return { checked: showClosedSiteIssues, onChange }
@@ -74,7 +74,7 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
   useEffect(() => {
     if(!mapRef?.current) return
 
-    const map = new Map({ basemap: 'dark-gray-vector' })
+    const map = new Map({ basemap: "dark-gray-vector" })
 
     const mapView = new MapView({
       container: mapRef.current,
@@ -90,15 +90,15 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
       const basemapGallery = new BasemapGallery({ view: mapView })
       const basemapExpand = new Expand({ view: mapView, content: basemapGallery })
 
-      mapView.ui.add(homeWidget, { position: 'bottom-right' })
-      mapView.ui.add(zoomWidget, { position: 'bottom-right' })
-      mapView.ui.add(basemapExpand, { position: 'bottom-right' })
+      mapView.ui.add(homeWidget, { position: "bottom-right" })
+      mapView.ui.add(zoomWidget, { position: "bottom-right" })
+      mapView.ui.add(basemapExpand, { position: "bottom-right" })
 
       setState(prevState => ({ ...prevState, view: mapView }))
     })
 
-    const pointGraphicsLayer = new GraphicsLayer({ id: 'pointGraphicsLayer' })
-    const textGraphicsLayer = new GraphicsLayer({ id: 'textGraphicsLayer', minScale: 20000 })
+    const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
+    const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer", minScale: 20000 })
     map.addMany([pointGraphicsLayer, textGraphicsLayer])
 
     return () => {
@@ -134,8 +134,8 @@ const useSetMapGraphics = (site: AppTypes.SiteInterface, state: { view: __esri.M
   useEffect(() => {
     if(!state.view || !site) return
 
-    const pointGraphicsLayer = state.view.map?.findLayerById('pointGraphicsLayer') as GraphicsLayer
-    const textGraphicsLayer = state.view.map?.findLayerById('textGraphicsLayer') as GraphicsLayer
+    const pointGraphicsLayer = state.view.map?.findLayerById("pointGraphicsLayer") as GraphicsLayer
+    const textGraphicsLayer = state.view.map?.findLayerById("textGraphicsLayer") as GraphicsLayer
     pointGraphicsLayer.removeAll()
     textGraphicsLayer.removeAll()
 
