@@ -334,6 +334,9 @@ const useHandleEventClick = () => {
   }, [roles, pathname, navigate, dispatch])
 }
 
+/**
+* Returns whether the calendar double-click note should be visible on site pages
+**/
 export const useHandleCalendarNoteVisibility = () => {
   const { pathname } = useLocation()
 

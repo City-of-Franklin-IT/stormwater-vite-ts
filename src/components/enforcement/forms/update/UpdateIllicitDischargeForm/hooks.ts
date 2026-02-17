@@ -71,10 +71,15 @@ const useHandleFormSubmit = () => {
     queryClient.invalidateQueries({ queryKey: ["getIllicitDischarges"] })
     queryClient.invalidateQueries({ queryKey: ["getIllicitDischarge", formData.uuid] })
     queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    queryClient.invalidateQueries({ queryKey: ["getSites"] })
+    queryClient.invalidateQueries({ queryKey: ["getInspector"] })
     dispatch({ type: "RESET_CTX" })
   }
 }
 
+/**
+* Returns the stream watershed enum value, or "Other" if not a known enum member
+**/
 const useSetStreamWatershed = (streamWatershed: StreamWatershedEnum | string) => {
   if(streamWatershed in StreamWatershedEnum) {
     return streamWatershed as StreamWatershedEnum

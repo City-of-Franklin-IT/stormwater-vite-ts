@@ -6,7 +6,7 @@ import { useEnableQuery } from "@helpers/hooks"
 /**
 * Returns sites from server
 **/
-export const useGetSites = () => { // Get sites
+export const useGetSites = () => {
   const { enabled, token } = useEnableQuery()
 
   return useQuery({ 

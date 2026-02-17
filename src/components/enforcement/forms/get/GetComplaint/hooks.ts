@@ -5,7 +5,10 @@ import * as AppActions from "@/context/App/AppActions"
 import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 
-export const useGetComplaint = () => { // Get complaint
+/**
+* Returns complaint query by formUUID from EnforcementCtx
+**/
+export const useGetComplaint = () => {
   const { formUUID } = useContext(EnforcementCtx)
 
   const { enabled, token } = useEnableQuery()

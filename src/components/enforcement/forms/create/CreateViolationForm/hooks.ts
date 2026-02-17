@@ -74,6 +74,9 @@ const useCreateViolationForm = (site: AppTypes.SiteInterface | undefined) => {
   })
 }
 
+/**
+* Returns create violation form submit handler that posts data and invalidates queries
+**/
 const useHandleFormSubmit = () => {
   const { enabled, token } = useEnableQuery()
 
@@ -92,6 +95,8 @@ const useHandleFormSubmit = () => {
 
     queryClient.invalidateQueries({ queryKey: ["getViolations"] })
     queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    queryClient.invalidateQueries({ queryKey: ["getSites"] })
+    queryClient.invalidateQueries({ queryKey: ["getInspector"] })
     navigate("/enforcement/violations")
   }
 }

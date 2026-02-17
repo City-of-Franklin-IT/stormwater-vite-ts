@@ -79,6 +79,8 @@ export const useHandleDeleteBtn = () => {
       if(result.success) {
         queryClient.invalidateQueries({ queryKey: ["getComplaints"] })
         queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+        queryClient.invalidateQueries({ queryKey: ["getSites"] })
+        queryClient.invalidateQueries({ queryKey: ["getInspector"] })
         dispatch({ type: "RESET_CTX" })
         savedPopup(result.msg)
       } else errorPopup(result.msg)
@@ -92,6 +94,9 @@ export const useHandleDeleteBtn = () => {
   return { onClick, label }
 }
 
+/**
+* Returns SSRS report URL with query params based on current enforcement filters
+**/
 export const useHandleReportParams = () => {
   const { dateRangeFilter: { start, end }, showClosedSiteIssues } = useContext(EnforcementCtx)
 

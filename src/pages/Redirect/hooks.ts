@@ -2,6 +2,9 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { useMsal } from "@azure/msal-react"
 
+/**
+* Redirects authenticated users to the given href, or to root if not authenticated
+**/
 export const useRedirect = (href: string) => {
   const { instance, inProgress } = useMsal()
   const activeAccount = instance.getActiveAccount()

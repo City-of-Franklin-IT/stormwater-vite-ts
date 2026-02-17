@@ -5,7 +5,10 @@ import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import * as AppActions from "@/context/App/AppActions"
 
-export const useGetViolation = () => { // Get construction violation
+/**
+* Returns construction violation query by formUUID from EnforcementCtx
+**/
+export const useGetViolation = () => {
   const { formUUID } = useContext(EnforcementCtx)
 
   const { enabled, token } = useEnableQuery()

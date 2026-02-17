@@ -4,6 +4,9 @@ import EnforcementCtx from "@/components/enforcement/context"
 // Types
 import { FormType } from "@/components/site/context"
 
+/**
+* Returns form nav visibility and onClick handler for setting the active form type
+**/
 export const useHandleFormNav = () => {
   const { activeForm, dispatch } = useContext(EnforcementCtx)
 

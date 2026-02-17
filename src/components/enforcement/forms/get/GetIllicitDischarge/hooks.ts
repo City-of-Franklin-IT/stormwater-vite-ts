@@ -5,7 +5,10 @@ import { useEnableQuery } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import * as AppActions from "@/context/App/AppActions"
 
-export const useGetIllicitDischarge = () => { // Get illicit discharge
+/**
+* Returns illicit discharge query by formUUID from EnforcementCtx
+**/
+export const useGetIllicitDischarge = () => {
   const { formUUID } = useContext(EnforcementCtx)
 
   const { enabled, token } = useEnableQuery()

@@ -62,6 +62,8 @@ const useHandleFormSubmit = () => {
 
     queryClient.invalidateQueries({ queryKey: ["getComplaints"] })
     queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    queryClient.invalidateQueries({ queryKey: ["getSites"] })
+    queryClient.invalidateQueries({ queryKey: ["getInspector"] })
     queryClient.invalidateQueries({ queryKey: ["getComplaint", formData.uuid] })
     dispatch({ type: "RESET_CTX" })
   }

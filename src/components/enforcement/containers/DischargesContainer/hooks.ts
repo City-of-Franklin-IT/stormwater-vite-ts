@@ -12,7 +12,10 @@ import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 import * as AppTypes from "@/context/App/types"
 import { IllicitDischargesTableDataType } from "./components"
 
-export const useHandleTableData = (discharges: AppTypes.IllicitDischargeInterface[]) => { // Illciit discharges table data
+/**
+* Returns paginated illicit discharges table data; applies filters when applicable
+**/
+export const useHandleTableData = (discharges: AppTypes.IllicitDischargeInterface[]) => {
   const { currentPage, showClosedSiteIssues, dateRangeFilter } = useContext(EnforcementCtx)
 
   const tableData = useMemo(() => {
@@ -50,6 +53,9 @@ export const useHandleTableData = (discharges: AppTypes.IllicitDischargeInterfac
     return tableData.data
 }
 
+/**
+* Returns two-step delete button onClick handler and label for illicit discharge deletion
+**/
 export const useHandleDeleteBtn = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { formUUID, dispatch } = useContext(EnforcementCtx)
@@ -64,7 +70,7 @@ export const useHandleDeleteBtn = () => {
     if(!state.active) {
       setState({ active: true })
       return
-    } 
+    }
 
     if(enabled) {
       const result = await AppActions.deleteIllicitDischarge(formUUID, authHeaders(token))
@@ -72,6 +78,8 @@ export const useHandleDeleteBtn = () => {
       if(result.success) {
         queryClient.invalidateQueries({ queryKey: ["getIllicitDischarges"] })
         queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+        queryClient.invalidateQueries({ queryKey: ["getSites"] })
+        queryClient.invalidateQueries({ queryKey: ["getInspector"] })
         dispatch({ type: "RESET_CTX" })
         savedPopup(result.msg)
       } else errorPopup(result.msg)

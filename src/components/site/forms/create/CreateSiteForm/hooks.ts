@@ -113,6 +113,7 @@ const useHandleFormSubmit = () => {
     } else savedPopup(result?.msg)
 
     queryClient.invalidateQueries({ queryKey: ["getSites"] })
+    queryClient.invalidateQueries({ queryKey: ["getInspector"] })
     navigate(`/site/${ result.data.uuid }`)
   }
 }

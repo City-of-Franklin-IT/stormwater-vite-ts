@@ -1,6 +1,9 @@
 import { useContext } from "react"
 import InspectorTableCtx from "../../tables/InspectorTable/context"
 
+/**
+* Returns prev/next year button props and current year for the inspector table
+**/
 export const useHandleInspectorTableYearBtns = () => {
   const { year, dispatch } = useContext(InspectorTableCtx)
 
@@ -12,7 +15,14 @@ export const useHandleInspectorTableYearBtns = () => {
     dispatch({ type: "SET_YEAR", payload: year + 1 })
   }
 
-  const nextBtnDisabled = new Date().getFullYear() === year
+  const prevPageBtnProps = {
+    onClick: onPrevBtnClick
+  }
 
-  return { onPrevBtnClick, onNextBtnClick, nextBtnDisabled, year }
+  const nextPageBtnProps = {
+    onClick: onNextBtnClick,
+    disabled: new Date().getFullYear() === year
+  }
+
+  return { prevPageBtnProps, nextPageBtnProps, year }
 }

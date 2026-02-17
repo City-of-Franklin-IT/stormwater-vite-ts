@@ -39,6 +39,7 @@ export const useOnDeleteBtnClick = () => {
       } else errorPopup(result.msg)
 
       queryClient.invalidateQueries({ queryKey: ["getSites"] })
+      queryClient.invalidateQueries({ queryKey: ["getInspector"] })
       navigate("/sites")
     }
   }, [state.active, enabled, token, siteUUID, queryClient, navigate])

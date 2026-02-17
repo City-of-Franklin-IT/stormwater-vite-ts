@@ -251,6 +251,8 @@ const useHandleFormSubmit = () => {
 
     queryClient.invalidateQueries({ queryKey: ["getIllicitDischarges"] })
     queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    queryClient.invalidateQueries({ queryKey: ["getSites"] })
+    queryClient.invalidateQueries({ queryKey: ["getInspector"] })
     navigate("/enforcement/discharges")
   }
 }

@@ -8,6 +8,9 @@ export interface SearchProps { // Search props
   placeholder: string
 }
 
+/**
+* Returns onChange handler that dispatches search value to ContactsCtx
+**/
 export const useHandleSearch = () => {
   const { dispatch } = useContext(ContactsCtx)
 

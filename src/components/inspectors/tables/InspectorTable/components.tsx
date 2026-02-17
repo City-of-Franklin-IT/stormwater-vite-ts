@@ -1,7 +1,6 @@
-import { useContext } from "react"
 import { Link } from "react-router"
-import { useHandleInspectorSiteSelection, useHandleCreateLogBtn, useHandleCreateSiteLogColumn } from "./hooks"
-import InspectorTableCtx from "./context"
+import { useHandleInspectorSiteSelection, useHandleCreateLogBtn, useHandleCreateSiteLogColumn, useHandleForm, useHandleInspectionDatesColumn } from "./hooks"
+import { setSiteNameLabel } from "./utils"
 
 // Types
 import { InspectorTableData } from "./hooks"
@@ -20,27 +19,27 @@ export const Table = ({ tableData }: { tableData: InspectorTableData[] }) => {
   )
 }
 
-export const CreateLogBtn = () => { // Create site log button
-  const { label, onClick } = useHandleCreateLogBtn()
+export const CreateLogBtn = () => {
+  const { btnProps, visible } = useHandleCreateLogBtn()
 
-  if(!label) return null
+  if(!visible) return null
 
   return (
     <div className="mx-auto mt-2">
       <button
         type="button"
         className="btn btn-primary uppercase"
-        onClick={onClick}>
-        {label}
+        onClick={btnProps.onClick}>
+          {btnProps.label}
       </button>
     </div>
   )
 }
 
-export const Form = ({ formRef }: { formRef: React.RefObject<HTMLDivElement> }) => { // Site log form
-  const { formOpen } = useContext(InspectorTableCtx)
+export const Form = ({ formRef }: { formRef: React.RefObject<HTMLDivElement> }) => {
+  const visible = useHandleForm()
 
-  if(!formOpen) return null
+  if(!visible) return null
 
   return (
     <div ref={formRef} className="w-full">
@@ -103,23 +102,57 @@ const TableRow = ({ row }: { row: InspectorTableData }) => {
 }
 
 const SiteNameColumn = ({ row }: { row: InspectorTableData }) => {
-
+  
   return (
     <td className="w-fit hover:text-warning">
-      <Link to={`/site/${ row.uuid }`}>{row.site}</Link>
+      <Link to={`/site/${ row.uuid }`}>
+        <SiteNameLabel row={row} />
+      </Link>
     </td>
   )
 }
 
+const SiteNameLabel = ({ row }: { row: InspectorTableData }) => {
+  const { className, label } = setSiteNameLabel(row)
+
+  return (
+    <span className={className}>{label}</span>
+  )
+}
+
 const InspectionDatesColumn = ({ row }: { row: InspectorTableData }) => {
+  const { statusDate, year } = useHandleInspectionDatesColumn(row)
 
   return (
     <>
       {Array.from({ length: 12 }).map((_, index) => {
+        const monthDates = row.dates.filter(date => new Date(date).getMonth() === index)
+
+        if(!monthDates.length && statusDate) {
+          const statusAt = new Date(statusDate)
+          const isOnOrAfterStatus = year > statusAt.getFullYear() || (year === statusAt.getFullYear() && index >= statusAt.getMonth())
+
+          if(isOnOrAfterStatus) {
+            const label = row.inactiveAt ? 
+              "Inactive" : 
+              "Incomplete"
+              
+            const className = row.inactiveAt ? 
+              "text-neutral-content/50" : 
+              "text-info/50"
+
+            return (
+              <td key={`inspection-date-col-${ row.site }-${ index }`}>
+                <small className={`${ className } italic`}>{label}</small>
+              </td>
+            )
+          }
+        }
+
         return (
           <td key={`inspection-date-col-${ row.site }-${ index }`}>
             <div className="flex flex-col">
-              {row.dates.filter(date => new Date(date).getMonth() === index).sort((a, b) => {
+              {monthDates.sort((a, b) => {
                 const dateA = new Date(a).getTime()
                 const dateB = new Date(b).getTime()
 
@@ -127,7 +160,7 @@ const InspectionDatesColumn = ({ row }: { row: InspectorTableData }) => {
                   return -1
                 }
 
-                if(dateB < dateA) {
+                if(dateA < dateB) {
                   return 1
                 }
 

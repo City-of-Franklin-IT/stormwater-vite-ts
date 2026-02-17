@@ -1,5 +1,5 @@
-import { useContext, useEffect, useCallback, useState } from "react"
-import { useNavigate, useParams } from "react-router"
+import { useContext, useEffect, useCallback, useState, useRef } from "react"
+import { useNavigate } from "react-router"
 import { useQueryClient } from "@tanstack/react-query"
 import Map from "@arcgis/core/Map"
 import MapView from "@arcgis/core/views/MapView"
@@ -17,7 +17,7 @@ import { TextSymbol } from "@arcgis/core/symbols"
 import * as AppActions from "@/context/App/AppActions"
 import { mapHitTest, authHeaders } from "@/helpers/utils"
 import InspectorCtx from "../../context"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, useReturnUserRoles } from "@/helpers/hooks"
 import { setSiteMarker } from "@/components/sites/containers/SitesContainer/utils"
 import { useSetTableData, useHandleBtns } from "@/components/sites/containers/SitesContainer/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
@@ -36,13 +36,14 @@ export const useHandleInspectorContainer = (sites: AppTypes.SiteInterface[]) => 
   return { tableData, activeSitesBtnProps, onOpenIssuesBtnClick }
 }
 
+/**
+* Initializes and manages the ArcGIS map view for the inspector page
+**/
 export const useSetInspectorMapView = (mapRef: React.RefObject<HTMLDivElement>, sites: AppTypes.SiteInterface[]) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
   useCreateMapView(mapRef, setState)
-
   useUpdateMapExtent(state.view, sites)
-
   useSetMapGraphics(sites, state)
 
   useEffect(() => {
@@ -54,17 +55,89 @@ export const useSetInspectorMapView = (mapRef: React.RefObject<HTMLDivElement>, 
   }, [state.view])
 }
 
-export const useHandleDeleteBtn = () => {
+/**
+* Returns cancel button onClick handler that resets InspectorCtx
+**/
+export const useOnCancelBtnClick = () => {
+  const { dispatch } = useContext(InspectorCtx)
+
+  return () => dispatch({ type: "RESET_CTX" })
+}
+
+/**
+* Returns view toggle label, onClick handler, and props for calendar and table components
+**/
+export const useHandleCalendarAndTable = (tableData: AppTypes.SiteInterface[]) => {
+  const [state, setState] = useState<{ view: "calendar" | "table" }>({ view: "calendar" })
+
+  const label = state.view === "calendar" ? 
+    "Switch To Table View" : 
+    "Switch To Calendar View"
+
+  const onClick = () => {
+    const payload = state.view === "calendar" ?
+      "table" :
+      "calendar"
+
+    setState({ view: payload })
+  }
+
+  const calendarProps = {
+    visible: state.view === "calendar",
+    tableData
+  }
+
+  const tableProps = {
+    visible: state.view === "table",
+    tableData
+  }
+
+  return { label, onClick, calendarProps, tableProps }
+}
+
+/**
+* Returns form ref, delete button props, and visibility for the inspector update form
+**/
+export const useHandleUpdateForm = () => {
+  const { inspectorId } = useContext(InspectorCtx)
+
+  const formRef = useRef<HTMLDivElement>(null)
+
+  const deleteBtnProps = useHandleDeleteBtn()
+
+  const visible = !!inspectorId
+
+  return { formRef, deleteBtnProps, visible }
+}
+
+/**
+* Returns visibility and onClick handler for the update inspector button based on user role
+**/
+export const useHandleUpdateInspectorBtn = (inspectorId: string) => {
+  const { dispatch } = useContext(InspectorCtx)
+
+  const roles = useReturnUserRoles()
+
+  const visible = roles.includes("task.write")
+
+  const onClick = () => {
+    dispatch({ type: "SET_INSPECTOR_ID", payload: inspectorId })
+  }
+
+  return { visible, onClick }
+}
+
+/**
+* Returns two-step delete button onClick handler and label for inspector deletion
+**/
+const useHandleDeleteBtn = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { inspectorId } = useContext(InspectorCtx)
 
   const navigate = useNavigate()
-
-  const { enabled, token } = useEnableQuery()
-
   const queryClient = useQueryClient()
 
-  const { uuid: siteUUID } = useParams<{ uuid: string }>()
+  const { enabled, token } = useEnableQuery()
 
   const onClick = useCallback(async () => {
     if(!state.active) {
@@ -81,19 +154,18 @@ export const useHandleDeleteBtn = () => {
         savedPopup(result.msg)
       } else errorPopup(result.msg)
     }
-  }, [state.active, enabled, token, inspectorId, queryClient, siteUUID, navigate])
+  }, [state.active, enabled, token, inspectorId, queryClient, navigate])
 
-  const label = !state.active ? "Delete Inspector" : "Confirm Delete"
+  const label = !state.active ? 
+    "Delete Inspector" : 
+    "Confirm Delete"
 
   return { onClick, label}
 }
 
-export const useOnCancelBtnClick = () => { // Handle cancel btn click
-  const { dispatch } = useContext(InspectorCtx)
-
-  return () => dispatch({ type: "RESET_CTX" })
-}
-
+/**
+* Creates the ArcGIS MapView instance with search, basemap, and navigation widgets
+**/
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
   const navigate = useNavigate()
 
@@ -149,6 +221,9 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
   }, [mapRef, setState, navigate])
 }
 
+/**
+* Animates the map view to fit all site points within the extent
+**/
 const useUpdateMapExtent = (view: __esri.MapView | null, sites: AppTypes.SiteInterface[]) => {
 
   useEffect(() => {
@@ -171,6 +246,9 @@ const useUpdateMapExtent = (view: __esri.MapView | null, sites: AppTypes.SiteInt
   }, [view, sites])
 }
 
+/**
+* Renders site marker and label graphics on the map for each site
+**/
 const useSetMapGraphics = (sites: AppTypes.SiteInterface[], state: { view: __esri.MapView | null }) => {
 
   useEffect(() => {

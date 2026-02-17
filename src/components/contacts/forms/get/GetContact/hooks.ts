@@ -6,7 +6,10 @@ import * as AppActions from "@/context/App/AppActions"
 import { useEnableQuery } from "@/helpers/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 
-export const useGetContact = () => { // Get contact
+/**
+* Returns contact query by formUUID from ContactsCtx
+**/
+export const useGetContact = () => {
   const { formUUID } = useContext(ContactsCtx)
 
   const { enabled, token } = useEnableQuery()
@@ -18,6 +21,9 @@ export const useGetContact = () => { // Get contact
   })
 }
 
+/**
+* Returns two-step delete button onClick handler and active state for contact deletion
+**/
 export const useHandleDeleteBtnClick = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { formUUID } = useContext(ContactsCtx)

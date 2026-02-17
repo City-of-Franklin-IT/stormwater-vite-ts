@@ -166,6 +166,8 @@ const useHandleFormSubmit = () => {
 
     queryClient.invalidateQueries({ queryKey: ["getComplaints"] })
     queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+    queryClient.invalidateQueries({ queryKey: ["getSites"] })
+    queryClient.invalidateQueries({ queryKey: ["getInspector"] })
     savedPopup(result.msg)
 
     const href = formData.concern !== "Illicit Discharge / Spill" ?

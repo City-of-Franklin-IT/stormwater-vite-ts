@@ -6,6 +6,9 @@ import * as AppTypes from "@/context/App/types"
 
 export type SiteIssuesType = AppTypes.ConstructionViolationInterface | AppTypes.IllicitDischargeInterface | AppTypes.ComplaintInterface | undefined
 
+/**
+* Returns total, open, and closed ticket counts; applies date range filter when active
+**/
 export const useHandleStats = (issues: SiteIssuesType[]) => {
   const { dateRangeFilter } = useContext(EnforcementCtx)
 

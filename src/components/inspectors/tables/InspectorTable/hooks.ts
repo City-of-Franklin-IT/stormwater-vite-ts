@@ -10,6 +10,8 @@ export interface InspectorTableData {
   dates: string[]
   uuid: string
   siteId: string
+  inactiveAt: string | null
+  incompleteAt: string | null
 }
 
 /**
@@ -51,16 +53,39 @@ export const useHandleInspectorSiteSelection = (siteId: string) => {
   return { checked, onChange, visible }
 }
 
+/**
+* Returns create log button props and visibility based on site selection state
+**/
 export const useHandleCreateLogBtn = () => {
   const { selection, dispatch } = useContext(InspectorTableCtx)
 
-  if(!selection.length) return {}
+  if(!selection.length) return {
+    visible: false,
+    btnProps: {
+      onClick: () => null,
+      label: ""
+    }
+  }
 
-  const label = selection.length === 1 ? "Create Site Log" : "Create Site Logs"
+  const label = selection.length === 1 ? 
+    "Create Site Log" : 
+    "Create Site Logs"
 
-  return { label, onClick: () => dispatch({ type: "TOGGLE_FORM_OPEN" }) }
+  const onClick = () => {
+    dispatch({ type: "TOGGLE_FORM_OPEN" })
+  }
+
+  const btnProps = {
+    onClick,
+    label
+  }
+
+  return { btnProps, visible: true }
 }
 
+/**
+* Returns memoized inspector table data with inspection dates filtered by selected year
+**/
 export const useSetInspectorTableData = (sites: AppTypes.SiteInterface[]) => {
   const { year } = useContext(InspectorTableCtx)
   
@@ -72,7 +97,9 @@ export const useSetInspectorTableData = (sites: AppTypes.SiteInterface[]) => {
         site: site.name,
         dates: inspections.map(inspection => inspection.inspectionDate),
         uuid: site.uuid,
-        siteId: site.siteId
+        siteId: site.siteId,
+        inactiveAt: site.InactiveSite?.createdAt || null,
+        incompleteAt: site.IncompleteSite?.createdAt || null
       }
     })
 
@@ -80,6 +107,17 @@ export const useSetInspectorTableData = (sites: AppTypes.SiteInterface[]) => {
   }, [sites, year])
 
   return data
+}
+
+/**
+* Returns the status date and selected year for rendering inspection date columns
+**/
+export const useHandleInspectionDatesColumn = (row: InspectorTableData) => {
+  const { year } = useContext(InspectorTableCtx)
+
+  const statusDate = row.inactiveAt || row.incompleteAt
+
+  return { statusDate, year }
 }
 
 /**
@@ -93,4 +131,15 @@ export const useHandleCreateSiteLogColumn = () => {
     ""
 
   return className
+}
+
+/**
+* Returns whether the create site logs form is open
+**/
+export const useHandleForm = () => {
+  const { formOpen } = useContext(InspectorTableCtx)
+  
+  const visible = formOpen
+
+  return visible
 }

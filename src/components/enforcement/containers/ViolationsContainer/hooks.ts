@@ -11,6 +11,9 @@ import * as AppTypes from "@/context/App/types"
 import { ViolationTableDataType } from "./components"
 import { useParams } from "react-router"
 
+/**
+* Returns pagination button handlers and page label for violations table
+**/
 export const useHandleNavBtns = () => {
   const { currentPage, totalPages, dispatch } = useContext(EnforcementCtx)
 
@@ -31,13 +34,19 @@ export const useHandleNavBtns = () => {
   return { handlePrevBtn, handleNextBtn, label }
 }
 
+/**
+* Returns onClick handler that sets the formUUID in EnforcementCtx
+**/
 export const useHandleTableRowClick = (uuid: string) => {
   const { dispatch } = useContext(EnforcementCtx)
 
   return () => dispatch({ type:  "SET_FORM_UUID", payload: uuid })
 }
 
-export const useHandleTableData = (violations: AppTypes.ConstructionViolationInterface[]) => { // Construction violations table data
+/**
+* Returns paginated violations table data; applies closed and date range filters
+**/
+export const useHandleTableData = (violations: AppTypes.ConstructionViolationInterface[]) => {
   const { currentPage, showClosedSiteIssues, dateRangeFilter } = useContext(EnforcementCtx)
 
   const tableData = useMemo(() => {
@@ -77,6 +86,9 @@ export const useHandleTableData = (violations: AppTypes.ConstructionViolationInt
 
 type UseScrollToFormRefProps = { formRef: React.RefObject<HTMLDivElement>, activeForm: boolean }
 
+/**
+* Scrolls to form ref when activeForm is true; scrolls to top otherwise
+**/
 export const useScrollToFormRef = (props: UseScrollToFormRefProps) => {
 
   useEffect(() => { // Scroll to form if active
@@ -86,7 +98,10 @@ export const useScrollToFormRef = (props: UseScrollToFormRefProps) => {
   }, [props.activeForm, props.formRef])
 }
 
-export const useResetCtx = () => { // Reset EnforcementCtx on enforcement page change
+/**
+* Resets EnforcementCtx on component unmount
+**/
+export const useResetCtx = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
   useEffect(() => {
@@ -94,7 +109,10 @@ export const useResetCtx = () => { // Reset EnforcementCtx on enforcement page c
   }, [dispatch])
 }
 
-export const useSetTotalPages = (count: number) => { // Set total pages to ctx
+/**
+* Sets total pages in EnforcementCtx based on item count
+**/
+export const useSetTotalPages = (count: number) => {
   const { dispatch, showClosedSiteIssues } = useContext(EnforcementCtx)
 
   useEffect(() => {
@@ -102,6 +120,9 @@ export const useSetTotalPages = (count: number) => { // Set total pages to ctx
   }, [showClosedSiteIssues, count, dispatch])
 }
 
+/**
+* Returns two-step delete button onClick handler and label for violation deletion
+**/
 export const useHandleDeleteBtn = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { formUUID, dispatch } = useContext(EnforcementCtx)
@@ -124,6 +145,8 @@ export const useHandleDeleteBtn = () => {
       if(result.success) {
         queryClient.invalidateQueries({ queryKey: ["getViolations"] })
         queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
+        queryClient.invalidateQueries({ queryKey: ["getSites"] })
+        queryClient.invalidateQueries({ queryKey: ["getInspector"] })
         dispatch({ type: "RESET_CTX" })
         savedPopup(result.msg)
       } else errorPopup(result.msg)

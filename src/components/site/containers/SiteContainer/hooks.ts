@@ -18,6 +18,9 @@ import { useReturnUserRoles } from "@/helpers/hooks"
 // Types
 import * as AppTypes from "@/context/App/types"
 
+/**
+* Initializes and manages the ArcGIS map view for a single site page
+**/
 export const useSetSiteMapView = (mapRef: React.RefObject<HTMLDivElement>, site: AppTypes.SiteInterface) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
@@ -34,6 +37,9 @@ export const useSetSiteMapView = (mapRef: React.RefObject<HTMLDivElement>, site:
   }, [state.view])
 }
 
+/**
+* Returns form ref and visibility based on active enforcement form or site UUID
+**/
 export const useHandleForm = () => {
   const { activeForm } = useContext(EnforcementCtx)
   const { siteUUID } = useContext(SiteCtx)
@@ -45,6 +51,9 @@ export const useHandleForm = () => {
   return { formRef, visible }
 }
 
+/**
+* Returns update site button onClick handler and visibility based on user role
+**/
 export const useHandleButtons = (uuid: string) => {
   const { siteUUID, dispatch } = useContext(SiteCtx) 
 
@@ -60,6 +69,9 @@ export const useHandleButtons = (uuid: string) => {
   return { onClick, visible }
 }
 
+/**
+* Returns checked state and onChange handler for the show closed site issues checkbox
+**/
 export const useHandleSiteIssuesCheckbox = () => {
   const { showClosedSiteIssues, dispatch } = useContext(SiteCtx)
 
@@ -70,6 +82,9 @@ export const useHandleSiteIssuesCheckbox = () => {
   return { checked: showClosedSiteIssues, onChange }
 }
 
+/**
+* Creates the ArcGIS MapView instance with basemap widgets and click handler
+**/
 const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>, site: AppTypes.SiteInterface) => {
   useEffect(() => {
     if(!mapRef?.current) return
@@ -109,6 +124,9 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
   }, [mapRef, setState, site])
 }
 
+/**
+* Animates the map view to center on the site coordinates
+**/
 const useUpdateMapExtent = (view: __esri.MapView | null, site: AppTypes.SiteInterface) => {
 
   useEffect(() => {
@@ -129,6 +147,9 @@ const useUpdateMapExtent = (view: __esri.MapView | null, site: AppTypes.SiteInte
   }, [view, site])
 }
 
+/**
+* Renders the site marker and label graphics on the map
+**/
 const useSetMapGraphics = (site: AppTypes.SiteInterface, state: { view: __esri.MapView | null }) => {
 
   useEffect(() => {

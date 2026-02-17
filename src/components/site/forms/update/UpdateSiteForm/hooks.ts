@@ -82,6 +82,25 @@ export const useHandleInactiveCheckbox = () => {
 }
 
 /**
+* Returns incomplete site checkbox onChange handler and checked boolean
+**/
+export const useHandleIncompleteCheckbox = () => {
+  const { getValues, setValue, watch } = useUpdateSiteFormContext()
+
+  const siteId = getValues("siteId")
+
+  const checked = !!watch("IncompleteSite.siteId")
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.checked ? String(siteId) : ""
+
+    setValue("IncompleteSite.siteId", value)
+  }
+
+  return { checked, onChange }
+}
+
+/**
 * Returns update site form methods
 **/
 const useUpdateSiteForm = (site: AppTypes.SiteInterface) => { // UpdateSiteForm useForm state
@@ -102,6 +121,7 @@ const useUpdateSiteForm = (site: AppTypes.SiteInterface) => { // UpdateSiteForm 
       greenInfrastructure: site.greenInfrastructure,
       SiteContacts: site.SiteContacts,
       InactiveSite: site.InactiveSite,
+      IncompleteSite: site.IncompleteSite,
       uuid: site.uuid
     }
   })
@@ -142,6 +162,8 @@ const useHandleFormSubmit = () => {
     } else savedPopup(result.msg)
 
     queryClient.invalidateQueries({ queryKey: ["getSite", formData.uuid] })
+    queryClient.invalidateQueries({ queryKey: ["getSites"] })
+    queryClient.invalidateQueries({ queryKey: ["getInspector"] })
     dispatch({ type: "RESET_CTX" })
   }
 }

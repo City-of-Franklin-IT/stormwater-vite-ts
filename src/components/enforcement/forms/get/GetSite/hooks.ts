@@ -10,7 +10,10 @@ import { createFormMap } from "./utils"
 // Types
 import { CreateFormType } from "./utils"
 
-export const useGetActiveSiteNames = () => { // Get active site names
+/**
+* Returns active site names query
+**/
+export const useGetActiveSiteNames = () => {
   const { enabled, token } = useEnableQuery()
 
   return useQuery({
@@ -20,6 +23,9 @@ export const useGetActiveSiteNames = () => { // Get active site names
   })
 }
 
+/**
+* Returns site query for the currently selected site in EnforcementCtx
+**/
 export const useGetSelectedSite = () => {
   const { selectedSite } = useContext(EnforcementCtx)
 
@@ -32,6 +38,9 @@ export const useGetSelectedSite = () => {
   })
 }
 
+/**
+* Returns site selection handlers and selection state for the enforcement create form
+**/
 export const useHandleSiteSelection = () => {
   const { dispatch } = useContext(EnforcementCtx)
 
@@ -50,6 +59,9 @@ export const useHandleSiteSelection = () => {
   return { selectionMade: state.selectionMade, onSelect, onNoSiteSelect }
 }
 
+/**
+* Returns whether the "No Site" button should be visible based on the current enforcement route
+**/
 export const useNoSiteBtnVisibility = () => {
   const location = useLocation().pathname.split("/")[3]
 
@@ -58,6 +70,9 @@ export const useNoSiteBtnVisibility = () => {
   return visible
 }
 
+/**
+* Returns the create form component based on the current enforcement route
+**/
 export const useSetFormType = () => {
   const location = useLocation().pathname.split("/")[3]
 
@@ -66,6 +81,9 @@ export const useSetFormType = () => {
   return Component
 }
 
+/**
+* Resets EnforcementCtx on component unmount
+**/
 export const useResetCtx = () => {
   const { dispatch } = useContext(EnforcementCtx)
 

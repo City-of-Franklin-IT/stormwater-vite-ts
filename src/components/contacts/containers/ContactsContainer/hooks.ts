@@ -75,6 +75,9 @@ export const useHandleTableData = (contacts: AppTypes.ContactInterface[]) => {
   return data.tableData
 }
 
+/**
+* Returns table row onClick handler and className based on user role and contact status
+**/
 export const useHandleTableRow = (contact: AppTypes.ContactInterface) => {
   const { dispatch } = useContext(ContactsCtx)
   const roles = useReturnUserRoles()
@@ -92,7 +95,10 @@ export const useHandleTableRow = (contact: AppTypes.ContactInterface) => {
   return { onClick, className }
 }
 
-export const useSetTotalPages = (count: number) => { // Set total pages to ctx
+/**
+* Sets total pages in ContactsCtx based on item count
+**/
+export const useSetTotalPages = (count: number) => {
   const { dispatch } = useContext(ContactsCtx)
 
   useEffect(() => {

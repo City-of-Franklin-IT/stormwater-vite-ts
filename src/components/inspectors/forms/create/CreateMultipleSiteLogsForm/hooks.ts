@@ -72,6 +72,7 @@ const useHandleFormSubmit = () => {
       })
 
     queryClient.invalidateQueries({ queryKey: ["getInspector", slug] })
+    queryClient.invalidateQueries({ queryKey: ["getSites"] })
     dispatch({ type: "RESET_CTX" })
   }
 }
