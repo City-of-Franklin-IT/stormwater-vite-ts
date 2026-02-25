@@ -64,12 +64,13 @@ const useHandleFormSubmit = () => {
   return async (formData: { siteIds: string[], inspectionDate: string }) => {
     if(!enabled || !token) return
 
-    handleCreateMultipleSiteLogs(formData, token)
-      .then(data => savedPopup(data))
+    const result = await handleCreateMultipleSiteLogs(formData, token)
       .catch(err => {
         errorPopup(err || "Error Creating Site Logs")
         console.log(err)
       })
+
+    if(result) savedPopup(result)
 
     queryClient.invalidateQueries({ queryKey: ["getInspector", slug] })
     queryClient.invalidateQueries({ queryKey: ["getSites"] })
