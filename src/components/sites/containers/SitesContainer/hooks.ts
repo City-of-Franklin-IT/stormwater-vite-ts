@@ -164,7 +164,7 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
     map.addMany([pointGraphicsLayer, textGraphicsLayer])
 
     const onMapClick = mapView.on("click", async (e) => {
-      const results = (await mapView.hitTest(e)).results
+      const results = (await mapView.hitTest(e)).results as __esri.ViewHit[]
 
       const siteHit = mapHitTest(results)
 

@@ -13,10 +13,10 @@ export const handleUpdateViolation = async (formData: AppTypes.ConstructionViola
         formData.FollowUpDates.map(followup => { // Follow up dates
           if(followup.followUpDate) {
             if(!followup.uuid) { // New follow up
-              AppActions.createFollowUp({ ...followup, violationId: formData.violationId }, authHeaders(token))
-            } else AppActions.updateFollowUp(followup, authHeaders(token)) // Update existing
+              return AppActions.createFollowUp({ ...followup, violationId: formData.violationId }, authHeaders(token))
+            } else return AppActions.updateFollowUp(followup, authHeaders(token)) // Update existing
           } else if(followup.uuid) { // Delete existing
-            AppActions.deleteFollowUp(followup.uuid, authHeaders(token))
+            return AppActions.deleteFollowUp(followup.uuid, authHeaders(token))
           }
         })
       )

@@ -43,7 +43,7 @@ const useUpdateIllicitDischargeForm = (illicitDischarge: AppTypes.IllicitDischar
       FollowUpDates: illicitDischarge.FollowUpDates?.map(followup => ({
         ...followup,
         followUpDate: formatDate(followup.followUpDate)
-      }))
+      })) || []
     }
   })
 }

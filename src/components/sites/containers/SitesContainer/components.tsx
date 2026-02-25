@@ -35,7 +35,9 @@ export const Map = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
 type ActiveSitesBtnProps = { showActiveSitesOnly: boolean, onClick: React.MouseEventHandler<HTMLButtonElement> }
 
 export const ActiveSitesBtn = (props: ActiveSitesBtnProps) => {
-  const label = props.showActiveSitesOnly ? "Show Inactive Sites" : "Hide Inactive Sites"
+  const label = props.showActiveSitesOnly ? 
+    "Show Inactive / Incomplete Sites" : 
+    "Hide Inactive / Incomplete Sites"
 
   return (
     <button 

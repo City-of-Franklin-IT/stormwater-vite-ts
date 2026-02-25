@@ -130,7 +130,7 @@ export const useHandleUpdateInspectorBtn = (inspectorId: string) => {
 /**
 * Returns two-step delete button onClick handler and label for inspector deletion
 **/
-const useHandleDeleteBtn = () => {
+export const useHandleDeleteBtn = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { inspectorId } = useContext(InspectorCtx)
 
@@ -202,7 +202,7 @@ const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: Rea
     map.addMany([pointGraphicsLayer, textGraphicsLayer])
 
     const onMapClick = mapView.on("click", async (e) => {
-      const results = (await mapView.hitTest(e)).results
+      const results = (await mapView.hitTest(e)).results as __esri.ViewHit[]
 
       const siteHit = mapHitTest(results)
 

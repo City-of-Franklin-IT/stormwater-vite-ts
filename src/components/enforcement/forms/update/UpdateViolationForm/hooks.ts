@@ -41,7 +41,7 @@ const useUpdateViolationForm = (violation: AppTypes.ConstructionViolationInterfa
       FollowUpDates: violation.FollowUpDates?.map(followup => ({
         ...followup,
         followUpDate: formatDate(followup.followUpDate)
-      }))
+      })) || []
     }
   })
 }

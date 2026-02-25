@@ -1,5 +1,6 @@
 import { useContext, useMemo, useEffect, useRef } from "react"
 import { useReturnUserRoles } from "@/helpers/hooks"
+import InspectorCtx from "../../context"
 import InspectorTableCtx from "./context"
 
 // Types
@@ -142,4 +143,17 @@ export const useHandleForm = () => {
   const visible = formOpen
 
   return visible
+}
+
+/**
+* Returns props for ActiveSitesBtn
+**/
+export const useHandleActiveSitesBtn = () => {
+  const { showActiveSitesOnly, dispatch } = useContext(InspectorCtx)
+
+  const onClick = () => {
+    dispatch({ type: 'TOGGLE_SHOW_ACTIVE_SITES_ONLY' })
+  }
+
+  return { onClick, showActiveSitesOnly }
 }

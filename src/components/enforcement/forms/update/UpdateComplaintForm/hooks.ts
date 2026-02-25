@@ -35,7 +35,7 @@ const useUpdateComplaintForm = (complaint: AppTypes.ComplaintInterface) => {
       FollowUpDates: complaint.FollowUpDates?.map(followup => ({
         ...followup,
         followUpDate: formatDate(followup.followUpDate)
-      }))
+      })) || []
     }
   })
 }

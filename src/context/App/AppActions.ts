@@ -239,7 +239,11 @@ export const getFollowUp = async (uuid: string, headers: Headers): Promise<AppTy
 export const updateFollowUp = async (formData: AppTypes.FollowUpCreateInterface, headers: Headers) => {
   headers.append("Content-Type", "application/json")
 
-  const res = await fetch(`${ baseUrl }/followup/${ formData.uuid }`, { headers })
+  const res = await fetch(`${ baseUrl }/followup/${ formData.uuid }`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ ...formData }),
+  })
 
   return await res.json()
 }

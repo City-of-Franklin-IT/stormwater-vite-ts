@@ -8,7 +8,10 @@ export const handleLastInspected = (site: AppTypes.SiteInterface) => {
 
   if(!logs?.length) return {}
 
-  const lastInspectionDate = logs[0].inspectionDate
+  const lastInspectionDate = logs.reduce((latest, log) =>
+    log.inspectionDate > latest ? log.inspectionDate : latest,
+    logs[0].inspectionDate
+  )
 
   const iconClassName = `w-10 ${ !lastInspectionDate ? "opacity-40" : null }`
 

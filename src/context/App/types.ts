@@ -25,9 +25,10 @@ export interface SiteInterface extends BaseInterface {
   SiteContacts?: SiteContactInterface[]
   Inspector?: InspectorInterface
   InactiveSite?: InactiveSiteInterface
+  IncompleteSite?: IncompleteSiteInterface
 }
 
-export interface SiteCreateInterface extends Omit<SiteInterface, "siteId" | "inactive" | "hasOpenViolation" | "hasOpenComplaint" | "hasOpenIllicitDischarge" | "Logs" | "ConstructionViolations" | "Complaints" | "IllicitDischarges" | "SiteContacts" | "Inspector" | "InactiveSite" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
+export interface SiteCreateInterface extends Omit<SiteInterface, "siteId" | "inactive" | "hasOpenViolation" | "hasOpenComplaint" | "hasOpenIllicitDischarge" | "Logs" | "ConstructionViolations" | "Complaints" | "IllicitDischarges" | "SiteContacts" | "Inspector" | "InactiveSite" | "IncompleteSite" | "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   siteId?: string
   inactive?: boolean
   Logs?: SiteLogCreateInterface[]
@@ -36,6 +37,7 @@ export interface SiteCreateInterface extends Omit<SiteInterface, "siteId" | "ina
   IllicitDischarges?: IllicitDischargeCreateInterface[]
   SiteContacts?: SiteContactCreateInterface[]
   InactiveSite?: InactiveSiteCreateInterface
+  IncompleteSite?: IncompleteSiteCreateInterface
   uuid?: string
 }
 
@@ -205,6 +207,14 @@ export interface InactiveSiteInterface extends BaseInterface {
 }
 
 export interface InactiveSiteCreateInterface extends Omit<InactiveSiteInterface, "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
+  uuid?: string
+}
+
+export interface IncompleteSiteInterface extends BaseInterface {
+  siteId: string
+}
+
+export interface IncompleteSiteCreateInterface extends Omit<IncompleteSiteInterface, "uuid" | "createdBy" | "createdAt" | "updatedBy" | "updatedAt">{
   uuid?: string
 }
 
