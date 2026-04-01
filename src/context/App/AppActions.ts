@@ -9,11 +9,13 @@ import * as AppTypes from "./types"
 
 /**
 * Get sites
-* 
+*
 * GET /api/v2/eng/stormwater/sites
 **/
 export const getSites = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface[] }> => {
   const res = await fetch(`${ baseUrl }/site`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -26,6 +28,8 @@ export const getSites = async (headers: Headers): Promise<AppTypes.ServerRespons
 export const getSite = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface }> => {
   const res = await fetch(`${ baseUrl }/site/${ uuid }`, { headers })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -36,6 +40,8 @@ export const getSite = async (uuid: string, headers: Headers): Promise<AppTypes.
 **/
 export const getActiveSiteNames = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface[] }> => {
   const res = await fetch(`${ activeSitesUrl }`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -54,6 +60,8 @@ export const createSite = async (formData: AppTypes.SiteCreateInterface, headers
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -64,12 +72,14 @@ export const createSite = async (formData: AppTypes.SiteCreateInterface, headers
 **/
 export const updateSite = async (formData: AppTypes.SiteCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteInterface }> => {
   headers.append("Content-Type", "application/json")
-  
+
   const res = await fetch(`${ baseUrl }/site/${ formData.uuid }`, {
     method: "PUT",
     headers,
     body: JSON.stringify({ ...formData }),
   })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -85,6 +95,8 @@ export const deleteSite = async (uuid: string, headers: Headers): Promise<AppTyp
     headers
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -96,6 +108,8 @@ export const deleteSite = async (uuid: string, headers: Headers): Promise<AppTyp
 export const getContacts = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ContactInterface[] }> => {
   const res = await fetch(`${ baseUrl }/contact`, { headers })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -106,6 +120,8 @@ export const getContacts = async (headers: Headers): Promise<AppTypes.ServerResp
 **/
 export const getContact = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ContactInterface }> => {
   const res = await fetch(`${ baseUrl }/contact/${ uuid }`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -124,6 +140,8 @@ export const createContact = async (formData: AppTypes.ContactCreateInterface, h
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -141,6 +159,8 @@ export const updateContact = async (formData: AppTypes.ContactCreateInterface, h
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -154,6 +174,8 @@ export const deleteContact = async (uuid: string, headers: Headers): Promise<App
     method: "DELETE",
     headers
   })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -172,6 +194,8 @@ export const createSiteContact = async (formData: AppTypes.SiteContactCreateInte
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -186,6 +210,8 @@ export const deleteSiteContact = async (uuid: string, headers: Headers): Promise
     headers
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -199,6 +225,8 @@ export const deleteSiteContacts = async (siteId: string, headers: Headers): Prom
     method: "DELETE",
     headers
   })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -217,6 +245,8 @@ export const createFollowUp = async (formData: AppTypes.FollowUpCreateInterface,
     body: JSON.stringify({ ...formData }),
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -227,6 +257,8 @@ export const createFollowUp = async (formData: AppTypes.FollowUpCreateInterface,
 **/
 export const getFollowUp = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.FollowUpInterface }> => {
   const res = await fetch(`${ baseUrl }/followup/${ uuid }`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -245,6 +277,8 @@ export const updateFollowUp = async (formData: AppTypes.FollowUpCreateInterface,
     body: JSON.stringify({ ...formData }),
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -259,6 +293,8 @@ export const deleteFollowUp = async (uuid: string, headers: Headers): Promise<Ap
     headers
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -270,6 +306,8 @@ export const deleteFollowUp = async (uuid: string, headers: Headers): Promise<Ap
 export const getInspectors = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.InspectorInterface[] }> => {
   const res = await fetch(`${ baseUrl }/inspector`, { headers })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -280,6 +318,8 @@ export const getInspectors = async (headers: Headers): Promise<AppTypes.ServerRe
 **/
 export const getInspector = async (slug: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: { sites: AppTypes.SiteInterface[], inspector: AppTypes.InspectorInterface } }> => {
   const res = await fetch(`${ baseUrl }/inspector/${ slug }`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -298,6 +338,8 @@ export const createInspector = async (formData: AppTypes.InspectorCreateInterfac
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -315,6 +357,8 @@ export const updateInspector = async (formData: AppTypes.InspectorCreateInterfac
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -328,6 +372,8 @@ export const deleteInspector = async (inspectorid: string, headers: Headers): Pr
     method: "DELETE",
     headers
   })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -346,6 +392,8 @@ export const createSiteLog = async (formData: AppTypes.SiteLogCreateInterface, h
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -356,6 +404,8 @@ export const createSiteLog = async (formData: AppTypes.SiteLogCreateInterface, h
 **/
 export const getSiteLog = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.SiteLogInterface }> => {
   const res = await fetch(`${ baseUrl }/log/${ uuid }`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -374,6 +424,8 @@ export const updateSiteLog = async (formData: AppTypes.SiteLogCreateInterface, h
     body: JSON.stringify({ ...formData }),
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -387,6 +439,8 @@ export const deleteSiteLog = async (uuid: string, headers: Headers): Promise<App
     method: "DELETE",
     headers
   })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -405,6 +459,8 @@ export const createViolation = async (formData: AppTypes.ConstructionViolationCr
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -418,6 +474,8 @@ export const getViolation = async (uuid: string, headers: Headers): Promise<AppT
 
   const res = await fetch(`${ baseUrl }/violation/${ uuid }`, { headers })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -428,6 +486,8 @@ export const getViolation = async (uuid: string, headers: Headers): Promise<AppT
 **/
 export const getViolations = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ConstructionViolationInterface[] }> => {
   const res = await fetch(`${ baseUrl }/violation`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -446,6 +506,8 @@ export const updateViolation = async (formData: AppTypes.ConstructionViolationCr
     body: JSON.stringify({ ...formData }),
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -459,7 +521,9 @@ export const deleteViolation = async (uuid: string, headers: Headers): Promise<A
     method: "DELETE",
     headers
   })
-  
+
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -477,6 +541,8 @@ export const createComplaint = async (formData: AppTypes.ComplaintCreateInterfac
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -488,6 +554,8 @@ export const createComplaint = async (formData: AppTypes.ComplaintCreateInterfac
 export const getComplaint = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ComplaintInterface }> => {
   const res = await fetch(`${ baseUrl }/complaint/${ uuid }`, { headers })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -498,6 +566,8 @@ export const getComplaint = async (uuid: string, headers: Headers): Promise<AppT
 **/
 export const getComplaints = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.ComplaintInterface[] }> => {
   const res = await fetch(`${ baseUrl }/complaint`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -516,6 +586,8 @@ export const updateComplaint = async (formData: AppTypes.ComplaintCreateInterfac
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -529,6 +601,8 @@ export const deleteComplaint = async (uuid: string, headers: Headers): Promise<A
     method: "DELETE",
     headers
   })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -547,6 +621,8 @@ export const createIllicitDischarge = async (formData: AppTypes.IllicitDischarge
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -558,6 +634,8 @@ export const createIllicitDischarge = async (formData: AppTypes.IllicitDischarge
 export const getIllicitDischarge = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.IllicitDischargeInterface }> => {
   const res = await fetch(`${ baseUrl }/illicitdischarge/${ uuid }`, { headers })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -568,6 +646,8 @@ export const getIllicitDischarge = async (uuid: string, headers: Headers): Promi
 **/
 export const getIllicitDischarges = async (headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.IllicitDischargeInterface[] }> => {
   const res = await fetch(`${ baseUrl }/illicitdischarge`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -586,6 +666,8 @@ export const updateIllicitDischarge = async (formData: AppTypes.IllicitDischarge
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -599,6 +681,8 @@ export const deleteIllicitDischarge = async (uuid: string, headers: Headers): Pr
     method: "DELETE",
     headers
   })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
@@ -617,6 +701,8 @@ export const createInactiveSite = async (formData: AppTypes.InactiveSiteCreateIn
     body: JSON.stringify({ ...formData })
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -631,6 +717,8 @@ export const deleteInactiveSite = async (uuid: string, headers: Headers): Promis
     headers
   })
 
+  if (!res.ok) throw new Error(res.statusText)
+
   return await res.json()
 }
 
@@ -641,6 +729,8 @@ export const deleteInactiveSite = async (uuid: string, headers: Headers): Promis
 **/
 export const getDocs = async (headers: Headers) => {
   const res = await fetch(`${ baseUrl }/docs`, { headers })
+
+  if (!res.ok) throw new Error(res.statusText)
 
   return await res.json()
 }
