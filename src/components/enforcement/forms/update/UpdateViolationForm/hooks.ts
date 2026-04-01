@@ -63,9 +63,10 @@ const useHandleFormSubmit = () => {
     const result = await handleUpdateViolation(formData, token).catch(err => console.log(err))
 
     if(!result?.success) {
-      errorPopup(result?.msg || "Error Updating Violation")
-    } else savedPopup(result.msg)
+      return errorPopup(result?.msg || "Error Updating Violation")
+    }
 
+    savedPopup(result.msg)
     queryClient.invalidateQueries({ queryKey: ["getViolations"] })
     queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
     queryClient.invalidateQueries({ queryKey: ["getSites"] })

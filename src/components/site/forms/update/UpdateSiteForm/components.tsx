@@ -1,5 +1,5 @@
 import styles from "@/components/form-elements/Forms.module.css"
-import { useSetCreateSiteMapView, useHandleInactiveCheckbox } from "./hooks"
+import { useSetCreateSiteMapView, useHandleInactiveCheckbox, useHandleIncompleteCheckbox } from "./hooks"
 
 export const Map = () => { // Map input
   const mapRef = useSetCreateSiteMapView()
@@ -17,6 +17,20 @@ export const InactiveCheckbox = () => { // Inactive site checkbox
   return (
     <div className="flex items-center gap-2 mx-auto my-10 w-fit">
       <label className={styles.checkboxLabel}>Inactive Site</label>
+      <input 
+        type="checkbox"
+        className="checkbox checkbox-secondary"
+        { ...inputProps } />
+    </div>
+  )
+}
+
+export const IncompleteCheckbox = () => { // Incomplete site checkbox
+  const inputProps = useHandleIncompleteCheckbox()
+
+  return (
+    <div className="flex items-center gap-2 mx-auto my-10 w-fit">
+      <label className={styles.checkboxLabel}>Incomplete Site</label>
       <input 
         type="checkbox"
         className="checkbox checkbox-secondary"

@@ -158,9 +158,10 @@ const useHandleFormSubmit = () => {
     const result = await handleUpdateSite(formData, token).catch(err => console.log(err))
 
     if(!result?.success) {
-      errorPopup(result?.msg || "Error Updating Site")
-    } else savedPopup(result.msg)
+      return errorPopup(result?.msg || "Error Updating Site")
+    }
 
+    savedPopup(result.msg)
     queryClient.invalidateQueries({ queryKey: ["getSite", formData.uuid] })
     queryClient.invalidateQueries({ queryKey: ["getSites"] })
     queryClient.invalidateQueries({ queryKey: ["getInspector"] })

@@ -20,6 +20,18 @@ export const handleUpdateSite = async (formData: AppTypes.SiteCreateInterface, t
       }
     }
 
+    const incompleteSite = formData.IncompleteSite
+
+    if(incompleteSite) {
+      if(incompleteSite.siteId && !incompleteSite.uuid) { // Create
+        await AppActions.createIncompleteSite(incompleteSite, authHeaders(token))
+      }
+
+      if(!incompleteSite.siteId && incompleteSite.uuid) { // Delete
+        await AppActions.deleteIncompleteSite(incompleteSite.uuid, authHeaders(token))
+      }
+    }
+
     await AppActions.deleteSiteContacts(result.data.siteId, authHeaders(token))
 
     const contacts = formData.SiteContacts || []

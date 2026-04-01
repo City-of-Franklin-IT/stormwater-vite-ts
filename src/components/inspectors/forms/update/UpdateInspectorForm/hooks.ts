@@ -55,9 +55,10 @@ const useHandleFormSubmit = () => {
     const result = await handleUpdateInspector(formData, token).catch(err => console.log(err))
 
     if(!result?.success) {
-      errorPopup(result?.msg || "Error Updating Inspector")
-    } else savedPopup(result.msg)
+      return errorPopup(result?.msg || "Error Updating Inspector")
+    }
 
+    savedPopup(result.msg)
     queryClient.invalidateQueries({ queryKey: ["getInspectors"] })
     queryClient.invalidateQueries({ queryKey: ["getInspector", slug] })
     dispatch({ type: "RESET_CTX" })

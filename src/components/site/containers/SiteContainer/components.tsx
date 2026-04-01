@@ -3,6 +3,7 @@ import { Link } from "react-router"
 import inspectorIcon from "@/assets/icons/inspector/inspector.svg"
 import { useScrollToFormRef } from "@/components/enforcement/containers/ViolationsContainer/hooks"
 import { useHandleForm, useHandleButtons, useHandleSiteIssuesCheckbox, useSetSiteMapView } from "./hooks"
+import { setSiteStatusHeader } from "./utils"
 
 // Types
 import * as AppTypes from "@/context/App/types"
@@ -20,7 +21,7 @@ import DateRangeFilter from "../../filters/DateRangeFilter"
 import SiteIssuesTable from "../../tables/SiteIssuesTable"
 
 export const Header = ({ site }: { site: AppTypes.SiteInterface }) => {
-  const label = !site.InactiveSite ? "Active Site" : "Inactive Site"
+  const { label, className } = setSiteStatusHeader(site)
 
   return (
     <div className="flex gap-20 justify-between items-end">
@@ -31,7 +32,7 @@ export const Header = ({ site }: { site: AppTypes.SiteInterface }) => {
         <div className="flex flex-col">
           <h2 className="font-[shrikhand] text-4xl">{site.name}</h2>
 
-          <span className={`text-xl font-[play] font-bold italic ${ !site.InactiveSite ? "text-success animate-pulse" : "text-error font-normal" }`}>{label}</span>
+          <span className={className}>{label}</span>
         </div>
         <InspectorBtn inspector={site.Inspector} />
       </div>

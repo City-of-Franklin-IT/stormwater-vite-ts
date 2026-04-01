@@ -635,6 +635,37 @@ export const deleteInactiveSite = async (uuid: string, headers: Headers): Promis
 }
 
 /**
+* Create incomplete site
+*
+* POST /api/v2/eng/stormwater/incomplete
+**/
+export const createIncompleteSite = async (formData: AppTypes.IncompleteSiteCreateInterface, headers: Headers): Promise<AppTypes.ServerResponse & { data: AppTypes.IncompleteSiteInterface }> => {
+  headers.append("Content-Type", "application/json")
+
+  const res = await fetch(`${ baseUrl }/incomplete`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ ...formData })
+  })
+
+  return await res.json()
+}
+
+/**
+* Delete incomplete site by uuid
+*
+* DELETE /api/v2/eng/stormwater/incomplete/:uuid
+**/
+export const deleteIncompleteSite = async (uuid: string, headers: Headers): Promise<AppTypes.ServerResponse> => {
+  const res = await fetch(`${ baseUrl }/incomplete/${ uuid }`, {
+    method: "DELETE",
+    headers
+  })
+
+  return await res.json()
+}
+
+/**
 * Get API documentation
 *
 * GET /api/v2/eng/stormwater/docs

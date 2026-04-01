@@ -70,8 +70,9 @@ const useHandleFormSubmit = () => {
         console.log(err)
       })
 
-    if(result) savedPopup(result)
+    if(!result) return
 
+    savedPopup(result)
     queryClient.invalidateQueries({ queryKey: ["getInspector", slug] })
     queryClient.invalidateQueries({ queryKey: ["getSites"] })
     dispatch({ type: "RESET_CTX" })

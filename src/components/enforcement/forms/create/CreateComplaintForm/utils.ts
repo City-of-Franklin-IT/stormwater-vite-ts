@@ -12,7 +12,7 @@ export const handleCreateComplaint = async (formData: AppTypes.ComplaintCreateIn
       await Promise.all(
         formData.FollowUpDates.map(date => {
           if(date.followUpDate) {
-            AppActions.createFollowUp({ ...date, complaintId: result.data.complaintId }, authHeaders(token))
+            return AppActions.createFollowUp({ ...date, complaintId: result.data.complaintId }, authHeaders(token))
           }
         })
       )

@@ -65,9 +65,10 @@ const useHandleFormSubmit = () => {
     const result = await handleUpdateIllicitDischarge(formData, token).catch(err => console.log(err))
 
     if(!result?.success) {
-      errorPopup(result?.msg || "Error Updating Illicit Discharge")
-    } else savedPopup(result.msg)
+      return errorPopup(result?.msg || "Error Updating Illicit Discharge")
+    }
 
+    savedPopup(result.msg)
     queryClient.invalidateQueries({ queryKey: ["getIllicitDischarges"] })
     queryClient.invalidateQueries({ queryKey: ["getIllicitDischarge", formData.uuid] })
     queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })

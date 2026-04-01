@@ -13,7 +13,7 @@ export const handleCreateIllicitDischarge = async (formData: AppTypes.IllicitDis
       await Promise.all(
         formData.FollowUpDates.map(date => {
           if(date.followUpDate) {
-            AppActions.createFollowUp({ ...date, illicitId: result.data.illicitId }, authHeaders(token))
+            return AppActions.createFollowUp({ ...date, illicitId: result.data.illicitId }, authHeaders(token))
           }
         })
       )

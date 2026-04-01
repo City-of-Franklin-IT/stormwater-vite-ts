@@ -62,9 +62,10 @@ const useHandleFormSubmit = () => {
     const result = await handleCreateSiteLog(formData, token).catch(err => console.log(err))
 
     if(!result?.success) {
-      errorPopup(result?.msg || "Unable To Create Log")
-    } else savedPopup(result.msg)
+      return errorPopup(result?.msg || "Unable To Create Log")
+    }
 
+    savedPopup(result.msg)
     queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
     queryClient.invalidateQueries({ queryKey: ["getSites"] })
     queryClient.invalidateQueries({ queryKey: ["getInspector"] })

@@ -12,7 +12,7 @@ export const handleCreateViolation = async (formData: AppTypes.ConstructionViola
       await Promise.all(
         formData.FollowUpDates.map(date => {
           if(date.followUpDate) {
-            AppActions.createFollowUp({ ...date, violationId: result.data.violationId }, authHeaders(token))
+            return AppActions.createFollowUp({ ...date, violationId: result.data.violationId }, authHeaders(token))
           }
         })
       )

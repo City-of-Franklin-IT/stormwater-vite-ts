@@ -91,7 +91,7 @@ export const useSetTableData = <T extends FilterableCtx>(ctx: React.Context<T>, 
   }
 
   if(showActiveSitesOnly) { // Show active sites only filter
-    array = array.filter(site => !site.InactiveSite?.siteId)
+    array = array.filter(site => !site.InactiveSite?.siteId && !site.IncompleteSite?.siteId)
   }
 
   if(showOpenIssuesOnly) { // Show open issues only filter

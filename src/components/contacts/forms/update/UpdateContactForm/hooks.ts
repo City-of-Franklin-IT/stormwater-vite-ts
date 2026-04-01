@@ -63,9 +63,10 @@ const useHandleFormSubmit = () => {
     const result = await handleUpdateContact(formData, token).catch(err => console.log(err))
 
     if(!result?.success) {
-      errorPopup(result?.msg)
-    } else savedPopup(result.msg)
+      return errorPopup(result?.msg)
+    }
 
+    savedPopup(result.msg)
     queryClient.invalidateQueries({ queryKey: ["getContacts"] })
     queryClient.invalidateQueries({ queryKey: ["getContact", formData.uuid] })
     dispatch({ type: "RESET_CTX" })

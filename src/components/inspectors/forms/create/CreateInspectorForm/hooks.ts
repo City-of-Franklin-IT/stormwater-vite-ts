@@ -66,11 +66,11 @@ const useHandleFormSubmit = () => {
     const result = await handleCreateInspectorFormSubmit(formData, token).catch(err => console.log(err))
 
     if(!result?.success) {
-      errorPopup(result?.msg || "Error Creating Inspector")
-      navigate("/sites")
-    } else savedPopup(result.msg)
+      return errorPopup(result?.msg || "Error Creating Inspector")
+    }
 
+    savedPopup(result.msg)
     queryClient.invalidateQueries({ queryKey: ["getInspectors"] })
-    navigate(`/inspectors/${ result?.data.slug }`)
+    navigate(`/inspectors/${ result.data.slug }`)
   }
 }

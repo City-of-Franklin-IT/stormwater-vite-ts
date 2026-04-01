@@ -23,7 +23,11 @@ function UpdateSiteForm({ site }: { site: AppTypes.SiteInterface }) {
 
           <Components.Map />
 
-          <Components.InactiveCheckbox />
+          <div className="flex gap-20 justify-around mx-auto w-fit">
+            <Components.InactiveCheckbox />
+            <Components.IncompleteCheckbox />
+          </div>
+
           <CreateSiteForm.NameInput />
           <CreateSiteForm.LocationInput />
 

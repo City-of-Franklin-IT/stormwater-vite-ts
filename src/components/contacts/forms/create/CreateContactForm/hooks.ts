@@ -63,9 +63,10 @@ const useHandleFormSubmit = () => {
     const result = await handleCreateContact(formData, token).catch(err => console.log(err))
 
     if(!result?.success) {
-      errorPopup(result?.msg || "Error Creating Contact")
-    } else savedPopup(result.msg)
+      return errorPopup(result?.msg || "Error Creating Contact")
+    }
 
+    savedPopup(result.msg)
     queryClient.invalidateQueries({ queryKey: ["getContacts"] })
     dispatch({ type: "RESET_CTX" })
     navigate("/contacts")

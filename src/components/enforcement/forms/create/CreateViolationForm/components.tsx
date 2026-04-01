@@ -206,7 +206,7 @@ const PenaltyAmountInput = () => { // Penalty amount input
             required: "Penalty amount is required",
           }) } />
       </div>
-      <FormError error={errors?.penaltyDate?.message} />
+      <FormError error={errors?.penaltyAmount?.message} />
     </div>
   )
 }
@@ -233,7 +233,7 @@ const PenaltyDueDate = () => { // Penalty due date input
             required: "Penalty due date is required",
           }) } />
       </div>
-      <FormError error={errors.penaltyDate?.message} />
+      <FormError error={errors.penaltyDueDate?.message} />
     </div>
   )
 }
