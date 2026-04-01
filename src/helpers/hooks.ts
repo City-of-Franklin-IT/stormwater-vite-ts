@@ -5,77 +5,79 @@ import { NODE_ENV } from "@config/index"
 import { getUserDepartment } from "./utils"
 
 export const useGetToken = () => {
-  const [state, setState] = useState<{ token: string | undefined, isLoading: boolean }>({ token: undefined, isLoading: true })
+  const [state, setState] = useState<{ token: string | undefined, isLoading: boolean }>(
+    NODE_ENV === "development"
+      ? { token: "dev-token", isLoading: false }
+      : { token: undefined, isLoading: true }
+  )
 
   const { instance, accounts, inProgress } = useMsal()
 
-  if(NODE_ENV === "development") {
-    return { token: "dev-token", isLoading: false }
-  }
-
-  const checkToken = async () => {
-    setState(prevState => ({ ...prevState, isLoading: true }))
-
-    const activeAccount = instance.getActiveAccount()
-
-    if(!activeAccount && accounts.length === 0) {
-      setState(prevState => ({ ...prevState, isLoading: false }))
-      window.location.href = "/stormwater"
-      return
-    }
-
-    if(!activeAccount && accounts.length > 0) {
-      setState(prevState => ({ ...prevState, isLoading: false }))
-      instance.setActiveAccount(accounts[0])
-      return
-    }
-
-    let token: string | undefined = undefined
-
-    if(activeAccount?.idTokenClaims && activeAccount.idTokenClaims.exp) { // Check if token is expired or about to expire
-      const expiresOn = activeAccount.idTokenClaims.exp * 1000
-      const now = Date.now()
-  
-      if(expiresOn > now + 3000000) { // Still valid
-        token = activeAccount.idToken
-        setState(({ token, isLoading: false }))
-        return
-      }
-  
-      const request = {
-        scopes: ["openid", "profile", "email"],
-        account: activeAccount,
-        forceRefresh: true
-      }
-  
-      const response = await instance.acquireTokenSilent(request) // Refresh token
-
-      setState(({ token: response.idToken, isLoading: false }))
-    }
-
-    if(activeAccount && !activeAccount.idTokenClaims) { // Active account but !idTokenClaims
-      const request = {
-        scopes: ["openid", "profile", "email"],
-        account: activeAccount
-      }
-
-      const response = await instance.acquireTokenSilent(request) // Refresh token
-
-      setState(({ token: response.idToken, isLoading: false }))
-    }
-
-    setState(prevState => ({ ...prevState, isLoading: false }))
-  }
-
   useEffect(() => {
+    if(NODE_ENV === "development") return
+
     if(inProgress !== "none") { // Wait for instance to fully initialize
       return
+    }
+
+    const checkToken = async () => {
+      setState(prevState => ({ ...prevState, isLoading: true }))
+
+      const activeAccount = instance.getActiveAccount()
+
+      if(!activeAccount && accounts.length === 0) {
+        setState(prevState => ({ ...prevState, isLoading: false }))
+        window.location.href = "/stormwater"
+        return
+      }
+
+      if(!activeAccount && accounts.length > 0) {
+        setState(prevState => ({ ...prevState, isLoading: false }))
+        instance.setActiveAccount(accounts[0])
+        return
+      }
+
+      let token: string | undefined = undefined
+
+      if(activeAccount?.idTokenClaims && activeAccount.idTokenClaims.exp) { // Check if token is expired or about to expire
+        const expiresOn = activeAccount.idTokenClaims.exp * 1000
+        const now = Date.now()
+
+        if(expiresOn > now + 3000000) { // Still valid
+          token = activeAccount.idToken
+          setState(({ token, isLoading: false }))
+          return
+        }
+
+        const request = {
+          scopes: ["openid", "profile", "email"],
+          account: activeAccount,
+          forceRefresh: true
+        }
+
+        const response = await instance.acquireTokenSilent(request) // Refresh token
+
+        setState(({ token: response.idToken, isLoading: false }))
+      }
+
+      if(activeAccount && !activeAccount.idTokenClaims) { // Active account but !idTokenClaims
+        const request = {
+          scopes: ["openid", "profile", "email"],
+          account: activeAccount
+        }
+
+        const response = await instance.acquireTokenSilent(request) // Refresh token
+
+        setState(({ token: response.idToken, isLoading: false }))
+      }
+
+      setState(prevState => ({ ...prevState, isLoading: false }))
     }
 
     checkToken()
 
     const intervalId = setInterval(checkToken, 4 * 60 * 1000) // Check every 4 minutes
-    
+
     return () => clearInterval(intervalId)
   }, [inProgress, accounts.length])
 
@@ -118,14 +120,9 @@ export const useRedirectAfterLogin = () => {
 export const useReturnUserRoles = () => {
   const { instance } = useMsal()
 
-  if(NODE_ENV === "development") {
-    return ["task.write"]
-  }
-  
   const activeAccount = instance.getActiveAccount()
-  const roles = activeAccount?.idTokenClaims?.roles || []
-  
-  return roles
+
+  return NODE_ENV === "development" ? ["task.write"] : (activeAccount?.idTokenClaims?.roles ?? [])
 }
 
 export const useGetUserDepartment = () => {
