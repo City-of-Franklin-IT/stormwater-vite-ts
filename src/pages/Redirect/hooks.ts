@@ -1,23 +1,18 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
-import { useMsal } from "@azure/msal-react"
+import { useAuth } from "@/context/Auth"
 
-/**
-* Redirects authenticated users to the given href, or to root if not authenticated
-**/
 export const useRedirect = (href: string) => {
-  const { instance, inProgress } = useMsal()
-  const activeAccount = instance.getActiveAccount()
-
+  const { isAuthenticated, isLoading } = useAuth()
   const navigate = useNavigate()
 
-  const isReady = instance && inProgress === "none"
-
   useEffect(() => {
-    if(isReady) {
-      if(activeAccount) {
+    if (!isLoading) {
+      if (isAuthenticated) {
         navigate(href)
-      } else navigate("/")
+      } else {
+        navigate('/')
+      }
     }
-  }, [isReady, activeAccount, navigate, href])
+  }, [isAuthenticated, isLoading, navigate, href])
 }

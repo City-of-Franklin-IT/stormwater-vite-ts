@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { ToastContainer } from "react-toastify"
 import { APP_BASE } from "./config"
+import { AuthProvider } from "./context/Auth"
 import "react-toastify/dist/ReactToastify.css"
 
 // Components
@@ -23,22 +24,24 @@ const queryClient = new QueryClient()
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router basename={APP_BASE}>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/sites" element={<Sites />} />
-          <Route path="/site/:uuid" element={<Site />} />
-          <Route path="/create/*" element={<CreateRouting />} />
-          <Route path="/inspectors/:slug" element={<Inspector />} />
-          <Route path="/enforcement/violations" element={<Violations />} />
-          <Route path="/enforcement/complaints" element={<Complaints />} />
-          <Route path="/enforcement/discharges" element={<Discharges />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="/docs" element={<Docs />} />
-          <Route path="/*" element={<Redirect />} />
-        </Routes>
-      </Router>
-      <ToastContainer />
+      <AuthProvider>
+        <Router basename={APP_BASE}>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/sites" element={<Sites />} />
+            <Route path="/site/:uuid" element={<Site />} />
+            <Route path="/create/*" element={<CreateRouting />} />
+            <Route path="/inspectors/:slug" element={<Inspector />} />
+            <Route path="/enforcement/violations" element={<Violations />} />
+            <Route path="/enforcement/complaints" element={<Complaints />} />
+            <Route path="/enforcement/discharges" element={<Discharges />} />
+            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/docs" element={<Docs />} />
+            <Route path="/*" element={<Redirect />} />
+          </Routes>
+        </Router>
+        <ToastContainer />
+      </AuthProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
