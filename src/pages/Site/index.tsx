@@ -6,26 +6,23 @@ import { EnforcementProvider } from "@/components/enforcement/context"
 import * as AppTypes from "@/context/App/types"
 
 // Components
-import Layout from "../../components/layout/Layout"
 import HandleLoading from "../../utils/HandleLoading"
 import SiteContainer from "../../components/site/containers/SiteContainer"
 import ErrorBoundary from "../../components/layout/error/ErrorBoundary"
 
 function Site() {
-  const { data, isSuccess } = useGetSite()
+  const { data, isLoading } = useGetSite()
   
   return (
-    <Layout>
-      <HandleLoading isSuccess={isSuccess}>
-        <ErrorBoundary href={"/sites"}>
-          <SiteProvider>
-            <EnforcementProvider>
-              <SiteContainer site={data?.data as AppTypes.SiteInterface} />
-            </EnforcementProvider>
-          </SiteProvider>
-        </ErrorBoundary>
-      </HandleLoading>
-    </Layout>
+    <HandleLoading isLoading={isLoading}>
+      <ErrorBoundary href={"/sites"}>
+        <SiteProvider>
+          <EnforcementProvider>
+            <SiteContainer site={data?.data as AppTypes.SiteInterface} />
+          </EnforcementProvider>
+        </SiteProvider>
+      </ErrorBoundary>
+    </HandleLoading>
   )
 }
 

@@ -1,4 +1,4 @@
-import { NODE_ENV } from "@/config"
+import { MOCK_AUTH } from "@/context/Auth"
 import { useGetUserDepartment } from "@/helpers/hooks"
 
 /**
@@ -7,7 +7,7 @@ import { useGetUserDepartment } from "@/helpers/hooks"
 export const useHandleDocsBtn = () => {
   const { department } = useGetUserDepartment()
 
-  const visible = department === "IT" || NODE_ENV === "development"
+  const visible = department === "IT" || MOCK_AUTH
 
   return visible
 }

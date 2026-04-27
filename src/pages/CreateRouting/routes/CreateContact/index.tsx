@@ -1,5 +1,4 @@
 // Components
-import Layout from "@/components/layout/Layout"
 import Motion from "@/utils/Motion"
 import FormContainer from "@/components/form-elements/FormContainer"
 import CreateContactForm from "@/components/contacts/forms/create/CreateContactForm"
@@ -7,15 +6,13 @@ import CreateContactForm from "@/components/contacts/forms/create/CreateContactF
 function CreateContact() {
 
   return (
-    <Layout>
-      <Motion animation={"fadeInOut"}>
-        <div className="m-auto my-10 w-3/4 2xl:w-3/5">
-          <FormContainer>
-            <CreateContactForm />
-          </FormContainer>
-        </div>
-      </Motion>
-    </Layout>
+    <Motion animation={"fadeInOut"}>
+      <div className="m-auto my-10 w-3/4 2xl:w-3/5">
+        <FormContainer>
+          <CreateContactForm />
+        </FormContainer>
+      </div>
+    </Motion>
   )
 }
 

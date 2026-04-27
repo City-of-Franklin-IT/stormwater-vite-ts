@@ -7,10 +7,10 @@ import * as Components from "./components"
 type GetViolationProps = { handleDeleteBtn: { onClick: React.MouseEventHandler<HTMLButtonElement>, label: string } }
 
 function GetViolation(props: GetViolationProps) {
-  const { data, isSuccess } = useGetViolation()
+  const { data, isLoading } = useGetViolation()
 
   return (
-    <HandleLoading isSuccess={isSuccess}>
+    <HandleLoading isLoading={isLoading}>
       <Components.Form 
         violation={data?.data}
         handleDeleteBtn={props.handleDeleteBtn} />

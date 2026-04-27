@@ -1,13 +1,13 @@
+import { Outlet } from "react-router"
 import { HeaderProvider } from "../Header/context"
+import { useAuthCheck } from "./hooks"
 
 // Components
 import Header from "../Header"
 import Footer from "../Footer"
 
-// Types
-import { ReactNode } from "react"
-
-function Layout({ children }: { children: ReactNode }) {
+function Layout() {
+  useAuthCheck()
 
   return (
     <div className="flex flex-col w-full h-[100%] min-h-screen">
@@ -16,7 +16,7 @@ function Layout({ children }: { children: ReactNode }) {
       </HeaderProvider>
       <main>
         <div className="flex flex-col m-auto w-[90%] h-full 2xl:w-[80%]">
-          {children}
+          <Outlet />
         </div>
       </main>
       <Footer />

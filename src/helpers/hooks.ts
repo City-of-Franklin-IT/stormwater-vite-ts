@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import { useMsal } from "@azure/msal-react"
 import { AccountInfo } from "@azure/msal-browser"
-import { useAuth } from "@/context/Auth"
+import { useAuth, MOCK_AUTH } from "@/context/Auth"
 import { getUserDepartment } from "./utils"
 
 export const useGetToken = () => {
@@ -52,6 +52,11 @@ export const useGetUserDepartment = () => {
   const activeAccount = instance.getActiveAccount()
 
   useEffect(() => {
+    if(MOCK_AUTH) {
+      setState({ department: 'IT', isLoading: false })
+      return
+    }
+
     if (activeAccount && inProgress === 'none' && !state.department) {
       getUserDepartment(instance, activeAccount as AccountInfo)
         .then(department => setState({ department, isLoading: false }))

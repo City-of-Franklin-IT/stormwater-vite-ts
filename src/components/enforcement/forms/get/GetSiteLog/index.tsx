@@ -8,10 +8,10 @@ import HandleLoading from "@/utils/HandleLoading"
 import * as Components from "./components"
 
 function GetSiteLog() {
-  const { data, isSuccess } = useGetSiteLog()
+  const { data, isLoading } = useGetSiteLog()
 
   return (
-    <HandleLoading isSuccess={isSuccess}>
+    <HandleLoading isLoading={isLoading}>
       <Components.Form siteLog={data?.data as AppTypes.SiteLogInterface} />
     </HandleLoading>
   )

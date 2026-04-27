@@ -1,10 +1,10 @@
 // Components
 import Loading from "@/components/layout/loading/Loading"
 
-type HandleLoadingProps = { isSuccess: boolean, children: React.ReactNode }
+type HandleLoadingProps = { isLoading: boolean, children: React.ReactNode }
 
 function HandleLoading(props: HandleLoadingProps) {
-  if(!props.isSuccess) return <Loading />
+  if(props.isLoading) return <Loading />
   
   return <>{props.children}</>
 }

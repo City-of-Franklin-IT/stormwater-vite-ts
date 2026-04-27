@@ -5,10 +5,10 @@ import HandleLoading from "@/utils/HandleLoading"
 import * as Components from "./components"
 
 function GetContact() {
-  const { data, isSuccess } = useGetContact()
+  const { data, isLoading } = useGetContact()
 
   return (
-    <HandleLoading isSuccess={isSuccess}>
+    <HandleLoading isLoading={isLoading}>
       <Components.Form contact={data?.data} />
     </HandleLoading>
   )

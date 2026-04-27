@@ -1,7 +1,7 @@
 import { useLocation, Link } from "react-router"
-import { useMsal } from "@azure/msal-react"
 import { APP_TITLE } from "../../../config"
 import cofIcon from "@/assets/icons/cof/cof-primary-content.svg"
+import { useAuth } from "@/context/Auth"
 import { useReturnUserRoles } from "@/helpers/hooks"
 import useHandleLogoutRedirect from "@/context/Auth/hooks/useHandleLogoutRedirect"
 import { useGetInspectors, useIsEnforcmentPageActive } from "./hooks"
@@ -144,13 +144,11 @@ const CreateMenuItem = (props: CreateMenuItemProps) => {
   )
 }
 
-const LogoutBtn = () => { // Logout button
-  const { instance } = useMsal()
-  const activeAccount = instance.getActiveAccount()
-
+const LogoutBtn = () => {
+  const { isAuthenticated } = useAuth()
   const handleLogoutRedirect = useHandleLogoutRedirect()
 
-  if(!activeAccount) return null
+  if(!isAuthenticated) return null
 
   return (
     <button 

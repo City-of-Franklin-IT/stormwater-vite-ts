@@ -7,10 +7,10 @@ import * as Components from "./components"
 type GetComplaintProps = { handleDeleteBtn: { onClick: React.MouseEventHandler<HTMLButtonElement>, label: string } }
 
 function GetComplaint(props: GetComplaintProps) {
-  const { data, isSuccess } = useGetComplaint()
+  const { data, isLoading } = useGetComplaint()
 
   return (
-    <HandleLoading isSuccess={isSuccess}>
+    <HandleLoading isLoading={isLoading}>
       <Components.Form 
         complaint={data?.data}
         handleDeleteBtn={props.handleDeleteBtn} />
