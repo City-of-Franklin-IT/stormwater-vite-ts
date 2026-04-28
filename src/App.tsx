@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { ToastContainer } from "react-toastify"
 import { APP_BASE } from "./config"
-import { AuthProvider } from "./context/Auth"
+import { AuthCtxProvider } from "./context/Auth"
 import "react-toastify/dist/ReactToastify.css"
 
 // Components
@@ -25,7 +25,7 @@ const queryClient = new QueryClient()
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
+      <AuthCtxProvider>
         <Router basename={APP_BASE}>
           <Routes>
             <Route element={<Layout />}>
@@ -44,7 +44,7 @@ function App() {
           </Routes>
         </Router>
         <ToastContainer />
-      </AuthProvider>
+      </AuthCtxProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

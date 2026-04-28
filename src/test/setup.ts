@@ -8,7 +8,7 @@ vi.mock('@/context/Auth', () => ({
     isLoading: false,
     refreshToken: vi.fn()
   })),
-  AuthProvider: ({ children }: any) => children
+  AuthCtxProvider: ({ children }: any) => children
 }))
 
 // Mock ResizeObserver for ArcGIS
