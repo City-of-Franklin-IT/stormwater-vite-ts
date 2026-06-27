@@ -1,19 +1,19 @@
 import { useGetSiteLog } from "./hooks"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
-import HandleLoading from "@/utils/HandleLoading"
+import Loading from "@/components/layout/loading/Loading"
 import * as Components from "./components"
 
 function GetSiteLog() {
   const { data, isLoading } = useGetSiteLog()
 
+  if(isLoading) return <Loading />
+
   return (
-    <HandleLoading isLoading={isLoading}>
-      <Components.Form siteLog={data?.data as AppTypes.SiteLogInterface} />
-    </HandleLoading>
+    <Components.Form siteLog={data?.data as AppTypes.SiteLogInterface} />
   )
 }
 

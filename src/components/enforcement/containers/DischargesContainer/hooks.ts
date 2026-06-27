@@ -2,7 +2,7 @@ import { useContext, useMemo, useState, useCallback } from "react"
 import { useParams } from "react-router"
 import { useQueryClient } from "@tanstack/react-query"
 import * as AppActions from "@/context/App/AppActions"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import EnforcementCtx from "../../context"
 import { useSetTotalPages } from "../ViolationsContainer/hooks"
@@ -60,7 +60,7 @@ export const useHandleDeleteBtn = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { formUUID, dispatch } = useContext(EnforcementCtx)
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   const queryClient = useQueryClient()
 
@@ -73,18 +73,21 @@ export const useHandleDeleteBtn = () => {
     }
 
     if(enabled) {
-      const result = await AppActions.deleteIllicitDischarge(formUUID, authHeaders(token))
+      const result = await withTokenRefresh(
+        () => AppActions.deleteIllicitDischarge(formUUID, authHeaders(token)),
+        refreshToken
+      ).catch(() => { errorPopup('An error occurred. Please try again.'); return null })
 
-      if(result.success) {
+      if(result?.success) {
         queryClient.invalidateQueries({ queryKey: ["getIllicitDischarges"] })
         queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
         queryClient.invalidateQueries({ queryKey: ["getSites"] })
         queryClient.invalidateQueries({ queryKey: ["getInspector"] })
         dispatch({ type: "RESET_CTX" })
         savedPopup(result.msg)
-      } else errorPopup(result.msg)
+      } else if(result) errorPopup(result.msg)
     }
-  }, [state.active, enabled, token, formUUID, queryClient, siteUUID])
+  }, [state.active, enabled, token, refreshToken, formUUID, queryClient, siteUUID])
 
   const label = !state.active ? "Delete Illicit Discharge" : "Confirm Delete"
 

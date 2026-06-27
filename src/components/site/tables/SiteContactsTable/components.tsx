@@ -3,7 +3,7 @@ import starIcon from "@/assets/icons/star/star.svg"
 import { setSiteContactsTableData, setAllSiteContacts } from "./utils"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 type SiteContactRoleType = 
   | "Primary"
@@ -11,7 +11,14 @@ type SiteContactRoleType =
   | "Inspector"
   | "Other"
 
-export type SiteContactType = { name: string, company: string | null, role: SiteContactRoleType | undefined, phone: string | null, email: string | null, order: number }
+export type SiteContactType = { 
+  name: string
+  company: string | null
+  role: SiteContactRoleType | undefined
+  phone: string | null
+  email: string | null
+  order: number 
+}
 
 export const Table = ({ siteContacts }: { siteContacts: AppTypes.SiteContactInterface[] }) => {
   const tableData = setSiteContactsTableData(siteContacts)
@@ -36,62 +43,50 @@ export const EmailContacts = ({ siteContacts }: { siteContacts: AppTypes.SiteCon
   )
 }
 
-const TableHeaders = () => {
-
-  return (
-    <thead>
-      <tr className="text-warning uppercase border-b-2 border-warning">
-        <th>Contact</th>
-        <th>Role</th>
-      </tr>
-    </thead>
-  )
-}
-
-const TableBody = ({ tableData }: { tableData: SiteContactType[] }) => { // Site contacts table body
-
-  return (
-    <tbody>
-      {tableData.map(siteContact=> {
-        return (
-          <TableRow 
-            key={`site-contact-${ siteContact.name }`}
-            siteContact={siteContact} />
-        )
-      })}
-    </tbody>
-  )
-}
-
-const TableRow = ({ siteContact }: { siteContact: SiteContactType }) => {
-  
-  return (
-    <tr className="border-b-1 border-neutral-content/50">
-      <ContactTableData siteContact={siteContact} />
-      <td>
-        <div className="flex gap-2">
-          <span>{siteContact.role}</span>
-          <PrimaryIcon visible={siteContact.role === "Primary"} />
-        </div>
-      </td>
+const TableHeaders = () => (
+  <thead>
+    <tr className="text-warning uppercase border-b-2 border-warning">
+      <th>Contact</th>
+      <th>Role</th>
     </tr>
-  )
-}
+  </thead>
+)
 
-const ContactTableData = ({ siteContact }: { siteContact: SiteContactType }) => { // Contact table data
+const TableBody = ({ tableData }: { tableData: SiteContactType[] }) => (
+  <tbody>
+    {tableData.map(siteContact=> {
+      return (
+        <TableRow 
+          key={`site-contact-${ siteContact.name }`}
+          siteContact={siteContact} />
+      )
+    })}
+  </tbody>
+)
 
-  return (
-    <td className="flex flex-col whitespace-nowrap">
+const TableRow = ({ siteContact }: { siteContact: SiteContactType }) => (
+  <tr className="border-b-1 border-neutral-content/50">
+    <ContactTableData siteContact={siteContact} />
+    <td>
       <div className="flex gap-2">
-        <span className="font-extrabold whitespace-nowrap">{siteContact.name}</span>
+        <span>{siteContact.role}</span>
         <PrimaryIcon visible={siteContact.role === "Primary"} />
       </div>
-      <span>{siteContact.company}</span>
-      <Phone phone={siteContact.phone} />
-      <Email email={siteContact.email} />
     </td>
-  )
-}
+  </tr>
+)
+
+const ContactTableData = ({ siteContact }: { siteContact: SiteContactType }) => (
+  <td className="flex flex-col whitespace-nowrap">
+    <div className="flex gap-2">
+      <span className="font-extrabold whitespace-nowrap">{siteContact.name}</span>
+      <PrimaryIcon visible={siteContact.role === "Primary"} />
+    </div>
+    <span>{siteContact.company}</span>
+    <Phone phone={siteContact.phone} />
+    <Email email={siteContact.email} />
+  </td>
+)
 
 const PrimaryIcon = ({ visible }: { visible: boolean }) => {
   if(!visible) return null

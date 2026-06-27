@@ -1,6 +1,6 @@
 import { useParams } from "react-router"
 import { useQuery } from "@tanstack/react-query"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import * as AppActions from "@/context/App/AppActions"
 
@@ -10,11 +10,14 @@ import * as AppActions from "@/context/App/AppActions"
 export const useGetSite = () => {
   const { uuid } = useParams<{ uuid: string }>()
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return useQuery({
     queryKey: ["getSite", uuid],
-    queryFn: () => AppActions.getSite(uuid as string, authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getSite(uuid as string, authHeaders(token)),
+      refreshToken
+    ),
     enabled: enabled && !!uuid,
     staleTime: Infinity
   })

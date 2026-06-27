@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm, useFormContext } from "react-hook-form"
 import { useNavigate } from "react-router"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { useOnCancelBtnClick } from "@/components/enforcement/forms/create/CreateViolationForm/hooks"
 import ContactsCtx from "@/components/contacts/context"
 import { handleCreateContact } from "./utils"
@@ -55,12 +55,15 @@ const useHandleFormSubmit = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return async (formData: AppTypes.ContactCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleCreateContact(formData, token).catch(err => console.log(err))
+    const result = await withTokenRefresh(
+      () => handleCreateContact(formData, token),
+      refreshToken
+    ).catch(err => console.log(err))
 
     if(!result?.success) {
       return errorPopup(result?.msg || "Error Creating Contact")

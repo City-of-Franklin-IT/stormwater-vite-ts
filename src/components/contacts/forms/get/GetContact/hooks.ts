@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import ContactsCtx from "@/components/contacts/context"
 import { authHeaders } from "@/helpers/utils"
 import * as AppActions from "@/context/App/AppActions"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 
 /**
@@ -12,11 +12,14 @@ import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 export const useGetContact = () => {
   const { formUUID } = useContext(ContactsCtx)
 
-  const { enabled, token } = useEnableQuery()
-  
+  const { enabled, token, refreshToken } = useEnableQuery()
+
   return useQuery({
     queryKey: ["getContact", formUUID],
-    queryFn: () => AppActions.getContact(formUUID, authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getContact(formUUID, authHeaders(token)),
+      refreshToken
+    ),
     enabled: enabled && !!formUUID
   })
 }
@@ -28,7 +31,7 @@ export const useHandleDeleteBtnClick = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { formUUID } = useContext(ContactsCtx)
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   const queryClient = useQueryClient()
 
@@ -36,18 +39,23 @@ export const useHandleDeleteBtnClick = () => {
     if(!state.active) {
       setState({ active: true })
       return
-    } 
+    }
 
     if(enabled) {
-      const result = await AppActions.deleteContact(formUUID, authHeaders(token))
+      const result = await withTokenRefresh(
+        () => AppActions.deleteContact(formUUID, authHeaders(token)),
+        refreshToken
+      ).catch(() => { errorPopup('An error occurred. Please try again.'); return null })
 
-      if(result.success) {
+      if(result?.success) {
         savedPopup(result.msg)
-      } else errorPopup(result.msg)
+      } else if(result && !result.success) {
+        errorPopup(result.msg)
+      }
 
       queryClient.invalidateQueries({ queryKey: ["getContacts"] })
     }
-  }, [state.active, enabled, token, formUUID, queryClient])
+  }, [state.active, enabled, token, refreshToken, formUUID, queryClient])
 
   return { handleClick, active: state.active }
 }

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router"
 import EnforcementCtx from "@/components/enforcement/context"
 import SiteCtx from "../../context"
 import * as AppActions from "@/context/App/AppActions"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 import { useHandleDeleteBtn as useHandleDeleteViolationBtn } from "@/components/enforcement/containers/ViolationsContainer/hooks"
@@ -19,7 +19,7 @@ export const useOnDeleteBtnClick = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { siteUUID } = useContext(SiteCtx)
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   const queryClient = useQueryClient()
 
@@ -29,23 +29,26 @@ export const useOnDeleteBtnClick = () => {
     if(!state.active) {
       setState({ active: true })
       return
-    } 
+    }
 
     if(enabled) {
-      const result = await AppActions.deleteSite(siteUUID, authHeaders(token))
+      const result = await withTokenRefresh(
+        () => AppActions.deleteSite(siteUUID, authHeaders(token)),
+        refreshToken
+      ).catch(() => { errorPopup('An error occurred. Please try again.'); return null })
 
-      if(result.success) {
+      if(result?.success) {
         savedPopup(result.msg)
-      } else errorPopup(result.msg)
+      } else if(result) errorPopup(result.msg)
 
       queryClient.invalidateQueries({ queryKey: ["getSites"] })
       queryClient.invalidateQueries({ queryKey: ["getInspector"] })
       navigate("/sites")
     }
-  }, [state.active, enabled, token, siteUUID, queryClient, navigate])
-  
+  }, [state.active, enabled, token, refreshToken, siteUUID, queryClient, navigate])
+
   const label = !state.active ?
-    "Delete Site" : 
+    "Delete Site" :
     "Confirm Delete Site"
 
   return { onClick, label }

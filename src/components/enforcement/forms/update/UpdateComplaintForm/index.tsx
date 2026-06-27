@@ -3,7 +3,7 @@ import { useHandleUpdateComplaintForm } from "./hooks"
 import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
@@ -20,7 +20,6 @@ function UpdateComplaintForm({ complaint }: { complaint: AppTypes.ComplaintInter
 
         <FormProvider { ...methods }>
           <form onSubmit={methods.handleSubmit(handleFormSubmit)} className={styles.body}>
-
             <CreateComplaintForm.Map visible={!complaint.siteId} />
             <CreateComplaintForm.DateAndInspectorInputs siteId={complaint.siteId} />
             <CreateComplaintForm.LocationAndResponsiblePartyInputs />
@@ -30,12 +29,9 @@ function UpdateComplaintForm({ complaint }: { complaint: AppTypes.ComplaintInter
             <CreateComplaintForm.ComplaintantInputs />
             <CreateViolationForm.FollowUpInputs />
             <UpdateViolationForm.CheckboxInputs />
-
             <FormBtns onCancelBtnClick={onCancelBtnClick} />
-
           </form>
         </FormProvider>
-
     </div>
   )
 }

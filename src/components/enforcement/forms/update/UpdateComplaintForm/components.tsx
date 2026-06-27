@@ -1,22 +1,21 @@
 import { useCreateComplaintFormContext } from "../../create/CreateComplaintForm/hooks"
-import styles from "@/components/form-elements/Forms.module.css"
 
-export const CheckboxInputs = () => {
+// Components
+import FormLabel from "@/components/form-elements/FormLabel"
 
-  return (
-    <div className="flex justify-between gap-20 pb-10 m-auto w-fit">
-      <ComplianceCheckbox />
-      <ClosedCheckbox />
-    </div>
-  )
-}
+export const CheckboxInputs = () => (
+  <div className="flex justify-between gap-20 pb-10 m-auto w-fit">
+    <ComplianceCheckbox />
+    <ClosedCheckbox />
+  </div>
+)
 
 const ComplianceCheckbox = () => { // Compliance checkbox
   const methods = useCreateComplaintFormContext()
 
   return (
     <div className="flex flex-col gap-1 items-center">
-      <label htmlFor="compliance" className={styles.checkboxLabel}>Compliance:</label>
+      <FormLabel name="compliance">Compliance:</FormLabel>
       <input
         type="checkbox"
         className="checkbox checkbox-warning"
@@ -30,7 +29,7 @@ const ClosedCheckbox = () => { // Closed checkbox
 
   return (
     <div className="flex flex-col gap-1 items-center">
-      <label htmlFor="closed" className={styles.checkboxLabel}>Closed:</label>
+      <FormLabel name="closed">Closed:</FormLabel>
       <input
         type="checkbox"
         className="checkbox checkbox-warning"

@@ -3,7 +3,7 @@ import { useHandleUpdateIllicitDischargeForm } from "./hooks"
 import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
@@ -20,7 +20,6 @@ function UpdateIllicitDischargeForm({ illicitDischarge }: { illicitDischarge: Ap
 
       <FormProvider { ...methods }>
         <form onSubmit={methods.handleSubmit(handleFormSubmit)} className={styles.body}>
-
           <CreateIllicitDischargeForm.Map visible={!illicitDischarge.siteId} />
           <CreateIllicitDischargeForm.DateAndInspectorInputs siteId={illicitDischarge.siteId} />
           <CreateIllicitDischargeForm.LocationAndResponsiblePartyInputs />
@@ -30,9 +29,7 @@ function UpdateIllicitDischargeForm({ illicitDischarge }: { illicitDischarge: Ap
           <CreateIllicitDischargeForm.PenaltyInputs />
           <CreateViolationForm.FollowUpInputs />
           <UpdateViolationForm.CheckboxInputs />
-
           <FormBtns onCancelBtnClick={onCancelBtnClick} />
-
         </form>
       </FormProvider>
     </div>

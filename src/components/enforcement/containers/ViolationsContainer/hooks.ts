@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useMemo, useEffect, useState } from "re
 import { useQueryClient } from "@tanstack/react-query"
 import EnforcementCtx from "../../context"
 import * as AppActions from "@/context/App/AppActions"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 
@@ -127,7 +127,7 @@ export const useHandleDeleteBtn = () => {
   const [state, setState] = useState<{ active: boolean }>({ active: false })
   const { formUUID, dispatch } = useContext(EnforcementCtx)
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   const queryClient = useQueryClient()
 
@@ -137,21 +137,24 @@ export const useHandleDeleteBtn = () => {
     if(!state.active) {
       setState({ active: true })
       return
-    } 
+    }
 
     if(enabled) {
-      const result = await AppActions.deleteViolation(formUUID, authHeaders(token))
+      const result = await withTokenRefresh(
+        () => AppActions.deleteViolation(formUUID, authHeaders(token)),
+        refreshToken
+      ).catch(() => { errorPopup('An error occurred. Please try again.'); return null })
 
-      if(result.success) {
+      if(result?.success) {
         queryClient.invalidateQueries({ queryKey: ["getViolations"] })
         queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
         queryClient.invalidateQueries({ queryKey: ["getSites"] })
         queryClient.invalidateQueries({ queryKey: ["getInspector"] })
         dispatch({ type: "RESET_CTX" })
         savedPopup(result.msg)
-      } else errorPopup(result.msg)
+      } else if(result) errorPopup(result.msg)
     }
-  }, [state.active, enabled, token, formUUID, queryClient, siteUUID])
+  }, [state.active, enabled, token, refreshToken, formUUID, queryClient, siteUUID])
 
   const label = !state.active ? "Delete Violation" : "Confirm Delete"
 

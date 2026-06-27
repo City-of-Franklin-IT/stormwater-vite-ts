@@ -1,9 +1,11 @@
 import { Select } from "@mobiscroll/react"
 import { useSetSiteContactOptions, useHandlePrimaryContactSelect, useHandleContractorSelect, useHandleInspectorSelect, useHandleOtherContactSelect } from "./hooks"
-import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import { ContactOptionsType } from "./hooks"
+import type { ContactOptionsType } from "./hooks"
+
+// Components
+import FormLabel from "@/components/form-elements/FormLabel"
 
 export const SiteContactsInputs = () => { // Site contacts inputs
   const contactOptions = useSetSiteContactOptions()
@@ -25,7 +27,11 @@ const PrimaryContactSelect = ({ contactOptions }: { contactOptions: ContactOptio
 
   return (
     <div className="flex-1 flex flex-col text-center">
-      <label htmlFor="primaryContact" className={styles.checkboxLabel}>Primary Contact:</label>
+      <div className="translate-y-2">
+        <FormLabel name="siteId">
+          Primary Contact:
+        </FormLabel>
+      </div>
       <Select
         data={contactOptions}
         filter={true}
@@ -39,7 +45,11 @@ const ContractorsSelect = ({ contactOptions }: { contactOptions: ContactOptionsT
 
   return (
     <div className="flex-1 flex flex-col text-center">
-      <label htmlFor="contractors" className={styles.checkboxLabel}>Contractors:</label>
+      <div className="translate-y-2">
+        <FormLabel name="siteId">
+          Contractors:
+        </FormLabel>
+      </div>
       <Select
         data={contactOptions}
         selectMultiple={true}
@@ -54,7 +64,11 @@ const InspectorsSelect = ({ contactOptions }: { contactOptions: ContactOptionsTy
 
   return (
     <div className="flex-1 flex flex-col text-center">
-      <label htmlFor="inspectors" className={styles.checkboxLabel}>Inspectors:</label>
+      <div className="translate-y-2">
+        <FormLabel name="siteId">
+          Inspectors:
+        </FormLabel>
+      </div>
       <Select
         data={contactOptions}
         selectMultiple={true}
@@ -69,7 +83,11 @@ const OtherContactsSelect = ({ contactOptions }: { contactOptions: ContactOption
 
   return (
     <div className="flex-1 flex flex-col text-center">
-      <label htmlFor="otherContacts" className={styles.checkboxLabel}>Other:</label>
+      <div className="translate-y-2">
+        <FormLabel name="siteId">
+          Other:
+        </FormLabel>
+      </div>
       <Select
         data={contactOptions}
         selectMultiple={true}

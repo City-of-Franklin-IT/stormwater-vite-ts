@@ -1,17 +1,20 @@
 import { useQuery } from "@tanstack/react-query"
 import * as AppActions from "@/context/App/AppActions"
 import { authHeaders } from "@/helpers/utils"
-import { useEnableQuery } from "../../../helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "../../../helpers/hooks"
 
 /**
 * Returns complaints from server
 **/
 export const useGetComplaints = () => {
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return useQuery({
     queryKey: ["getComplaints"],
-    queryFn: () => AppActions.getComplaints(authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getComplaints(authHeaders(token)),
+      refreshToken
+    ),
     enabled,
     staleTime: Infinity
   })

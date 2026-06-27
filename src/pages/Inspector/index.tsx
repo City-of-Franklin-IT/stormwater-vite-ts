@@ -1,10 +1,10 @@
 import { useGetInspector } from "./hooks"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
-import HandleLoading from "../../utils/HandleLoading"
+import Loading from "@/components/layout/loading/Loading"
 import ErrorBoundary from "../../components/layout/error/ErrorBoundary"
 import { InspectorProvider } from "@/components/inspectors/context"
 import InspectorContainer from "../../components/inspectors/containers/InspectorContainer"
@@ -12,16 +12,16 @@ import InspectorContainer from "../../components/inspectors/containers/Inspector
 function Inspector() {
   const { data, isLoading } = useGetInspector()
 
+  if(isLoading) return <Loading />
+
   return (
-    <HandleLoading isLoading={isLoading}>
-      <ErrorBoundary href={"/sites"}>
-        <InspectorProvider>
-          <InspectorContainer 
-            sites={data?.data.sites || []}
-            inspector={data?.data.inspector as AppTypes.InspectorInterface} />
-        </InspectorProvider>
-      </ErrorBoundary>
-    </HandleLoading>
+    <ErrorBoundary href={"/sites"}>
+      <InspectorProvider>
+        <InspectorContainer 
+          sites={data?.data.sites || []}
+          inspector={data?.data.inspector as AppTypes.InspectorInterface} />
+      </InspectorProvider>
+    </ErrorBoundary>
   )
 }
 

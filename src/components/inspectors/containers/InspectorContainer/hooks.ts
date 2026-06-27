@@ -17,7 +17,7 @@ import { TextSymbol } from "@arcgis/core/symbols"
 import * as AppActions from "@/context/App/AppActions"
 import { mapHitTest, authHeaders } from "@/helpers/utils"
 import InspectorCtx from "../../context"
-import { useEnableQuery, useReturnUserRoles } from "@/helpers/hooks"
+import { useEnableQuery, useReturnUserRoles, withTokenRefresh } from "@/helpers/hooks"
 import { setSiteMarker } from "@/components/sites/containers/SitesContainer/utils"
 import { useSetTableData, useHandleBtns } from "@/components/sites/containers/SitesContainer/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
@@ -137,27 +137,30 @@ export const useHandleDeleteBtn = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   const onClick = useCallback(async () => {
     if(!state.active) {
       setState({ active: true })
       return
-    } 
+    }
 
     if(enabled) {
-      const result = await AppActions.deleteInspector(inspectorId, authHeaders(token))
+      const result = await withTokenRefresh(
+        () => AppActions.deleteInspector(inspectorId, authHeaders(token)),
+        refreshToken
+      ).catch(() => { errorPopup('An error occurred. Please try again.'); return null })
 
-      if(result.success) {
+      if(result?.success) {
         queryClient.invalidateQueries({ queryKey: ["getInspectors"] })
         navigate("/sites")
         savedPopup(result.msg)
-      } else errorPopup(result.msg)
+      } else if(result) errorPopup(result.msg)
     }
-  }, [state.active, enabled, token, inspectorId, queryClient, navigate])
+  }, [state.active, enabled, token, refreshToken, inspectorId, queryClient, navigate])
 
-  const label = !state.active ? 
-    "Delete Inspector" : 
+  const label = !state.active ?
+    "Delete Inspector" :
     "Confirm Delete"
 
   return { onClick, label}

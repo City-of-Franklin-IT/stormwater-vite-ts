@@ -21,8 +21,10 @@ function CreateSiteForm() {
             <Components.Map />
           </div>
 
-          <Components.NameInput />
-          <Components.LocationInput />
+          <div className="flex gap-2 justify-between">
+            <Components.NameInput />
+            <Components.LocationInput />
+          </div>
 
           <div className="flex gap-2 w-full">
             <Components.PreconDateInput />

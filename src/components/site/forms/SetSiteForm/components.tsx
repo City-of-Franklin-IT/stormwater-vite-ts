@@ -1,7 +1,7 @@
 import { useHandleForm, useHandleSetCreateForm, useOnDeleteBtnClick, useHandleSetUpdateForm } from "./hooks"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import FormContainer from "../../../form-elements/FormContainer"
@@ -16,7 +16,7 @@ import DeleteBtn from "../../../form-elements/buttons/DeleteBtn"
 export const Form = ({ site }: { site: AppTypes.SiteInterface }) => { // Set form opened on site page
   const { visible, createFormActive } = useHandleForm()
 
-  if(!visible) return
+  if(!visible) return null
 
   if(createFormActive) { // Create site log, violation, complaint, and illicit discharge
 
@@ -67,9 +67,9 @@ const SetUpdateForm = ({ site }: { site: AppTypes.SiteInterface }) => {
 
   if(!visibility.form) return null
 
-  if(visibility.updateSite) {
-    return <UpdateSite site={site} />
-  }
+  if(visibility.updateSite) return (
+    <UpdateSite site={site} />
+  )
 
   switch(activeForm) { 
     case "updateSiteLog":

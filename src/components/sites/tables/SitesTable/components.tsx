@@ -2,19 +2,16 @@ import styles from "./SitesTable.module.css"
 import { useHandleTableRow, useHandleTableData } from "./hooks"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import SiteDetails from "@/components/site/details/SiteDetails"
 
-export const Table = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => {
-
-  return (
-    <table>
-      <TableBody tableData={tableData} />
-    </table>
-  )
-}
+export const Table = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => (
+  <table>
+    <TableBody tableData={tableData} />
+  </table>
+)
 
 export const NoSites = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => {
   if(tableData.length) return null
@@ -24,23 +21,23 @@ export const NoSites = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) 
   )
 }
 
-const TableBody = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => {
+const TableBody = ({ tableData }: { tableData: AppTypes.SiteInterface[] }) => (
+  <tbody>
+    {tableData.map((site, index) => {
+      return (
+        <TableRow
+          key={`sites-table-row-${ site.uuid }`}
+          site={site}
+          index={index} />
+      )
+    })}
+  </tbody>
+)
 
-  return (
-    <tbody>
-      {tableData.map((site, index) => {
-        return (
-          <TableRow
-            key={`sites-table-row-${ site.uuid }`}
-            site={site}
-            index={index} />
-        )
-      })}
-    </tbody>
-  )
+type TableRowProps = { 
+  site: AppTypes.SiteInterface
+  index: number 
 }
-
-type TableRowProps = { site: AppTypes.SiteInterface, index: number }
 
 const TableRow = (props: TableRowProps) => {
   const tableRowProps = useHandleTableRow(props.site, props.index)

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useLocation } from "react-router"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 import * as AppActions from "@/context/App/AppActions"
 
@@ -8,11 +8,14 @@ import * as AppActions from "@/context/App/AppActions"
 * Returns inspectors query with infinite stale time
 **/
 export const useGetInspectors = () => {
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return useQuery({
     queryKey: ["getInspectors"],
-    queryFn: () => AppActions.getInspectors(authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getInspectors(authHeaders(token)),
+      refreshToken
+    ),
     enabled,
     staleTime: Infinity
   })

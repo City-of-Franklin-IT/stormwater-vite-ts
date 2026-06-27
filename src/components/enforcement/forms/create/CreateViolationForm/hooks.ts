@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useForm, useFormContext } from "react-hook-form"
 import EnforcementCtx from "@/components/enforcement/context"
 import SiteCtx from "@/components/site/context"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 import { handleCreateViolation } from "./utils"
@@ -78,7 +78,7 @@ const useCreateViolationForm = (site: AppTypes.SiteInterface | undefined) => {
 * Returns create violation form submit handler that posts data and invalidates queries
 **/
 const useHandleFormSubmit = () => {
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -87,7 +87,10 @@ const useHandleFormSubmit = () => {
   return async (formData: AppTypes.ConstructionViolationCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleCreateViolation(formData, token).catch(err => console.log(err))
+    const result = await withTokenRefresh(
+      () => handleCreateViolation(formData, token),
+      refreshToken
+    ).catch(err => console.log(err))
 
     if(!result?.success) {
       return errorPopup(result?.msg || "Error Creating Violation")

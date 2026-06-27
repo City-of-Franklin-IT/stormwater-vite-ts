@@ -6,7 +6,7 @@ import { useHandleForm, useHandleButtons, useHandleSiteIssuesCheckbox, useSetSit
 import { setSiteStatusHeader } from "./utils"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import SetSiteForm from "../../forms/SetSiteForm"
@@ -40,35 +40,28 @@ export const Header = ({ site }: { site: AppTypes.SiteInterface }) => {
   )
 }
 
-export const ActivityCalendar = ({ site }: { site: AppTypes.SiteInterface }) => {
+export const ActivityCalendar = ({ site }: { site: AppTypes.SiteInterface }) => (
+  <div className="flex-2 flex flex-col p-10 pt-0 border-4 border-secondary/30 border-double rounded">
+    <h3 className="text-neutral-content font-[shrikhand] text-4xl py-8 text-center">Activity</h3>
 
-  return (
-    <div className="flex-2 flex flex-col p-10 pt-0 border-4 border-secondary/30 border-double rounded">
-      <h3 className="text-neutral-content font-[shrikhand] text-4xl py-8 text-center">Activity</h3>
+    <SitesActivityCalendar sites={[site]} />
+  </div>
+)
 
-      <SitesActivityCalendar sites={[site]} />
+export const Enforcement = ({ site }: { site: AppTypes.SiteInterface }) => (
+  <div className="flex-2 flex flex-col gap-20 items-center p-8 bg-neutral/20 shadow-xl rounded-xl">
+    <h3 className="text-neutral-content font-[shrikhand] text-4xl py-8 text-center">Issues</h3>
+    <EnforcementIndicators site={site} />
+    <div className="flex flex-col gap-10 items-center w-full">
+      <DateRangeFilter />
+      <SiteIssuesCheckbox />
+      <SiteIssuesTable site={site} />
     </div>
-  )
-}
-
-export const Enforcement = ({ site }: { site: AppTypes.SiteInterface }) => {
-
-  return (
-    <div className="flex-2 flex flex-col gap-20 items-center p-8 bg-neutral/20 shadow-xl rounded-xl">
-      <h3 className="text-neutral-content font-[shrikhand] text-4xl py-8 text-center">Issues</h3>
-      <EnforcementIndicators site={site} />
-      <div className="flex flex-col gap-10 items-center w-full">
-        <DateRangeFilter />
-        <SiteIssuesCheckbox />
-        <SiteIssuesTable site={site} />
-      </div>
-    </div>
-  )
-}
+  </div>
+)
 
 export const Form = ({ site }: { site: AppTypes.SiteInterface }) => { // Update site form
   const { formRef, visible } = useHandleForm()
-
   useScrollToFormRef({ formRef, activeForm: visible })
 
   if(!visible) return null
@@ -97,7 +90,6 @@ export const Buttons = ({ site }: { site: AppTypes.SiteInterface }) => {
 
 export const Map = ({ site }: { site: AppTypes.SiteInterface }) => {
   const mapRef = useRef<HTMLDivElement>(null)
-
   useSetSiteMapView(mapRef, site)
 
   return (
@@ -136,13 +128,10 @@ export const SiteIssuesCheckbox = () => {
   )
 }
 
-const EnforcementIndicators = ({ site }: { site: AppTypes.SiteInterface }) => {
-
-  return (
-    <div className="flex gap-20 justify-around flex-wrap">
-      <ViolationsIndicator violations={site.ConstructionViolations || []} />
-      <ComplaintsIndicator complaints={site.Complaints || []} />
-      <IllicitDischargesIndicator discharges={site.IllicitDischarges || []} />
-    </div>
-  )
-}
+const EnforcementIndicators = ({ site }: { site: AppTypes.SiteInterface }) => (
+  <div className="flex gap-20 justify-around flex-wrap">
+    <ViolationsIndicator violations={site.ConstructionViolations || []} />
+    <ComplaintsIndicator complaints={site.Complaints || []} />
+    <IllicitDischargesIndicator discharges={site.IllicitDischarges || []} />
+  </div>
+)

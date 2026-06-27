@@ -1,7 +1,7 @@
 import { useHandleDeleteBtnClick } from "./hooks"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import UpdateContactForm from "../../update/UpdateContactForm"
@@ -12,7 +12,9 @@ export const Form = ({ contact }: { contact: AppTypes.ContactInterface | undefin
 
   if(!contact) return null
 
-  const label = !active ? "Delete Contact" : "Confirm Delete"
+  const label = !active ? 
+    "Delete Contact" : 
+    "Confirm Delete"
 
   return (
     <div className="flex flex-col gap-10 items-center">

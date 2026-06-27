@@ -9,7 +9,6 @@ import FormContainer from "../../../../form-elements/FormContainer"
 
 export const SiteSelect = ({ onSelect, onNoSiteSelect }: { onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void, onNoSiteSelect: () => void }) => { // Site select
   const { selectedSite } = useContext(EnforcementCtx)
-
   const { data } = useGetActiveSiteNames()
 
   const sites = data?.data || []

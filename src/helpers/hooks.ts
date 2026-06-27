@@ -26,12 +26,15 @@ export const useEnableQuery = () => {
 
 export const withTokenRefresh = async <T>(
   fn: () => Promise<T>,
-  refresh: () => Promise<string | undefined>
+  refresh: (forceRefresh?: boolean) => Promise<string | undefined>
 ): Promise<T> => {
   try {
     return await fn()
   } catch (e) {
-    if (e instanceof Error && e.message === '401') await refresh()
+    if (e instanceof Error && e.message === '401') {
+      await refresh(true)
+      return await fn()
+    }
     throw e
   }
 }

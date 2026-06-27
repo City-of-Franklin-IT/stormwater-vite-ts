@@ -6,7 +6,7 @@ interface AuthContextType {
   isAuthenticated: boolean
   token: string | undefined
   isLoading: boolean
-  refreshToken: () => Promise<string | undefined>
+  refreshToken: (forceRefresh?: boolean) => Promise<string | undefined>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -36,14 +36,25 @@ export function AuthCtxProvider({ children }: { children: ReactNode }) {
     }
   }, [isReady, activeAccount])
 
-  const refreshToken = async (): Promise<string | undefined> => {
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        refreshToken(true)
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [activeAccount])
+
+  const refreshToken = async (forceRefresh = false): Promise<string | undefined> => {
     if (MOCK_AUTH) return MOCK_TOKEN
     if (!activeAccount) return undefined
     try {
       const result = await instance.acquireTokenSilent({
         ...loginRequest,
         account: activeAccount,
-        forceRefresh: true
+        forceRefresh
       })
       setToken(result.idToken)
       return result.idToken

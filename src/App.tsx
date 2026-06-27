@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes } from "react-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -22,27 +23,44 @@ import Docs from "./pages/Docs"
 
 const queryClient = new QueryClient()
 
+function AppContent() {
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        queryClient.refetchQueries()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [])
+
+  return (
+    <Router basename={APP_BASE}>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Login />} />
+          <Route path="/sites" element={<Sites />} />
+          <Route path="/site/:uuid" element={<Site />} />
+          <Route path="/create/*" element={<CreateRouting />} />
+          <Route path="/inspectors/:slug" element={<Inspector />} />
+          <Route path="/enforcement/violations" element={<Violations />} />
+          <Route path="/enforcement/complaints" element={<Complaints />} />
+          <Route path="/enforcement/discharges" element={<Discharges />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/docs" element={<Docs />} />
+        </Route>
+        <Route path="/*" element={<Redirect />} />
+      </Routes>
+    </Router>
+  )
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthCtxProvider>
-        <Router basename={APP_BASE}>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Login />} />
-              <Route path="/sites" element={<Sites />} />
-              <Route path="/site/:uuid" element={<Site />} />
-              <Route path="/create/*" element={<CreateRouting />} />
-              <Route path="/inspectors/:slug" element={<Inspector />} />
-              <Route path="/enforcement/violations" element={<Violations />} />
-              <Route path="/enforcement/complaints" element={<Complaints />} />
-              <Route path="/enforcement/discharges" element={<Discharges />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/docs" element={<Docs />} />
-            </Route>
-            <Route path="/*" element={<Redirect />} />
-          </Routes>
-        </Router>
+        <AppContent />
         <ToastContainer />
       </AuthCtxProvider>
       <ReactQueryDevtools initialIsOpen={false} />

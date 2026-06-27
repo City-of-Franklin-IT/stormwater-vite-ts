@@ -16,7 +16,7 @@ import SiteCtx from "../../context"
 import { useReturnUserRoles } from "@/helpers/hooks"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 /**
 * Initializes and manages the ArcGIS map view for a single site page

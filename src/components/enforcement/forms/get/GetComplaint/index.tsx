@@ -1,20 +1,25 @@
 import { useGetComplaint } from "./hooks"
 
 // Components
-import HandleLoading from "@/utils/HandleLoading"
+import Loading from "@/components/layout/loading/Loading"
 import * as Components from "./components"
 
-type GetComplaintProps = { handleDeleteBtn: { onClick: React.MouseEventHandler<HTMLButtonElement>, label: string } }
+type GetComplaintProps = { 
+  handleDeleteBtn: { 
+    onClick: React.MouseEventHandler<HTMLButtonElement>
+    label: string 
+  } 
+}
 
 function GetComplaint(props: GetComplaintProps) {
   const { data, isLoading } = useGetComplaint()
 
+  if(isLoading) return <Loading />
+
   return (
-    <HandleLoading isLoading={isLoading}>
-      <Components.Form 
-        complaint={data?.data}
-        handleDeleteBtn={props.handleDeleteBtn} />
-    </HandleLoading>
+    <Components.Form 
+      complaint={data?.data}
+      handleDeleteBtn={props.handleDeleteBtn} />
   )
 }
 

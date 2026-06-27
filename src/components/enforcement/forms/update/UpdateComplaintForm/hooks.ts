@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { useOnCancelBtnClick } from "../../create/CreateViolationForm/hooks"
 import EnforcementCtx from "@/components/enforcement/context"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { formatDate } from "@/helpers/utils"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 import { handleUpdateComplaint } from "./utils"
@@ -49,12 +49,15 @@ const useHandleFormSubmit = () => {
   const queryClient = useQueryClient()
   const { uuid: siteUUID } = useParams<{ uuid: string }>()
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return async (formData: AppTypes.ComplaintCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateComplaint(formData, token).catch(err => console.log(err))
+    const result = await withTokenRefresh(
+      () => handleUpdateComplaint(formData, token),
+      refreshToken
+    ).catch(err => console.log(err))
 
     if(!result?.success) {
       return errorPopup(result?.msg || "Error Updating Complaint")

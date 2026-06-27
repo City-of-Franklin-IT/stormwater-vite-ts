@@ -4,7 +4,7 @@ import SitesCtx from "../../context"
 import styles from "./SitesContainer.module.css"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import Search from "../../search/Search"

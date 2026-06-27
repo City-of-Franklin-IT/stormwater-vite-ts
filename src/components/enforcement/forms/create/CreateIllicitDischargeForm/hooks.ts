@@ -12,7 +12,7 @@ import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
 import Search from "@arcgis/core/widgets/Search"
 import { TextSymbol } from "@arcgis/core/symbols"
 import pinErrorIcon from "@/assets/icons/pin/error-pin.png"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
 import * as AppActions from "@/context/App/AppActions"
 import { authHeaders, formatDate } from "@/helpers/utils"
@@ -160,11 +160,14 @@ export const useCreateIllicitDischargeFormContext = () => { // CreateSiteIllicit
 * Returns inspector options for inspector select component
 **/
 export const useSetInspectorOptions = () => { // Return inspectors and set <select> options
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   const result = useQuery({
     queryKey: ["getInspectors"],
-    queryFn: () => AppActions.getInspectors(authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getInspectors(authHeaders(token)),
+      refreshToken
+    ),
     enabled
   })
 

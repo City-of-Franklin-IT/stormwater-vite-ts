@@ -1,7 +1,7 @@
 import { memo } from "react"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import SiteContactsTable from "../../tables/SiteContactsTable"

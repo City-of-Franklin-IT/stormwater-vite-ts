@@ -3,7 +3,7 @@ import styles from "@/components/form-elements/Forms.module.css"
 import { useHandleUpdateSiteLogForm } from "./hooks"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import FormBtns from "@/components/form-elements/buttons/FormBtns"
@@ -24,7 +24,6 @@ function UpdateSiteLogForm({ siteLog }: { siteLog: AppTypes.SiteLogInterface }) 
 
           </form>
         </FormProvider>
-        
     </div>
   )
 }

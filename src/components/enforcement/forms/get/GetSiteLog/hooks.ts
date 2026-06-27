@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useParams } from "react-router"
 import EnforcementCtx from "@/components/enforcement/context"
 import * as AppActions from "@/context/App/AppActions"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
 
 // Types
@@ -15,11 +15,14 @@ import { authHeaders } from "@/helpers/utils"
 export const useGetSiteLog = () => {
   const { formUUID } = useContext(EnforcementCtx)
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return useQuery({
     queryKey: ["getSiteLog", formUUID],
-    queryFn: () => AppActions.getSiteLog(formUUID as string, authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getSiteLog(formUUID as string, authHeaders(token)),
+      refreshToken
+    ),
     enabled: enabled && !!formUUID
   })
 }
@@ -32,7 +35,7 @@ export const useOnDeleteBtnClick = (uuid: string) => {
 
   const [state, setState] = useState<{ active: boolean }>({ active: false })
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   const queryClient = useQueryClient()
 
@@ -42,20 +45,23 @@ export const useOnDeleteBtnClick = (uuid: string) => {
     if(!state.active) {
       setState({ active: true })
       return
-    } 
+    }
 
     if(enabled) {
-      const result = await AppActions.deleteSiteLog(uuid, authHeaders(token))
+      const result = await withTokenRefresh(
+        () => AppActions.deleteSiteLog(uuid, authHeaders(token)),
+        refreshToken
+      ).catch(() => { errorPopup('An error occurred. Please try again.'); return null })
 
-      if(result.success) {
+      if(result?.success) {
         savedPopup(result.msg)
         queryClient.invalidateQueries({ queryKey: ["getSite", siteUUID] })
         queryClient.invalidateQueries({ queryKey: ["getSites"] })
         queryClient.invalidateQueries({ queryKey: ["getInspector"] })
         dispatch({ type: "RESET_CTX" })
-      } else errorPopup(result.msg)
+      } else if(result) errorPopup(result.msg)
     }
-  }, [state.active, enabled, token, siteUUID, queryClient, uuid, dispatch])
+  }, [state.active, enabled, token, refreshToken, siteUUID, queryClient, uuid, dispatch])
 
   return { onClick, active: state.active }
 }

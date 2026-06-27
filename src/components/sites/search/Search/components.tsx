@@ -1,13 +1,10 @@
-import { Context } from "react"
 import { useHandleSearch, useHandleClearBtn, SearchableCtx } from "./hooks"
 
-export const Header = () => {
-  return (
-    <h2 className="text-primary-content text-2xl font-[play] uppercase font-bold">Search</h2>
-  )
-}
+export const Header = () => (
+  <h2 className="text-primary-content text-2xl font-[play] uppercase font-bold">Search</h2>
+)
 
-export const SearchInput = <T extends SearchableCtx>({ ctx }: { ctx: Context<T> }) => {
+export const SearchInput = <T extends SearchableCtx>({ ctx }: { ctx: React.Context<T> }) => {
   const inputProps = useHandleSearch(ctx)
 
   return (
@@ -19,10 +16,10 @@ export const SearchInput = <T extends SearchableCtx>({ ctx }: { ctx: Context<T> 
   )
 }
 
-export const ClearBtn = <T extends SearchableCtx>({ ctx }: { ctx: Context<T> }) => {
+export const ClearBtn = <T extends SearchableCtx>({ ctx }: { ctx: React.Context<T> }) => {
   const { visible, ...btnProps } = useHandleClearBtn(ctx)
 
-  if(!visible) return
+  if(!visible) return null
 
   return (
     <button

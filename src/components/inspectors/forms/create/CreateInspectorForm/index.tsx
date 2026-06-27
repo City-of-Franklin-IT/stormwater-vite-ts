@@ -15,15 +15,13 @@ function CreateInspectorForm() {
 
       <FormProvider { ...methods }>
         <form onSubmit={methods.handleSubmit(handleFormSubmit)} className={styles.body}>
-          
-          <Components.NameInput />
-          <Components.EmailInput />
-          
+          <div className="flex gap-2">
+            <Components.NameInput />
+            <Components.EmailInput />
+          </div>
           <FormBtns onCancelBtnClick={onCancelBtnClick} />
-
         </form>
       </FormProvider>
-
     </div>
   )
 }

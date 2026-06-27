@@ -1,15 +1,12 @@
 import { useRef } from "react"
 import { useSetInspectorOptions } from "@/components/enforcement/forms/create/CreateIllicitDischargeForm/hooks"
-import styles from "@/components/form-elements/Forms.module.css"
 import { useCreateSiteFormContext, useSetCreateSiteMapView } from "./hooks"
 
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
-import FormError from "@/components/form-elements/FormError"
 
 export const Map = () => { // Map input
   const mapRef = useRef<HTMLDivElement>(null)
-
   useSetCreateSiteMapView(mapRef)
 
   return (
@@ -20,26 +17,26 @@ export const Map = () => { // Map input
 export const NameInput = () => { // Site name input
   const { register, formState: { errors } } = useCreateSiteFormContext()
 
+  const error = errors.name?.message
+
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
-        <FormLabel
-          name={"name"}
-          required={true}>
-            Site Name:
-        </FormLabel>
-        <input 
-          type="text"
-          className={styles.input}
-          { ...register("name", {
-            required: "Site name is required",
-            maxLength: {
-              value: 100,
-              message: "Site name must be 100 characters or less"
-            },
-          }) } />
-      </div>
-      <FormError error={errors.name?.message} />
+    <div className="flex-1 flex flex-col gap-1">
+      <FormLabel
+        name={"name"}
+        required={true}
+        error={error}>
+          Site Name:
+      </FormLabel>
+      <input 
+        type="text"
+        className="input w-full"
+        { ...register("name", {
+          required: "Site name is required",
+          maxLength: {
+            value: 100,
+            message: "Site name must be 100 characters or less"
+          },
+        }) } />
     </div>
   )
 }
@@ -47,50 +44,50 @@ export const NameInput = () => { // Site name input
 export const LocationInput = () => { // Site location description
   const { register, formState: { errors } } = useCreateSiteFormContext()
 
+  const error = errors.location?.message
+
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
-        <FormLabel
-          name={"location"}
-          required={true}>
-            Location:
-        </FormLabel>
-        <input 
-          type="text"
-          className={styles.input}
-          { ...register("location", {
-            required: "Site location is required",
-            maxLength: {
-              value: 100,
-              message: "Site location must be 100 characters or less"
-            },
-          }) } />
-      </div>
-      <FormError error={errors.location?.message} />
+    <div className="flex-1 flex flex-col gap-1">
+      <FormLabel
+        name={"location"}
+        required={true}
+        error={error}>
+          Location:
+      </FormLabel>
+      <input 
+        type="text"
+        className="input w-full"
+        { ...register("location", {
+          required: "Site location is required",
+          maxLength: {
+            value: 100,
+            message: "Site location must be 100 characters or less"
+          },
+        }) } />
     </div>
   )
 }
 
 export const PreconDateInput = () => { // Site precon date input
   const { register, formState: { errors } } = useCreateSiteFormContext()
+
+  const error = errors.preconDate?.message
   
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
+      <div className="flex-1 flex flex-col gap-1">
         <FormLabel
           name={"preconDate"}
-          required={true}>
+          required={true}
+          error={error}>
             Precon Date:
         </FormLabel>
         <input 
           type="date"
-          className={styles.input}
+          className="input w-full"
           { ...register("preconDate", {
             required: "Precon date is required",
           }) } />
       </div>
-      <FormError error={errors.preconDate?.message} />
-    </div>
   )
 }
 
@@ -98,19 +95,17 @@ export const GreenInfrastructureSelect = () => { // Green infrastructure select
   const methods = useCreateSiteFormContext()
 
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
-        <FormLabel name={"greenInfrastructure"}>
-          Green Infrastructure:
-        </FormLabel>
-        <select 
-          className={styles.input}
-          { ...methods.register("greenInfrastructure") }>
-            <option value=""></option>
-            <option value={"false"}>No</option>
-            <option value={"true"}>Yes</option>
-          </select>
-      </div>
+    <div className="flex-1 flex flex-col gap-1">
+      <FormLabel name={"greenInfrastructure"}>
+        Green Infrastructure:
+      </FormLabel>
+      <select 
+        className="select w-full"
+        { ...methods.register("greenInfrastructure") }>
+          <option value=""></option>
+          <option value={"false"}>No</option>
+          <option value={"true"}>Yes</option>
+        </select>
     </div>
   )
 }
@@ -118,23 +113,24 @@ export const GreenInfrastructureSelect = () => { // Green infrastructure select
 export const PermitInput = () => { // Permit input
   const { register, formState: { errors } } = useCreateSiteFormContext()
 
+  const error = errors.permit?.message
+
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
-        <FormLabel name={"permit"}>
+    <div className="flex-1 flex flex-col gap-1">
+      <FormLabel 
+        name={"permit"}
+        error={error}>
           Permit #:
-        </FormLabel>
-        <input 
-          type="text"
-          className={styles.input}
-          { ...register("permit", {
-            maxLength: {
-              value: 20,
-              message: "Permit must be 20 characters or less"
-            }
-          }) } />
-      </div>
-      <FormError error={errors.permit?.message} />
+      </FormLabel>
+      <input 
+        type="text"
+        className="input w-full"
+        { ...register("permit", {
+          maxLength: {
+            value: 20,
+            message: "Permit must be 20 characters or less"
+          }
+        }) } />
     </div>
   )
 }
@@ -142,23 +138,24 @@ export const PermitInput = () => { // Permit input
 export const COFInput = () => { // COF number input
   const { register, formState: { errors } } = useCreateSiteFormContext()
 
+  const error = errors.cof?.message
+
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
-        <FormLabel name={"cof"}>
+    <div className="flex-1 flex flex-col gap-1">
+      <FormLabel 
+        name={"cof"}
+        error={error}>
           COF #:
-        </FormLabel>
-        <input 
-          type="text"
-          className={styles.input}
-          { ...register("cof", {
-            maxLength: {
-              value: 10,
-              message: "COF # must be 10 characters or less"
-            }
-          }) } />
-      </div>
-      <FormError error={errors.cof?.message} />
+      </FormLabel>
+      <input 
+        type="text"
+        className="input w-full"
+        { ...register("cof", {
+          maxLength: {
+            value: 10,
+            message: "COF # must be 10 characters or less"
+          }
+        }) } />
     </div>
   )
 }
@@ -166,49 +163,47 @@ export const COFInput = () => { // COF number input
 export const TNQInput = () => { // TNQ input
   const { register, formState: { errors } } = useCreateSiteFormContext()
 
+  const error = errors.tnq?.message
+
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
-        <FormLabel name={"tnq"}>
+    <div className="flex-1 flex flex-col gap-1">
+      <FormLabel 
+        name={"tnq"}
+        error={error}>
           TNQ #:
-        </FormLabel>
-        <input 
-          type="text"
-          className={styles.input}
-          { ...register("tnq", {
-            maxLength: {
-              value: 20,
-              message: "TNQ # must be 20 characters or less"
-            },
-          }) } />
-      </div>
-      <FormError error={errors.tnq?.message} />
+      </FormLabel>
+      <input 
+        type="text"
+        className="input w-full"
+        { ...register("tnq", {
+          maxLength: {
+            value: 20,
+            message: "TNQ # must be 20 characters or less"
+          },
+        }) } />
     </div>
   )
 }
 
 export const InspectorSelect = () => { // Inspector select
   const methods = useCreateSiteFormContext()
-
   const inspectors = useSetInspectorOptions()
 
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
-        <FormLabel name={"inspectorId"}>
-          Inspector:
-        </FormLabel>
-        <select 
-          className={styles.input}
-          { ...methods.register("inspectorId") }>
-          <option value=""></option>
-          {inspectors.map(inspector => {
-            return (
-              <option key={`inspector-option-${ inspector.value }`} value={inspector.value}>{inspector.text}</option>
-            )
-          })}
-        </select>
-      </div>
+    <div className="flex flex-col mx-auto w-1/2">
+      <FormLabel name={"inspectorId"}>
+        Inspector:
+      </FormLabel>
+      <select 
+        className="select"
+        { ...methods.register("inspectorId") }>
+        <option value=""></option>
+        {inspectors.map(inspector => {
+          return (
+            <option key={`inspector-option-${ inspector.value }`} value={inspector.value}>{inspector.text}</option>
+          )
+        })}
+      </select>
     </div>
   )
 }

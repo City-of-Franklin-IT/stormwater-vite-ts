@@ -1,32 +1,30 @@
 import { useFormContext } from "react-hook-form"
-import styles from "@/components/form-elements/Forms.module.css"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
-import FormError from "@/components/form-elements/FormError"
 
 export const DateInput = () => { // Inspection date input
   const { register, formState: { errors } } = useFormContext<AppTypes.SiteLogCreateInterface>()
 
+  const error = errors.inspectionDate?.message
+
   return (
-    <div className={styles.inputSection}>
-      <div className="flex">
-        <FormLabel
-          name={"inspectionDate"}
-          required={true}>
-            Inspection Date:
-        </FormLabel>
-        <input 
-          type="date"
-          className={styles.input}
-          { ...register("inspectionDate", {
-            required: "Inspection date is required"
-          }) } />
-      </div>
-      <FormError error={errors.inspectionDate?.message} />
+    <div className="flex flex-col gap-1">
+      <FormLabel
+        name={"inspectionDate"}
+        required={true}
+        error={error}>
+          Inspection Date:
+      </FormLabel>
+      <input
+        type="date"
+        className="input w-full"
+        { ...register("inspectionDate", {
+          required: "Inspection date is required"
+        }) } />
     </div>
   )
 }

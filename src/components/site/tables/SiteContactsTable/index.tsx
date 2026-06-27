@@ -1,7 +1,7 @@
 import { memo } from "react"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import * as Components from "./components"
@@ -14,7 +14,6 @@ function SiteContactsTable({ siteContacts }: { siteContacts: AppTypes.SiteContac
 
       <Components.Table siteContacts={siteContacts} />
       <Components.EmailContacts siteContacts={siteContacts} />
-
     </div>
   )
 }

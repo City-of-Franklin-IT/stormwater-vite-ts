@@ -13,7 +13,7 @@ function CreateSiteLogForm({ site }: { site: AppTypes.SiteInterface }) {
   const { methods, handleFormSubmit, onCancelBtnClick } = useHandleCreateSiteLogForm(site)
 
   return (
-    <div className="flex flex-col items-center w-full border">
+    <div className="flex flex-col items-center w-full">
       <h2 className={styles.title}>Create Site Log</h2>
 
         <FormProvider { ...methods }>

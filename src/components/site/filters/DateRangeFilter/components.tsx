@@ -1,14 +1,11 @@
 import { useHandleDateRangeInput, useHandleClearBtn } from "./hooks"
 
-export const DateRangeInputs = () => {
-
-  return (
-    <div className="flex gap-10">
-      <DateRangeInput param={"start"} />
-      <DateRangeInput param={"end"} />
-    </div>
-  )
-}
+export const DateRangeInputs = () => (
+  <div className="flex gap-10">
+    <DateRangeInput param={"start"} />
+    <DateRangeInput param={"end"} />
+  </div>
+)
 
 export const ClearBtn = () => {
   const { visible, onClick } = useHandleClearBtn()
@@ -37,16 +34,16 @@ const DateRangeInput = ({ param }: { param: "start" | "end" }) => {
   )
 }
 
-type ClearFilterBtnProps = { onClick: React.MouseEventHandler<HTMLButtonElement>, children: React.ReactNode }
-
-const ClearFilterBtn = (props: ClearFilterBtnProps) => {
-
-  return (
-    <button 
-      type="button"
-      onClick={props.onClick}
-      className="btn btn-warning btn-outline font-[play] uppercase">
-        {props.children}
-    </button>
-  )
+type ClearFilterBtnProps = { 
+  onClick: React.MouseEventHandler<HTMLButtonElement>
+  children: React.ReactNode 
 }
+
+const ClearFilterBtn = (props: ClearFilterBtnProps) => (
+  <button 
+    type="button"
+    onClick={props.onClick}
+    className="btn btn-warning btn-outline font-[play] uppercase">
+      {props.children}
+  </button>
+)

@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { useQuery } from "@tanstack/react-query"
 import EnforcementCtx from "@/components/enforcement/context"
 import * as AppActions from "@/context/App/AppActions"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { authHeaders } from "@/helpers/utils"
 
 /**
@@ -11,11 +11,14 @@ import { authHeaders } from "@/helpers/utils"
 export const useGetComplaint = () => {
   const { formUUID } = useContext(EnforcementCtx)
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return useQuery({
     queryKey: ["getComplaint", formUUID],
-    queryFn: () => AppActions.getComplaint(formUUID as string, authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getComplaint(formUUID as string, authHeaders(token)),
+      refreshToken
+    ),
     enabled: enabled && !!formUUID
   })
 }

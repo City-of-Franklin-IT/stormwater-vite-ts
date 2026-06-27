@@ -3,7 +3,7 @@ import { Eventcalendar } from "@mobiscroll/react"
 import { useFormatCalendarData, useCalendarProps, useHandleCalendarTypeBtnClick } from "./hooks"
 
 // Types
-import * as AppTypes from "@/context/App/types"
+import type * as AppTypes from "@/context/App/types"
 
 // Components
 import * as Components from "./components"
@@ -17,9 +17,8 @@ function SitesActivityCalendar({ sites }: { sites: AppTypes.SiteInterface[] }) {
     <div className="flex flex-col gap-4 items-end w-full">
       <div className="flex justify-between items-center text-neutral-content w-full">
         <Components.CalendarNote />
-        <Components.CalendarTypeBtn 
-          onClick={onClick}>
-            {label}
+        <Components.CalendarTypeBtn onClick={onClick}>
+          {label}
         </Components.CalendarTypeBtn>
       </div>
       <div className="flex flex-col gap-4 opacity-70 w-full shadow-xl">

@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import ContactsCtx from "@/components/contacts/context"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { handleUpdateContact } from "./utils"
 
 // Types
@@ -55,12 +55,15 @@ const useHandleFormSubmit = () => {
 
   const queryClient = useQueryClient()
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return async (formData: AppTypes.ContactCreateInterface) => {
     if(!enabled || !token) return
 
-    const result = await handleUpdateContact(formData, token).catch(err => console.log(err))
+    const result = await withTokenRefresh(
+      () => handleUpdateContact(formData, token),
+      refreshToken
+    ).catch(err => console.log(err))
 
     if(!result?.success) {
       return errorPopup(result?.msg)

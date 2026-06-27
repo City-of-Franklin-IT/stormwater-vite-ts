@@ -15,13 +15,10 @@ function CreateMultipleSiteLogsForm() {
 
         <FormProvider { ...methods }>
           <form onSubmit={methods.handleSubmit(handleFormSubmit)} className={styles.body}>
-
             <Components.DateInput />
             <FormBtns onCancelBtnClick={onCancelBtnClick} />
-
           </form>
         </FormProvider>
-
     </div>
   )
 }

@@ -1,16 +1,16 @@
 import { useGetContact } from "./hooks"
 
 // Components
-import HandleLoading from "@/utils/HandleLoading"
+import Loading from "@/components/layout/loading/Loading"
 import * as Components from "./components"
 
 function GetContact() {
   const { data, isLoading } = useGetContact()
 
+  if(isLoading) return <Loading />
+
   return (
-    <HandleLoading isLoading={isLoading}>
-      <Components.Form contact={data?.data} />
-    </HandleLoading>
+    <Components.Form contact={data?.data} />
   )
 }
 

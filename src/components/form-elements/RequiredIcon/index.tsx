@@ -1,6 +1,7 @@
 import icon from "@/assets/icons/required/required.svg"
 
-function RequiredIcon() {
+function RequiredIcon({ required }: { required: boolean | undefined }) {
+  if(!required) return null
 
   return (
     <div className="mb-auto mt-1">

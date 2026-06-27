@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import EnforcementCtx from "@/components/enforcement/context"
 import * as AppActions from "@/context/App/AppActions"
 import { authHeaders } from "@/helpers/utils"
-import { useEnableQuery } from "@/helpers/hooks"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { createFormMap } from "./utils"
 
 // Types
@@ -14,11 +14,14 @@ import { CreateFormType } from "./utils"
 * Returns active site names query
 **/
 export const useGetActiveSiteNames = () => {
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return useQuery({
     queryKey: ["getActiveSiteName"],
-    queryFn: () => AppActions.getActiveSiteNames(authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getActiveSiteNames(authHeaders(token)),
+      refreshToken
+    ),
     enabled
   })
 }
@@ -29,11 +32,14 @@ export const useGetActiveSiteNames = () => {
 export const useGetSelectedSite = () => {
   const { selectedSite } = useContext(EnforcementCtx)
 
-  const { enabled, token } = useEnableQuery()
+  const { enabled, token, refreshToken } = useEnableQuery()
 
   return useQuery({
     queryKey: ["getSite", selectedSite],
-    queryFn: () => AppActions.getSite(selectedSite, authHeaders(token)),
+    queryFn: () => withTokenRefresh(
+      () => AppActions.getSite(selectedSite, authHeaders(token)),
+      refreshToken
+    ),
     enabled: enabled && !!selectedSite && selectedSite !== "No Site"
   })
 }
