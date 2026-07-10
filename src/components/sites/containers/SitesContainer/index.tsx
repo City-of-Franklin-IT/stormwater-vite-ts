@@ -19,7 +19,6 @@ function SitesContainer({ sites }: { sites: AppTypes.SiteInterface[] }) {
   return (
     <Motion animation={"fadeInOut"}>
       <div className="flex flex-col my-10">
-
         <div className="flex justify-between mb-4 w-full">
           <Search ctx={SitesCtx} />
           <div className="flex gap-4 ml-auto">
@@ -27,7 +26,6 @@ function SitesContainer({ sites }: { sites: AppTypes.SiteInterface[] }) {
             <Components.OpenIssuesBtn onClick={onOpenIssuesBtnClick} />
           </div>
         </div>
-
         <div className="flex flex-col gap-8 shadow-xl">
           <div className={styles.mapDiv}>
             <div className="flex-1">
@@ -37,14 +35,11 @@ function SitesContainer({ sites }: { sites: AppTypes.SiteInterface[] }) {
               <SitesTable tableData={tableData} />
             </div>
           </div>
-
           <div className="flex flex-col p-10 pt-0 border-4 border-secondary/30 border-double rounded shadow-xl">
             <h3 className={styles.header}>Activity</h3>
-
             <SitesActivityCalendar sites={tableData} />
           </div>
         </div>
-
       </div>
     </Motion>
   )
