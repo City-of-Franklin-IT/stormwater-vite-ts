@@ -1,15 +1,25 @@
 import { LogLevel } from "@azure/msal-browser"
+import type { AccountInfo } from "@azure/msal-browser"
+
+export const setAuth = () => {
+  const auth = {
+    clientId: import.meta.env.VITE_CLIENT_ID,
+    authority: import.meta.env.VITE_AUTH_AUTHORITY,
+    redirectUri: import.meta.env.VITE_AUTH_REDIRECT_URI,
+    postLogoutRedirectUri: import.meta.env.VITE_AUTH_POST_LOGOUT_REDIRECT_URI,
+    navigateToLoginRequestUrl: true,
+    allowRedirectInIframe: true
+  }
+
+  return auth
+}
+
+const auth = setAuth()
 
 export const msalConfig = {
-  auth: {
-    clientId: "10dff41b-bba0-4fcb-83a6-147c19927e6b",
-    authority: "https://login.microsoftonline.com/f6644f52-f834-4a2f-a433-e6bc40d7c17f/",
-    redirectUri: "https://dev.franklintn.gov/stormwater",
-    postLogoutRedirectUri: "/",
-    navigateToLoginRequestUrl: false
-  },
+  auth,
   cache: {
-    cacheLocation: "sessionStorage",
+    cacheLocation: "localStorage",
     storeAuthStateInCookie: false
   },
   system: {
@@ -38,5 +48,10 @@ export const msalConfig = {
 
 export const loginRequest = {
   scopes: ["openid", "profile"],
-  redirectUri: "https://dev.franklintn.gov/stormwater"
+  redirectUri: auth.redirectUri
 }
+
+export const acquireRequest = (account: AccountInfo) => ({
+  scopes: [`${ import.meta.env.VITE_ENTRA_CLIENT_ID }/.default`],
+  account
+})

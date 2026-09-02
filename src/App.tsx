@@ -1,11 +1,10 @@
-import { useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes } from "react-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { ToastContainer } from "react-toastify"
-import { APP_BASE } from "./config"
 import { AuthCtxProvider } from "./context/Auth"
 import "react-toastify/dist/ReactToastify.css"
+import { useHandleVisibilityChange } from "./helpers/hooks"
 
 // Components
 import Layout from "./components/layout/Layout"
@@ -24,19 +23,10 @@ import Docs from "./pages/Docs"
 const queryClient = new QueryClient()
 
 function AppContent() {
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        queryClient.refetchQueries()
-      }
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [])
+  useHandleVisibilityChange(queryClient)
 
   return (
-    <Router basename={APP_BASE}>
+    <Router basename={import.meta.env.VITE_APP_BASE}>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Login />} />

@@ -7,7 +7,7 @@ export default () => {
     instance
       .logoutPopup({
         account: accounts[0],
-        postLogoutRedirectUri: "/"
+        postLogoutRedirectUri: import.meta.env.VITE_AUTH_POST_LOGOUT_REDIRECT_URI
       })
   }
 }

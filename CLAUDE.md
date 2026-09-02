@@ -21,6 +21,7 @@ City of Franklin stormwater site inspection and violation tracking application.
 **Environment:**
 - Dev URL: https://dev.franklintn.gov/stormwater/
 - API: https://api.franklin-gov.com/api/v2/eng/stormwater
+- App base, title, API URLs and all MSAL settings are supplied via `VITE_*` env vars (see `.env.example`), typed in `src/vite-env.d.ts`. Copy `.env.example` → `.env` and `.env.development.example` → `.env.development`; both are git-ignored.
 
 ## Project Structure
 
@@ -49,7 +50,7 @@ ComponentName/
 - React Context for UI state
 - Custom hooks for logic extraction
 
-**Authentication:** Azure AD via MSAL. Dev mode uses hardcoded 'dev-token'. Use `useEnableQuery()` to tie query enabled state to token availability.
+**Authentication:** Azure AD via MSAL (`@azure/msal-browser`). `AuthProvider` (`src/context/Auth/hooks/AuthProvider.tsx`) initializes the MSAL instance; `AuthCtxProvider` (`src/context/Auth/index.tsx`) acquires an **access token** for the `${VITE_ENTRA_CLIENT_ID}/.default` scope via `acquireTokenSilent`, falling back to a popup and then a login redirect, and refreshes it on tab focus and on any `401` response. `VITE_ENTRA_CLIENT_ID` is eng-api-ts's shared Entra API app registration, not this app's own `VITE_CLIENT_ID`. In development (`import.meta.env.DEV`) MSAL is bypassed and `VITE_MOCK_TOKEN` (`.env.development`) stands in as the access token. Use `useEnableQuery()` to tie query enabled state to token availability.
 
 **Forms:** React Hook Form with consistent component patterns for inputs/labels/errors.
 

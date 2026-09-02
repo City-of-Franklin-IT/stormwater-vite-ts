@@ -1,74 +1,95 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import type { ReactNode } from 'react'
 import { useMsal } from '@azure/msal-react'
-import { loginRequest } from '@/context/Auth/config'
+import { acquireRequest, loginRequest } from '@/context/Auth/config'
 
 interface AuthContextType {
   isAuthenticated: boolean
   token: string | undefined
   isLoading: boolean
-  refreshToken: (forceRefresh?: boolean) => Promise<string | undefined>
+  refreshToken: (forceRefresh?: boolean) => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const MOCK_AUTH = import.meta.env.VITE_MOCK_AUTH === 'true'
-const MOCK_TOKEN = 'dev-token-12345'
-
-export function AuthCtxProvider({ children }: { children: ReactNode }) {
-  const { instance, inProgress } = useMsal()
+export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
+  const { instance, accounts, inProgress } = useMsal()
   const [token, setToken] = useState<string | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const isReady = inProgress === 'none'
-  const activeAccount = instance.getActiveAccount()
-
-  useEffect(() => {
-    if (MOCK_AUTH) {
-      setToken(MOCK_TOKEN)
+  const getToken = useCallback(async () => {
+    if(import.meta.env.DEV) {
+      setToken(import.meta.env.VITE_MOCK_TOKEN)
+      setIsLoading(false)
       return
     }
 
-    if (!isReady) return
-
-    if (!activeAccount) {
-      setToken(undefined)
-    } else {
-      setToken(activeAccount.idToken)
+    if(inProgress !== 'none') {
+      return
     }
-  }, [isReady, activeAccount])
 
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        refreshToken(true)
+    setIsLoading(true)
+
+    const activeAccount = instance.getActiveAccount()
+
+    if(!activeAccount && accounts.length === 0) {
+      setToken(undefined)
+      setIsLoading(false)
+      return
+    }
+
+    if(!activeAccount && accounts.length > 0) {
+      instance.setActiveAccount(accounts[0])
+      setIsLoading(false)
+      return
+    }
+
+    if(!activeAccount) {
+      setToken(undefined)
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      const request = acquireRequest(activeAccount)
+      const response = await instance.acquireTokenSilent(request)
+      setToken(response.accessToken)
+      setIsLoading(false)
+    } catch {
+      try {
+        const request = acquireRequest(activeAccount)
+        const response = await instance.acquireTokenPopup(request)
+        setToken(response.accessToken)
+        setIsLoading(false)
+      } catch {
+        instance.loginRedirect(loginRequest)
       }
     }
+  }, [instance, accounts, inProgress])
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [activeAccount])
+  const refreshToken = useCallback(async (forceRefresh = false) => {
+    const activeAccount = instance.getActiveAccount()
 
-  const refreshToken = async (forceRefresh = false): Promise<string | undefined> => {
-    if (MOCK_AUTH) return MOCK_TOKEN
-    if (!activeAccount) return undefined
+    if(!activeAccount || import.meta.env.DEV) return
+
     try {
-      const result = await instance.acquireTokenSilent({
-        ...loginRequest,
-        account: activeAccount,
-        forceRefresh
-      })
-      setToken(result.idToken)
-      return result.idToken
+      const request = { ...acquireRequest(activeAccount), forceRefresh }
+      const response = await instance.acquireTokenSilent(request)
+      setToken(response.accessToken)
     } catch {
-      setToken(undefined)
-      return undefined
+      instance.loginRedirect(loginRequest)
     }
-  }
+  }, [instance])
+
+  useEffect(() => {
+    getToken()
+  }, [inProgress, getToken])
 
   const value: AuthContextType = {
     isAuthenticated: !!token,
     token,
-    isLoading: !isReady && !MOCK_AUTH,
-    refreshToken
+    isLoading,
+    refreshToken,
   }
 
   return (
@@ -78,10 +99,9 @@ export function AuthCtxProvider({ children }: { children: ReactNode }) {
   )
 }
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext)
-
-  if (!context) {
+  if(!context) {
     throw new Error('useAuth must be used within AuthCtxProvider')
   }
 

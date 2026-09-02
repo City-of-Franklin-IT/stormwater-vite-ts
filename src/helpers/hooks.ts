@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
+import { QueryClient } from "@tanstack/react-query"
 import { useMsal } from "@azure/msal-react"
 import { AccountInfo } from "@azure/msal-browser"
-import { useAuth, MOCK_AUTH } from "@/context/Auth"
+import { useAuth } from "@/context/Auth"
 import { getUserDepartment } from "./utils"
-
-export const useGetToken = () => {
-  const { token } = useAuth()
-
-  return token
-}
 
 export const useEnableQuery = () => {
   const { token, isLoading, refreshToken } = useAuth()
@@ -26,7 +21,7 @@ export const useEnableQuery = () => {
 
 export const withTokenRefresh = async <T>(
   fn: () => Promise<T>,
-  refresh: (forceRefresh?: boolean) => Promise<string | undefined>
+  refresh: (forceRefresh?: boolean) => Promise<void>
 ): Promise<T> => {
   try {
     return await fn()
@@ -43,7 +38,7 @@ export const useReturnUserRoles = () => {
   const { instance } = useMsal()
   const activeAccount = instance.getActiveAccount()
 
-  if (import.meta.env.VITE_MOCK_AUTH === 'true') return ["task.write"]
+  if (import.meta.env.DEV) return ["task.write"]
 
   return activeAccount?.idTokenClaims?.roles ?? []
 }
@@ -55,7 +50,7 @@ export const useGetUserDepartment = () => {
   const activeAccount = instance.getActiveAccount()
 
   useEffect(() => {
-    if(MOCK_AUTH) {
+    if(import.meta.env.DEV) {
       setState({ department: 'IT', isLoading: false })
       return
     }
@@ -89,4 +84,20 @@ export const useDebounce = <T>(value: T, delay: number): T => {
   }, [value, delay])
 
   return state
+}
+
+export const useHandleVisibilityChange = (queryClient: QueryClient) => {
+  const { refreshToken } = useAuth()
+
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      if (!document.hidden) {
+        await refreshToken(true)
+        queryClient.refetchQueries()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [refreshToken, queryClient])
 }
