@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite --port 6001",
     "build": "NODE_OPTIONS=--max-old-space-size=4096 tsc && NODE_OPTIONS=--max-old-space-size=4096 vite build",
+    "build:istest": "NODE_OPTIONS=--max-old-space-size=4096 tsc && NODE_OPTIONS=--max-old-space-size=4096 vite build --mode istest",
     "deploy": "scp -r dist $USER@cofasv32:/opt/builds/stormwater-vite-ts",
+    "deploy:istest": "scp -r dist $USER@cofasv32:/opt/builds/test/stormwater-vite-ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest"

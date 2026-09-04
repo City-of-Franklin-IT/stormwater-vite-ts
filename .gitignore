@@ -48,5 +48,6 @@ tsconfig.tsbuildinfo
 .env.local
 .env.*.local
 .env.development
+.env.istest
 
 .npmrc
