@@ -1,7 +1,8 @@
 import { useContext, useState, useRef } from "react"
 import InspectorCtx from "../../context"
 import { InspectorTableProvider } from "../../tables/InspectorTable/context"
-import { useReturnUserRoles, useDebounce } from "@/helpers/hooks"
+import { useAuth } from "@/context/Auth"
+import { useDebounce } from "@/helpers/hooks"
 import { useScrollToFormRef } from "@/components/enforcement/containers/ViolationsContainer/hooks"
 import { useSetInspectorMapView, useHandleDeleteBtn } from "./hooks"
 
@@ -91,9 +92,9 @@ export const UpdateForm = (props: FormProps) => { // Update form
 export const UpdateInspectorBtn = ({ inspector }: { inspector: AppTypes.InspectorInterface }) => {
   const { dispatch } = useContext(InspectorCtx)
 
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
-  if(!roles.includes("task.write")) return null // Viewers
+  if(!canUpdate) return null // Viewers
 
   return (
     <UpdateBtn onClick={() => dispatch({ type: "SET_INSPECTOR_ID", payload: inspector.inspectorId })}>

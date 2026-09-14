@@ -1,5 +1,5 @@
 import { useContext, useMemo, useEffect, useRef } from "react"
-import { useReturnUserRoles } from "@/helpers/hooks"
+import { useAuth } from "@/context/Auth"
 import InspectorCtx from "../../context"
 import InspectorTableCtx from "./context"
 
@@ -39,7 +39,7 @@ export const useScrollToFormRef = () => {
 export const useHandleInspectorSiteSelection = (siteId: string) => {
   const { selection, dispatch } = useContext(InspectorTableCtx)
 
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
   const checked = !!selection.find(item => item === siteId)
 
@@ -49,7 +49,7 @@ export const useHandleInspectorSiteSelection = (siteId: string) => {
     } else dispatch({ type: "REMOVE_FROM_SELECTION", payload: siteId })
   }
 
-  const visible = roles.includes("task.write")
+  const visible = canUpdate
 
   return { checked, onChange, visible }
 }
@@ -125,8 +125,8 @@ export const useHandleInspectionDatesColumn = (row: InspectorTableData) => {
 * Returns className for create site log column; hides column if user does not have write permissions
 **/
 export const useHandleCreateSiteLogColumn = () => {
-  const roles = useReturnUserRoles()
-  const showBtn = roles.includes("task.write")
+  const { canUpdate } = useAuth()
+  const showBtn = canUpdate
   const className = !showBtn ?
     "hidden" :
     ""

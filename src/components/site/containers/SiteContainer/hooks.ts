@@ -13,7 +13,7 @@ import { TextSymbol } from "@arcgis/core/symbols"
 import { setSiteMarker } from "@/components/sites/containers/SitesContainer/utils"
 import EnforcementCtx from "@/components/enforcement/context"
 import SiteCtx from "../../context"
-import { useReturnUserRoles } from "@/helpers/hooks"
+import { useAuth } from "@/context/Auth"
 
 // Types
 import type * as AppTypes from "@/context/App/types"
@@ -55,16 +55,16 @@ export const useHandleForm = () => {
 * Returns update site button onClick handler and visibility based on user role
 **/
 export const useHandleButtons = (uuid: string) => {
-  const { siteUUID, dispatch } = useContext(SiteCtx) 
+  const { siteUUID, dispatch } = useContext(SiteCtx)
 
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
   const onClick = () => {
     const payload = !siteUUID ? uuid : ""
     dispatch({ type: "SET_SITE_UUID", payload })
   }
 
-  const visible = roles.includes("task.write")
+  const visible = canUpdate
 
   return { onClick, visible }
 }

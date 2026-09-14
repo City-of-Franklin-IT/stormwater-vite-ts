@@ -1,7 +1,6 @@
 import { useLocation, Link } from "react-router"
 import cofIcon from "@/assets/icons/cof/cof-primary-content.svg"
 import { useAuth } from "@/context/Auth"
-import { useReturnUserRoles } from "@/helpers/hooks"
 import useHandleLogoutRedirect from "@/context/Auth/hooks/useHandleLogoutRedirect"
 import { useGetInspectors, useIsEnforcmentPageActive } from "./hooks"
 import NavDropdown from "../nav/NavDropdown"
@@ -113,9 +112,9 @@ const CreateMenu = () => {
 
   const active = pathname.includes("create")
 
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
-  if(!roles.includes("task.write")) return null // Viewers
+  if(!canUpdate) return null // Viewers
 
   return (
     <NavDropdown

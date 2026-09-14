@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
-import { useReturnUserRoles } from "@/helpers/hooks"
+import { useAuth } from "@/context/Auth"
 import { setTableDataStyle } from "./utils"
 
 // Types
@@ -11,10 +11,10 @@ import * as AppTypes from "@/context/App/types"
 **/
 export const useHandleTableRow = (site: AppTypes.SiteInterface, index: number) => {
   const navigate = useNavigate()
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
   const onClick = () => {
-    if(!roles.includes("task.write")) {
+    if(!canUpdate) {
       return null
     }
 

@@ -1,5 +1,5 @@
 import { useContext, useMemo, useEffect } from "react"
-import { useReturnUserRoles } from "@/helpers/hooks"
+import { useAuth } from "@/context/Auth"
 import ContactsCtx from "../../context"
 
 // Types
@@ -80,10 +80,10 @@ export const useHandleTableData = (contacts: AppTypes.ContactInterface[]) => {
 **/
 export const useHandleTableRow = (contact: AppTypes.ContactInterface) => {
   const { dispatch } = useContext(ContactsCtx)
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
   const onClick = () => {
-    if(!roles.includes("task.write")) {
+    if(!canUpdate) {
       return null
     }
     

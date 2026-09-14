@@ -17,7 +17,8 @@ import { TextSymbol } from "@arcgis/core/symbols"
 import * as AppActions from "@/context/App/AppActions"
 import { mapHitTest, authHeaders } from "@/helpers/utils"
 import InspectorCtx from "../../context"
-import { useEnableQuery, useReturnUserRoles, withTokenRefresh } from "@/helpers/hooks"
+import { useAuth } from "@/context/Auth"
+import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { setSiteMarker } from "@/components/sites/containers/SitesContainer/utils"
 import { useSetTableData, useHandleBtns } from "@/components/sites/containers/SitesContainer/hooks"
 import { savedPopup, errorPopup } from "@/utils/Toast/Toast"
@@ -116,9 +117,9 @@ export const useHandleUpdateForm = () => {
 export const useHandleUpdateInspectorBtn = (inspectorId: string) => {
   const { dispatch } = useContext(InspectorCtx)
 
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
-  const visible = roles.includes("task.write")
+  const visible = canUpdate
 
   const onClick = () => {
     dispatch({ type: "SET_INSPECTOR_ID", payload: inspectorId })

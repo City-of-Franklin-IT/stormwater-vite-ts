@@ -34,15 +34,6 @@ export const withTokenRefresh = async <T>(
   }
 }
 
-export const useReturnUserRoles = () => {
-  const { instance } = useMsal()
-  const activeAccount = instance.getActiveAccount()
-
-  if (import.meta.env.DEV) return ["task.write"]
-
-  return activeAccount?.idTokenClaims?.roles ?? []
-}
-
 export const useGetUserDepartment = () => {
   const [state, setState] = useState<{ department: string | undefined, isLoading: boolean }>({ department: undefined, isLoading: true })
 

@@ -2,11 +2,13 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import type { ReactNode } from 'react'
 import { useMsal } from '@azure/msal-react'
 import { acquireRequest, loginRequest } from '@/context/Auth/config'
+import { getAccessTokenRoles } from "./utils"
 
 interface AuthContextType {
   isAuthenticated: boolean
   token: string | undefined
   isLoading: boolean
+  canUpdate: boolean
   refreshToken: (forceRefresh?: boolean) => Promise<void>
 }
 
@@ -16,10 +18,12 @@ export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
   const { instance, accounts, inProgress } = useMsal()
   const [token, setToken] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
+  const [canUpdate, setCanUpdate] = useState(false)
 
   const getToken = useCallback(async () => {
     if(import.meta.env.DEV) {
       setToken(import.meta.env.VITE_MOCK_TOKEN)
+      setCanUpdate(true)
       setIsLoading(false)
       return
     }
@@ -54,12 +58,14 @@ export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
       const request = acquireRequest(activeAccount)
       const response = await instance.acquireTokenSilent(request)
       setToken(response.accessToken)
+      setCanUpdate(getAccessTokenRoles(response.accessToken).includes("stormwater.write"))
       setIsLoading(false)
     } catch {
       try {
         const request = acquireRequest(activeAccount)
         const response = await instance.acquireTokenPopup(request)
         setToken(response.accessToken)
+        setCanUpdate(getAccessTokenRoles(response.accessToken).includes("stormwater.write"))
         setIsLoading(false)
       } catch {
         instance.loginRedirect(loginRequest)
@@ -89,6 +95,7 @@ export const AuthCtxProvider = ({ children }: { children: ReactNode }) => {
     isAuthenticated: !!token,
     token,
     isLoading,
+    canUpdate,
     refreshToken,
   }
 

@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback, useContext } from "react"
 import { useLocation, useNavigate } from "react-router"
 import EnforcementCtx from "@/components/enforcement/context"
-import { useReturnUserRoles } from "@/helpers/hooks"
+import { useAuth } from "@/context/Auth"
 import { calendarColorMap } from "./utils"
 
 // Types
@@ -314,10 +314,10 @@ const useHandleEventClick = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
   return useCallback((e: MbscCalendarEvent | MbscEventClickEvent) => {
-    if (!roles?.includes("task.write")) {
+    if (!canUpdate) {
       return null
     }
 
@@ -331,7 +331,7 @@ const useHandleEventClick = () => {
       dispatch({ type: "SET_FORM_UUID", payload: event.formUUID })
       dispatch({ type: "SET_ACTIVE_FORM", payload: event.form })
     }
-  }, [roles, pathname, navigate, dispatch])
+  }, [canUpdate, pathname, navigate, dispatch])
 }
 
 /**

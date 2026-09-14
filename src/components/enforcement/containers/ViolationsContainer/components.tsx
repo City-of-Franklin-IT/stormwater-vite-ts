@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from "react"
 import EnforcementCtx from "../../context"
 import { Link } from "react-router"
-import { useReturnUserRoles } from "@/helpers/hooks"
+import { useAuth } from "@/context/Auth"
 import { useHandleNavBtns, useHandleTableRowClick, useScrollToFormRef } from "./hooks"
 
 // Types
@@ -36,9 +36,9 @@ export const UpdateForm = (props: FormProps) => { // Update form
 type CreateBtnProps = { href: string, children: React.ReactNode }
 
 export const CreateBtn = (props: CreateBtnProps) => {
-  const roles = useReturnUserRoles()
+  const { canUpdate } = useAuth()
 
-  if(!roles.includes("task.write")) return null // Viewers
+  if(!canUpdate) return null // Viewers
 
   return (
     <div className="absolute top-8 left-1/2 -translate-x-1/2">
