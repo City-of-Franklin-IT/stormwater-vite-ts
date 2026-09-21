@@ -14,6 +14,7 @@ interface ImportMetaEnv {
   readonly VITE_AUTH_POST_LOGOUT_REDIRECT_URI: string
   readonly VITE_API_URL: string
   readonly VITE_ACTIVE_SITES_URL: string
+  readonly VITE_MCP_URL: string
   readonly VITE_MOCK_TOKEN?: string
 }
 

@@ -1,8 +1,10 @@
 import { useLocation, Link } from "react-router"
 import cofIcon from "@/assets/icons/cof/cof-primary-content.svg"
+import claudeIcon from "@/assets/icons/claude/claude.webp"
 import { useAuth } from "@/context/Auth"
 import useHandleLogoutRedirect from "@/context/Auth/hooks/useHandleLogoutRedirect"
 import { useGetInspectors, useIsEnforcmentPageActive } from "./hooks"
+import { useAiChatPanel } from "../AiChatPanel/hooks"
 import NavDropdown from "../nav/NavDropdown"
 
 // Types
@@ -35,6 +37,7 @@ export const Buttons = () => {
       <InspectorsMenu />
       <EnforcementMenu />
       <CreateMenu />
+      <AiChatToggleBtn />
       <LogoutBtn />
     </div>
   )
@@ -139,6 +142,22 @@ const CreateMenuItem = (props: CreateMenuItemProps) => {
 
   return (
     <li><Link to={props.href} className={`hover:cursor-pointer hover:bg-neutral ${ active ? "text-warning" : null }`}>{props.children}</Link></li>
+  )
+}
+
+const AiChatToggleBtn = () => {
+  const { open, dispatch } = useAiChatPanel()
+
+  return (
+    <button
+      type="button"
+      title="Ask Claude about this application"
+      aria-label={open ? "Close assistant panel" : "Open assistant panel"}
+      aria-expanded={open}
+      onClick={() => dispatch({ type: "TOGGLE" })}
+      className="btn btn-ghost btn-square rounded-none hover:bg-primary hover:shadow-none">
+        <img src={claudeIcon} alt="" className="w-8 h-8" />
+    </button>
   )
 }
 
