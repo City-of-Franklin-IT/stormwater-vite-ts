@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import claudeIcon from "@/assets/icons/claude/claude.webp"
 import { useAiChatPanel, useSendChatMessage } from "./hooks"
 
@@ -61,7 +63,13 @@ const MessageBubble = ({ message }: { message: ChatMessage }) => {
             ? "max-w-[85%] rounded-2xl rounded-br-sm bg-[color:var(--claude-user-bubble)] text-[color:var(--claude-user-bubble-content)] px-4 py-2.5 shadow-sm"
             : "max-w-[85%] rounded-2xl rounded-bl-sm bg-[color:var(--claude-accent)] text-[color:var(--claude-accent-content)] px-4 py-2.5 shadow-sm"
         }>
-          <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
+          {isUser
+            ? <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
+            : (
+              <div className="claude-markdown text-sm leading-relaxed">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
+              </div>
+            )}
       </div>
     </div>
   )
