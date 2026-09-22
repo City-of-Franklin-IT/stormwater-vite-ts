@@ -11,14 +11,35 @@ import type * as AppTypes from "@/context/App/types"
 import MapLegend from "@/components/map/MapLegend/index.tsx"
 import Loading from "@/components/layout/loading/Loading/index.tsx"
 
+// ArcGIS map web components
+import "@arcgis/map-components/components/arcgis-map"
+import "@arcgis/map-components/components/arcgis-search"
+import "@arcgis/map-components/components/arcgis-home"
+import "@arcgis/map-components/components/arcgis-zoom"
+import "@arcgis/map-components/components/arcgis-expand"
+import "@arcgis/map-components/components/arcgis-basemap-gallery"
+
 export const Map = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
-  const mapRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<HTMLArcgisMapElement>(null)
   const debounced = useDebounce(sites, 500)
   useSetSitesMapView(mapRef, debounced)
 
   return (
     <div className="flex-1 bg-neutral h-full">
-      <div ref={mapRef} className="relative w-full h-full">
+      <div className="relative w-full h-full">
+        <arcgis-map
+          ref={mapRef}
+          basemap="dark-gray-vector"
+          center="-86.86897349, 35.92531721"
+          zoom="12"
+          className="block w-full h-full">
+          <arcgis-search position="top-right"></arcgis-search>
+          <arcgis-home position="top-right"></arcgis-home>
+          <arcgis-zoom position="top-right"></arcgis-zoom>
+          <arcgis-expand position="top-right">
+            <arcgis-basemap-gallery></arcgis-basemap-gallery>
+          </arcgis-expand>
+        </arcgis-map>
         <div className="absolute bottom-4 left-4 z-10">
           <MapLegend sites={debounced} />
         </div>
