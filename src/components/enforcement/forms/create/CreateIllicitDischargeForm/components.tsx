@@ -8,15 +8,26 @@ import { StreamWatershedEnum } from "./hooks"
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
 
+// ArcGIS map web components
+import "@arcgis/map-components/components/arcgis-map"
+import "@arcgis/map-components/components/arcgis-search"
+
 export const Map = ({ visible }: { visible: boolean }) => {
-  const mapRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<HTMLArcgisMapElement>(null)
   useSetIllicitDischargeMapView(mapRef)
 
   if(!visible) return null
 
   return (
     <div className="w-full h-[50vh] overflow-hidden bg-transparent shadow-xl rounded-xl touch-none">
-      <div ref={mapRef} className="relative w-full h-full"></div>
+      <arcgis-map
+        ref={mapRef}
+        basemap="dark-gray-vector"
+        center="-86.86897349, 35.92531721"
+        zoom="12"
+        className="block relative w-full h-full">
+        <arcgis-search position="top-left"></arcgis-search>
+      </arcgis-map>
     </div>
   )
 }

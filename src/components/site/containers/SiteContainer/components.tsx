@@ -20,6 +20,13 @@ import SitesActivityCalendar from "@/components/sites/calendar/SitesActivityCale
 import DateRangeFilter from "../../filters/DateRangeFilter"
 import SiteIssuesTable from "../../tables/SiteIssuesTable"
 
+// ArcGIS map web components
+import "@arcgis/map-components/components/arcgis-map"
+import "@arcgis/map-components/components/arcgis-home"
+import "@arcgis/map-components/components/arcgis-zoom"
+import "@arcgis/map-components/components/arcgis-expand"
+import "@arcgis/map-components/components/arcgis-basemap-gallery"
+
 export const Header = ({ site }: { site: AppTypes.SiteInterface }) => {
   const { label, className } = setSiteStatusHeader(site)
 
@@ -89,12 +96,24 @@ export const Buttons = ({ site }: { site: AppTypes.SiteInterface }) => {
 }
 
 export const Map = ({ site }: { site: AppTypes.SiteInterface }) => {
-  const mapRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<HTMLArcgisMapElement>(null)
   useSetSiteMapView(mapRef, site)
 
   return (
     <div className="flex-1 flex w-full h-full overflow-hidden rounded-xl shadow-xl touch-none">
-      <div ref={mapRef} className="relative w-full h-full">
+      <div className="relative w-full h-full">
+        <arcgis-map
+          ref={mapRef}
+          basemap="dark-gray-vector"
+          center={`${ site.xCoordinate }, ${ site.yCoordinate }`}
+          zoom="16"
+          className="block w-full h-full">
+          <arcgis-home position="bottom-right"></arcgis-home>
+          <arcgis-zoom position="bottom-right"></arcgis-zoom>
+          <arcgis-expand position="bottom-right">
+            <arcgis-basemap-gallery></arcgis-basemap-gallery>
+          </arcgis-expand>
+        </arcgis-map>
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
           <SiteDetails site={site} />
         </div>

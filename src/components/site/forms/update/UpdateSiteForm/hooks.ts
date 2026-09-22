@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState, useRef } from "react"
 import { useForm, useFormContext } from "react-hook-form"
 import { useQueryClient } from "@tanstack/react-query"
-import Map from "@arcgis/core/Map"
-import MapView from "@arcgis/core/views/MapView"
 import Point from "@arcgis/core/geometry/Point"
 import Graphic from "@arcgis/core/Graphic"
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
@@ -41,23 +39,15 @@ export const useUpdateSiteFormContext = () => { // UpdateSiteForm context
 
 
 /**
-* Handles update site map view and graphics
+* Handles update site map view and graphics; returns a ref for the declarative <arcgis-map> element
 **/
 export const useSetCreateSiteMapView = () => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
-  const mapRef = useRef<HTMLDivElement|null>(null)
+  const mapRef = useRef<HTMLArcgisMapElement | null>(null)
 
-  useCreateMapView(mapRef, setState)
+  useMapViewReady(mapRef, setState)
   useSetMapGraphics(state)
-  
-  useEffect(() => {
-    if(state.view) {
-      state.view.when(() => {
-        setState(prevState => ({ ...prevState, isLoaded: true }))
-      })
-    }
-  }, [state.view])
 
   return mapRef
 }
@@ -170,49 +160,45 @@ const useHandleFormSubmit = () => {
 }
 
 /**
-* Handles update site map view
+* Reads the MapView off the declarative <arcgis-map> element once it's ready, wires up the
+* point/text graphics layers, and sets the form's coordinates from map clicks
 **/
-const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
-  const { setValue, getValues } = useFormContext<AppTypes.SiteCreateInterface>()
-
-  const xCoordinate = getValues("xCoordinate")
-  const yCoordinate = getValues("yCoordinate")
+const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement | null>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
+  const { setValue } = useFormContext<AppTypes.SiteCreateInterface>()
 
   useEffect(() => {
-    const coordinates = { xCoordinate, yCoordinate }
+    const mapEl = mapRef.current
+    if(!mapEl) return
 
-    if(!mapRef?.current || !coordinates) return
+    let clickHandle: { remove: () => void } | undefined
 
-    const map = new Map({ basemap: "dark-gray-vector" })
+    const onViewReady = () => {
+      const view = mapEl.view
+      if(!view) return
 
-    const mapView = new MapView({
-      container: mapRef.current,
-      map,
-      center: [coordinates.xCoordinate, coordinates.yCoordinate],
-      zoom: 16,
-      ui: { components: [] }
-    })
+      const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
+      const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer" })
+      view.map?.addMany([pointGraphicsLayer, textGraphicsLayer])
 
-    mapView.when(() => setState(prevState => ({ ...prevState, view: mapView })))
+      clickHandle = view.on("click", async (e) => {
+        const mappoint = e.mapPoint
 
-    const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
-    const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer" })
-    map.addMany([pointGraphicsLayer, textGraphicsLayer])
+        setValue("xCoordinate", mappoint.longitude, { shouldValidate: true, shouldDirty: true })
+        setValue("yCoordinate", mappoint.latitude, { shouldValidate: true, shouldDirty: true })
+      })
 
-    const onMapClick = mapView.on("click", async (e) => {
-      const mappoint = e.mapPoint
+      view.when(() => {
+        setState(prevState => ({ ...prevState, view, isLoaded: true }))
+      })
+    }
 
-      setValue("xCoordinate", mappoint.longitude, { shouldValidate: true, shouldDirty: true })
-      setValue("yCoordinate", mappoint.latitude, { shouldValidate: true, shouldDirty: true })
-    })
+    mapEl.addEventListener("arcgisViewReadyChange", onViewReady, { once: true })
 
     return () => {
-      setTimeout(() => {
-        onMapClick?.remove()
-        mapView?.destroy()
-      }, 50)
+      mapEl.removeEventListener("arcgisViewReadyChange", onViewReady)
+      clickHandle?.remove()
     }
-  }, [mapRef, xCoordinate, yCoordinate, setState, setValue])
+  }, [mapRef, setState, setValue])
 }
 
 /**

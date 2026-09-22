@@ -5,12 +5,23 @@ import { useCreateSiteFormContext, useSetCreateSiteMapView } from "./hooks"
 // Components
 import FormLabel from "@/components/form-elements/FormLabel"
 
+// ArcGIS map web components
+import "@arcgis/map-components/components/arcgis-map"
+import "@arcgis/map-components/components/arcgis-search"
+
 export const Map = () => { // Map input
-  const mapRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<HTMLArcgisMapElement>(null)
   useSetCreateSiteMapView(mapRef)
 
   return (
-    <div ref={mapRef} className="relative w-full h-full"></div>
+    <arcgis-map
+      ref={mapRef}
+      basemap="dark-gray-vector"
+      center="-86.86897349, 35.92531721"
+      zoom="12"
+      className="block relative w-full h-full">
+      <arcgis-search position="top-left"></arcgis-search>
+    </arcgis-map>
   )
 }
 

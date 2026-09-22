@@ -1,18 +1,11 @@
 import { useContext, useEffect, useCallback, useState, useRef } from "react"
 import { useNavigate } from "react-router"
 import { useQueryClient } from "@tanstack/react-query"
-import Map from "@arcgis/core/Map"
-import MapView from "@arcgis/core/views/MapView"
 import Point from "@arcgis/core/geometry/Point"
 import Multipoint from "@arcgis/core/geometry/Multipoint"
 import Graphic from "@arcgis/core/Graphic"
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
-import Search from "@arcgis/core/widgets/Search"
-import Home from "@arcgis/core/widgets/Home"
-import Zoom from "@arcgis/core/widgets/Zoom"
-import BasemapGallery from "@arcgis/core/widgets/BasemapGallery"
-import Expand from "@arcgis/core/widgets/Expand"
 import { TextSymbol } from "@arcgis/core/symbols"
 import * as AppActions from "@/context/App/AppActions"
 import { mapHitTest, authHeaders } from "@/helpers/utils"
@@ -38,22 +31,14 @@ export const useHandleInspectorContainer = (sites: AppTypes.SiteInterface[]) => 
 }
 
 /**
-* Initializes and manages the ArcGIS map view for the inspector page
+* Initializes and manages the ArcGIS map view for the inspector page; mapRef points to the declarative <arcgis-map> element
 **/
-export const useSetInspectorMapView = (mapRef: React.RefObject<HTMLDivElement>, sites: AppTypes.SiteInterface[]) => {
+export const useSetInspectorMapView = (mapRef: React.RefObject<HTMLArcgisMapElement>, sites: AppTypes.SiteInterface[]) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
-  useCreateMapView(mapRef, setState)
+  useMapViewReady(mapRef, setState)
   useUpdateMapExtent(state.view, sites)
   useSetMapGraphics(sites, state)
-
-  useEffect(() => {
-    if(state.view) {
-      state.view.when(() => {
-        setState(prevState => ({ ...prevState, isLoaded: true }))
-      })
-    }
-  }, [state.view])
 }
 
 /**
@@ -168,59 +153,47 @@ export const useHandleDeleteBtn = () => {
 }
 
 /**
-* Creates the ArcGIS MapView instance with search, basemap, and navigation widgets
+* Reads the MapView off the declarative <arcgis-map> element once it's ready, wires up
+* the point/text graphics layers, and forwards marker clicks to the site page
 **/
-const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
+const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if(!mapRef?.current) return
+    const mapEl = mapRef.current
+    if(!mapEl) return
 
-    const map = new Map({ basemap: "dark-gray-vector" })
+    let clickHandle: { remove: () => void } | undefined
 
-    const mapView = new MapView({
-      container: mapRef.current,
-      map,
-      center: [-86.86897349, 35.92531721],
-      zoom: 12,
-      ui: { components: [] }
-    })
+    const onViewReady = () => {
+      const view = mapEl.view
+      if(!view) return
 
-    mapView.when(() => {
-      const searchWidget = new Search({ view: mapView })
-      const homeWidget = new Home({ view: mapView })
-      const zoomWidget = new Zoom({ view: mapView })
-      const basemapGallery = new BasemapGallery({ view: mapView })
-      const basemapExpand = new Expand({ view: mapView, content: basemapGallery })
+      const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
+      const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer", minScale: 20000 })
+      view.map?.addMany([pointGraphicsLayer, textGraphicsLayer])
 
-      mapView.ui.add(searchWidget, { position: "top-right" })
-      mapView.ui.add(homeWidget, { position: "top-right" })
-      mapView.ui.add(zoomWidget, { position: "top-right" })
-      mapView.ui.add(basemapExpand, { position: "top-right" })
+      clickHandle = view.on("click", async (e) => {
+        const results = (await view.hitTest(e)).results as __esri.ViewHit[]
 
-      setState(prevState => ({ ...prevState, view: mapView }))
-    })
+        const siteHit = mapHitTest(results)
 
-    const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
-    const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer", minScale: 20000 })
-    map.addMany([pointGraphicsLayer, textGraphicsLayer])
+        if(siteHit) {
+          const hit = siteHit as MapHitInterface
+          navigate(`/site/${ hit.graphic.attributes.uuid }`)
+        }
+      })
 
-    const onMapClick = mapView.on("click", async (e) => {
-      const results = (await mapView.hitTest(e)).results as __esri.ViewHit[]
+      view.when(() => {
+        setState(prevState => ({ ...prevState, view, isLoaded: true }))
+      })
+    }
 
-      const siteHit = mapHitTest(results)
-
-      if(siteHit) {
-        const hit = siteHit as MapHitInterface
-        navigate(`/site/${ hit.graphic.attributes.uuid }`)
-      }
-    })
+    mapEl.addEventListener("arcgisViewReadyChange", onViewReady, { once: true })
 
     return () => {
-      setTimeout(() => {
-        onMapClick.remove()
-        mapView.destroy()
-      }, 50)
+      mapEl.removeEventListener("arcgisViewReadyChange", onViewReady)
+      clickHandle?.remove()
     }
   }, [mapRef, setState, navigate])
 }

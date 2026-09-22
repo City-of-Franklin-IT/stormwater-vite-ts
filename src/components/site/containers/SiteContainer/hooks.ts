@@ -1,14 +1,8 @@
 import { useContext, useEffect, useState, useRef } from "react"
-import Map from "@arcgis/core/Map"
-import MapView from "@arcgis/core/views/MapView"
 import Point from "@arcgis/core/geometry/Point"
 import Graphic from "@arcgis/core/Graphic"
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
-import Home from "@arcgis/core/widgets/Home"
-import Zoom from "@arcgis/core/widgets/Zoom"
-import BasemapGallery from "@arcgis/core/widgets/BasemapGallery"
-import Expand from "@arcgis/core/widgets/Expand"
 import { TextSymbol } from "@arcgis/core/symbols"
 import { setSiteMarker } from "@/components/sites/containers/SitesContainer/utils"
 import EnforcementCtx from "@/components/enforcement/context"
@@ -19,22 +13,14 @@ import { useAuth } from "@/context/Auth"
 import type * as AppTypes from "@/context/App/types"
 
 /**
-* Initializes and manages the ArcGIS map view for a single site page
+* Initializes and manages the ArcGIS map view for a single site page; mapRef points to the declarative <arcgis-map> element
 **/
-export const useSetSiteMapView = (mapRef: React.RefObject<HTMLDivElement>, site: AppTypes.SiteInterface) => {
+export const useSetSiteMapView = (mapRef: React.RefObject<HTMLArcgisMapElement>, site: AppTypes.SiteInterface) => {
   const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
-  useCreateMapView(mapRef, setState, site)
+  useMapViewReady(mapRef, setState)
   useUpdateMapExtent(state.view, site)
   useSetMapGraphics(site, state)
-
-  useEffect(() => {
-    if(state.view) {
-      state.view.when(() => {
-        setState(prevState => ({ ...prevState, isLoaded: true }))
-      })
-    }
-  }, [state.view])
 }
 
 /**
@@ -83,45 +69,32 @@ export const useHandleSiteIssuesCheckbox = () => {
 }
 
 /**
-* Creates the ArcGIS MapView instance with basemap widgets and click handler
+* Reads the MapView off the declarative <arcgis-map> element once it's ready and wires up the point/text graphics layers
 **/
-const useCreateMapView = (mapRef: React.RefObject<HTMLDivElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>, site: AppTypes.SiteInterface) => {
+const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
   useEffect(() => {
-    if(!mapRef?.current) return
+    const mapEl = mapRef.current
+    if(!mapEl) return
 
-    const map = new Map({ basemap: "dark-gray-vector" })
+    const onViewReady = () => {
+      const view = mapEl.view
+      if(!view) return
 
-    const mapView = new MapView({
-      container: mapRef.current,
-      map,
-      center: [site.xCoordinate, site.yCoordinate],
-      zoom: 16,
-      ui: { components: [] }
-    })
+      const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
+      const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer", minScale: 20000 })
+      view.map?.addMany([pointGraphicsLayer, textGraphicsLayer])
 
-    mapView.when(() => {
-      const homeWidget = new Home({ view: mapView })
-      const zoomWidget = new Zoom({ view: mapView })
-      const basemapGallery = new BasemapGallery({ view: mapView })
-      const basemapExpand = new Expand({ view: mapView, content: basemapGallery })
+      view.when(() => {
+        setState(prevState => ({ ...prevState, view, isLoaded: true }))
+      })
+    }
 
-      mapView.ui.add(homeWidget, { position: "bottom-right" })
-      mapView.ui.add(zoomWidget, { position: "bottom-right" })
-      mapView.ui.add(basemapExpand, { position: "bottom-right" })
-
-      setState(prevState => ({ ...prevState, view: mapView }))
-    })
-
-    const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
-    const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer", minScale: 20000 })
-    map.addMany([pointGraphicsLayer, textGraphicsLayer])
+    mapEl.addEventListener("arcgisViewReadyChange", onViewReady, { once: true })
 
     return () => {
-      setTimeout(() => {
-        mapView.destroy()
-      }, 50)
+      mapEl.removeEventListener("arcgisViewReadyChange", onViewReady)
     }
-  }, [mapRef, setState, site])
+  }, [mapRef, setState])
 }
 
 /**
