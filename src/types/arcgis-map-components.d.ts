@@ -1,12 +1,11 @@
 import type * as React from "react"
+import type MapView from "@arcgis/core/views/MapView"
 
-type ArcgisWidgetProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
-  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "manual"
-}
+type ArcgisWidgetProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
 
 declare global {
   interface HTMLArcgisMapElement extends HTMLElement {
-    view?: __esri.MapView
+    view?: MapView
   }
 
   interface HTMLElementTagNameMap {
@@ -28,7 +27,7 @@ declare global {
       "arcgis-search": ArcgisWidgetProps
       "arcgis-home": ArcgisWidgetProps
       "arcgis-zoom": ArcgisWidgetProps
-      "arcgis-expand": ArcgisWidgetProps
+      "arcgis-expand": ArcgisWidgetProps & { mode?: "auto" | "drawer" | "floating" }
       "arcgis-basemap-gallery": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
     }
   }

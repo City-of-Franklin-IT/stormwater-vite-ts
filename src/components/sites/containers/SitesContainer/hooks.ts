@@ -4,14 +4,17 @@ import Point from "@arcgis/core/geometry/Point"
 import Graphic from "@arcgis/core/Graphic"
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
-import { TextSymbol } from "@arcgis/core/symbols"
+import TextSymbol from "@arcgis/core/symbols/TextSymbol"
 import { mapHitTest } from "@/helpers/utils"
 import SitesCtx from "../../context"
 import { setSiteMarker } from "./utils"
 
 // Types
+import type MapView from "@arcgis/core/views/MapView"
+import type { ViewHit } from "@arcgis/core/views/types"
 import * as AppTypes from "@/context/App/types"
 import Multipoint from "@arcgis/core/geometry/Multipoint"
+import { ClickEvent } from "@arcgis/core/views/input/types"
 
 export interface MapHitInterface {
   graphic: {
@@ -47,7 +50,7 @@ export const useHandleSitesContainer = (sites: AppTypes.SiteInterface[]) => {
 * Handles sites map view, extent, and graphics; mapRef points to the declarative <arcgis-map> element
 **/
 export const useSetSitesMapView = (mapRef: React.RefObject<HTMLArcgisMapElement>, sites: AppTypes.SiteInterface[]) => {
-  const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
+  const [state, setState] = useState<{ view: MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
   useMapViewReady(mapRef, setState)
   useUpdateMapExtent(state.view, sites)
@@ -114,7 +117,7 @@ export const useHandleBtns = <T extends FilterableCtx>(ctx: React.Context<T>) =>
 * Reads the MapView off the declarative <arcgis-map> element once it's ready, wires up
 * the point/text graphics layers, and forwards marker clicks to the site page
 **/
-const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
+const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState: React.Dispatch<React.SetStateAction<{ view: MapView | null, isLoaded: boolean }>>) => {
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -131,8 +134,8 @@ const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState
       const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer", minScale: 20000 })
       view.map?.addMany([pointGraphicsLayer, textGraphicsLayer])
 
-      clickHandle = view.on("click", async (e) => {
-        const results = (await view.hitTest(e)).results as __esri.ViewHit[]
+      clickHandle = view.on("click", async (e: ClickEvent) => {
+        const results = (await view.hitTest(e)).results as ViewHit[]
 
         const siteHit = mapHitTest(results)
 
@@ -159,7 +162,7 @@ const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState
 /**
 * Handles sites map extent changes
 **/
-const useUpdateMapExtent = (view: __esri.MapView | null, sites: AppTypes.SiteInterface[]) => {
+const useUpdateMapExtent = (view: MapView | null, sites: AppTypes.SiteInterface[]) => {
 
   useEffect(() => {
     if(!view) return
@@ -184,7 +187,7 @@ const useUpdateMapExtent = (view: __esri.MapView | null, sites: AppTypes.SiteInt
 /**
 * Handles sites map graphics changes
 **/
-const useSetMapGraphics = (sites: AppTypes.SiteInterface[], state: { view: __esri.MapView | null }) => {
+const useSetMapGraphics = (sites: AppTypes.SiteInterface[], state: { view: MapView | null }) => {
 
   useEffect(() => {
     if(!state.view) return

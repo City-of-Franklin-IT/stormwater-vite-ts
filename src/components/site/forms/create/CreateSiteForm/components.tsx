@@ -20,7 +20,7 @@ export const Map = () => { // Map input
       center="-86.86897349, 35.92531721"
       zoom="12"
       className="block relative w-full h-full">
-      <arcgis-search position="top-left"></arcgis-search>
+      <arcgis-search slot="top-left"></arcgis-search>
     </arcgis-map>
   )
 }

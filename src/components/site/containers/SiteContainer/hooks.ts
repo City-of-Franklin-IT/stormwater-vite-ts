@@ -3,7 +3,7 @@ import Point from "@arcgis/core/geometry/Point"
 import Graphic from "@arcgis/core/Graphic"
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
-import { TextSymbol } from "@arcgis/core/symbols"
+import TextSymbol from "@arcgis/core/symbols/TextSymbol"
 import { setSiteMarker } from "@/components/sites/containers/SitesContainer/utils"
 import EnforcementCtx from "@/components/enforcement/context"
 import SiteCtx from "../../context"
@@ -11,12 +11,13 @@ import { useAuth } from "@/context/Auth"
 
 // Types
 import type * as AppTypes from "@/context/App/types"
+import type MapView from "@arcgis/core/views/MapView"
 
 /**
 * Initializes and manages the ArcGIS map view for a single site page; mapRef points to the declarative <arcgis-map> element
 **/
 export const useSetSiteMapView = (mapRef: React.RefObject<HTMLArcgisMapElement>, site: AppTypes.SiteInterface) => {
-  const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
+  const [state, setState] = useState<{ view: MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
   useMapViewReady(mapRef, setState)
   useUpdateMapExtent(state.view, site)
@@ -71,7 +72,7 @@ export const useHandleSiteIssuesCheckbox = () => {
 /**
 * Reads the MapView off the declarative <arcgis-map> element once it's ready and wires up the point/text graphics layers
 **/
-const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
+const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState: React.Dispatch<React.SetStateAction<{ view: MapView | null, isLoaded: boolean }>>) => {
   useEffect(() => {
     const mapEl = mapRef.current
     if(!mapEl) return
@@ -100,7 +101,7 @@ const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState
 /**
 * Animates the map view to center on the site coordinates
 **/
-const useUpdateMapExtent = (view: __esri.MapView | null, site: AppTypes.SiteInterface) => {
+const useUpdateMapExtent = (view: MapView | null, site: AppTypes.SiteInterface) => {
 
   useEffect(() => {
     if(!view || !site) return
@@ -123,7 +124,7 @@ const useUpdateMapExtent = (view: __esri.MapView | null, site: AppTypes.SiteInte
 /**
 * Renders the site marker and label graphics on the map
 **/
-const useSetMapGraphics = (site: AppTypes.SiteInterface, state: { view: __esri.MapView | null }) => {
+const useSetMapGraphics = (site: AppTypes.SiteInterface, state: { view: MapView | null }) => {
 
   useEffect(() => {
     if(!state.view || !site) return

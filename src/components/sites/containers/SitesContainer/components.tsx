@@ -33,12 +33,12 @@ export const Map = ({ sites }: { sites: AppTypes.SiteInterface[] }) => {
           center="-86.86897349, 35.92531721"
           zoom="12"
           className="block w-full h-full">
-          <arcgis-search position="top-right"></arcgis-search>
-          <arcgis-home position="top-right"></arcgis-home>
-          <arcgis-zoom position="top-right"></arcgis-zoom>
-          <arcgis-expand position="top-right">
-            <arcgis-basemap-gallery></arcgis-basemap-gallery>
-          </arcgis-expand>
+            <arcgis-search slot="top-right"></arcgis-search>
+            <arcgis-home slot="top-right"></arcgis-home>
+            <arcgis-zoom slot="top-right"></arcgis-zoom>
+            <arcgis-expand slot="top-right">
+              <arcgis-basemap-gallery></arcgis-basemap-gallery>
+            </arcgis-expand>
         </arcgis-map>
         <div className="absolute bottom-4 left-4 z-10">
           <MapLegend sites={debounced} />

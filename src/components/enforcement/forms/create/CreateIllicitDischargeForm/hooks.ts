@@ -7,7 +7,7 @@ import Point from "@arcgis/core/geometry/Point"
 import Graphic from "@arcgis/core/Graphic"
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
-import { TextSymbol } from "@arcgis/core/symbols"
+import TextSymbol from "@arcgis/core/symbols/TextSymbol"
 import pinErrorIcon from "@/assets/icons/pin/error-pin.png"
 import { useEnableQuery, withTokenRefresh } from "@/helpers/hooks"
 import { errorPopup, savedPopup } from "@/utils/Toast/Toast"
@@ -18,6 +18,8 @@ import { handleCreateIllicitDischarge } from "./utils"
 
 // Types
 import * as AppTypes from "@/context/App/types"
+import type MapView from "@arcgis/core/views/MapView"
+import type { ClickEvent } from "@arcgis/core/views/input/types"
 
 export enum StreamWatershedEnum {
   AenonCreek = "Aenon Creek",
@@ -181,7 +183,7 @@ export const useSetInspectorOptions = () => { // Return inspectors and set <sele
 * Handles illicit discharge map view and graphics; mapRef points to the declarative <arcgis-map> element
 **/
 export const useSetIllicitDischargeMapView = (mapRef: React.RefObject<HTMLArcgisMapElement>) => {
-  const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
+  const [state, setState] = useState<{ view: MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
   useMapViewReady(mapRef, setState)
   useSetMapGraphics(state)
@@ -252,7 +254,7 @@ const useHandleFormSubmit = () => {
 * Reads the MapView off the declarative <arcgis-map> element once it's ready, wires up the
 * point graphics layer, and sets the form's coordinates from map clicks
 **/
-const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
+const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState: React.Dispatch<React.SetStateAction<{ view: MapView | null, isLoaded: boolean }>>) => {
   const { setValue } = useFormContext<AppTypes.IllicitDischargeCreateInterface>()
 
   useEffect(() => {
@@ -268,8 +270,9 @@ const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState
       const pointGraphicsLayer = new GraphicsLayer({ id: "pointGraphicsLayer" })
       view.map?.add(pointGraphicsLayer)
 
-      clickHandle = view.on("click", (e) => {
+      clickHandle = view.on("click", (e: ClickEvent) => {
         const mappoint = e.mapPoint
+        if(mappoint.longitude == null || mappoint.latitude == null) return
 
         setValue("xCoordinate", mappoint.longitude, { shouldValidate: true, shouldDirty: true })
         setValue("yCoordinate", mappoint.latitude, { shouldValidate: true, shouldDirty: true })
@@ -292,7 +295,7 @@ const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement>, setState
 /**
 * Handles illicit discharge map graphics
 **/
-const useSetMapGraphics = (state: { view: __esri.MapView | null }) => {
+const useSetMapGraphics = (state: { view: MapView | null }) => {
   const { watch } = useFormContext<AppTypes.IllicitDischargeCreateInterface>()
 
   const xCoordinate = watch("xCoordinate")

@@ -108,9 +108,9 @@ export const Map = ({ site }: { site: AppTypes.SiteInterface }) => {
           center={`${ site.xCoordinate }, ${ site.yCoordinate }`}
           zoom="16"
           className="block w-full h-full">
-          <arcgis-home position="bottom-right"></arcgis-home>
-          <arcgis-zoom position="bottom-right"></arcgis-zoom>
-          <arcgis-expand position="bottom-right">
+          <arcgis-home slot="bottom-right"></arcgis-home>
+          <arcgis-zoom slot="bottom-right"></arcgis-zoom>
+          <arcgis-expand slot="bottom-right">
             <arcgis-basemap-gallery></arcgis-basemap-gallery>
           </arcgis-expand>
         </arcgis-map>

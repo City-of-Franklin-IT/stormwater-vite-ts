@@ -2,6 +2,7 @@
 import { MapHitInterface } from "@/components/sites/containers/SitesContainer/hooks"
 import { AccountInfo, IPublicClientApplication } from "@azure/msal-browser"
 import { MotionProps } from "motion/react"
+import type { ViewHit } from "@arcgis/core/views/types"
 
 export const getUserDepartment = async (instance: IPublicClientApplication, activeAccount: AccountInfo) => {
   const graphConfig = {
@@ -41,7 +42,7 @@ export const formatPhone = (phone: string): string | undefined => { // Format ph
   }
 }
 
-export const mapHitTest = (results: __esri.ViewHit[]) => { // Checks if a feature is present in map hit results
+export const mapHitTest = (results: ViewHit[]) => { // Checks if a feature is present in map hit results
   return results.find(result => {
     const hit = result as MapHitInterface
 

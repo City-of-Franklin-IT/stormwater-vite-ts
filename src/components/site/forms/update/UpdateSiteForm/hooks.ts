@@ -5,7 +5,7 @@ import Point from "@arcgis/core/geometry/Point"
 import Graphic from "@arcgis/core/Graphic"
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer"
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol"
-import { TextSymbol } from "@arcgis/core/symbols"
+import TextSymbol from "@arcgis/core/symbols/TextSymbol"
 import EnforcementCtx from "@/components/enforcement/context"
 import SiteCtx from "@/components/site/context"
 import { useEnableQuery } from "@/helpers/hooks"
@@ -16,6 +16,8 @@ import { handleUpdateSite } from "./utils"
 
 // Types
 import * as AppTypes from "@/context/App/types"
+import type MapView from "@arcgis/core/views/MapView"
+import type { ClickEvent } from "@arcgis/core/views/input/types"
 
 /**
 * Returns update site form methods, cancel button onClick handler, and form submit function
@@ -42,7 +44,7 @@ export const useUpdateSiteFormContext = () => { // UpdateSiteForm context
 * Handles update site map view and graphics; returns a ref for the declarative <arcgis-map> element
 **/
 export const useSetCreateSiteMapView = () => {
-  const [state, setState] = useState<{ view: __esri.MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
+  const [state, setState] = useState<{ view: MapView | null, isLoaded: boolean }>({ view: null, isLoaded: false })
 
   const mapRef = useRef<HTMLArcgisMapElement | null>(null)
 
@@ -163,7 +165,7 @@ const useHandleFormSubmit = () => {
 * Reads the MapView off the declarative <arcgis-map> element once it's ready, wires up the
 * point/text graphics layers, and sets the form's coordinates from map clicks
 **/
-const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement | null>, setState: React.Dispatch<React.SetStateAction<{ view: __esri.MapView | null, isLoaded: boolean }>>) => {
+const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement | null>, setState: React.Dispatch<React.SetStateAction<{ view: MapView | null, isLoaded: boolean }>>) => {
   const { setValue } = useFormContext<AppTypes.SiteCreateInterface>()
 
   useEffect(() => {
@@ -180,8 +182,9 @@ const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement | null>, s
       const textGraphicsLayer = new GraphicsLayer({ id: "textGraphicsLayer" })
       view.map?.addMany([pointGraphicsLayer, textGraphicsLayer])
 
-      clickHandle = view.on("click", async (e) => {
+      clickHandle = view.on("click", async (e: ClickEvent) => {
         const mappoint = e.mapPoint
+        if(mappoint.longitude == null || mappoint.latitude == null) return
 
         setValue("xCoordinate", mappoint.longitude, { shouldValidate: true, shouldDirty: true })
         setValue("yCoordinate", mappoint.latitude, { shouldValidate: true, shouldDirty: true })
@@ -204,7 +207,7 @@ const useMapViewReady = (mapRef: React.RefObject<HTMLArcgisMapElement | null>, s
 /**
 * Handles update site map graphics
 **/
-const useSetMapGraphics = (state: { view: __esri.MapView | null }) => {
+const useSetMapGraphics = (state: { view: MapView | null }) => {
   const { watch } = useFormContext<AppTypes.SiteCreateInterface>()
 
   const xCoordinate = watch("xCoordinate")
