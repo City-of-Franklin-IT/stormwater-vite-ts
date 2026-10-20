@@ -55,6 +55,12 @@ export const formatDate = (date: string) => { // Format dates for react hook for
   return new Date(date).toISOString().split("T")[0]
 }
 
+export const emptyToNull = <T extends object>(data: T): T => { // Convert empty string values to null so nullable columns don't receive ""
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [key, value === "" ? null : value])
+  ) as T
+}
+
 const slideInLeft: MotionProps = {
   initial: { x: -100, opacity: 0 },
   animate: { x: 0, opacity: 1 },

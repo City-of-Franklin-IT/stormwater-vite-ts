@@ -1,6 +1,8 @@
 const baseUrl = import.meta.env.VITE_API_URL
 const activeSitesUrl = import.meta.env.VITE_ACTIVE_SITES_URL
 
+import { emptyToNull } from "@/helpers/utils"
+
 // Types
 import * as AppTypes from "./types"
 
@@ -57,7 +59,7 @@ export const createSite = async (formData: AppTypes.SiteCreateInterface, headers
   const res = await fetch(`${ baseUrl }/site`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -77,7 +79,7 @@ export const updateSite = async (formData: AppTypes.SiteCreateInterface, headers
   const res = await fetch(`${ baseUrl }/site/${ formData.uuid }`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ ...formData }),
+    body: JSON.stringify(emptyToNull(formData)),
   })
 
   if (res.status === 401) throw new Error('401')
@@ -142,7 +144,7 @@ export const createContact = async (formData: AppTypes.ContactCreateInterface, h
   const res = await fetch(`${ baseUrl }/contact`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -162,7 +164,7 @@ export const updateContact = async (formData: AppTypes.ContactCreateInterface, h
   const res = await fetch(`${ baseUrl }/contact/${ formData.uuid }`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -199,7 +201,7 @@ export const createSiteContact = async (formData: AppTypes.SiteContactCreateInte
   const res = await fetch(`${ baseUrl }/sitecontact`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -253,7 +255,7 @@ export const createFollowUp = async (formData: AppTypes.FollowUpCreateInterface,
   const res = await fetch(`${ baseUrl }/followup`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData }),
+    body: JSON.stringify(emptyToNull(formData)),
   })
 
   if (res.status === 401) throw new Error('401')
@@ -287,7 +289,7 @@ export const updateFollowUp = async (formData: AppTypes.FollowUpCreateInterface,
   const res = await fetch(`${ baseUrl }/followup/${ formData.uuid }`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ ...formData }),
+    body: JSON.stringify(emptyToNull(formData)),
   })
 
   if (res.status === 401) throw new Error('401')
@@ -352,7 +354,7 @@ export const createInspector = async (formData: AppTypes.InspectorCreateInterfac
   const res = await fetch(`${ baseUrl }/inspector`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -372,7 +374,7 @@ export const updateInspector = async (formData: AppTypes.InspectorCreateInterfac
   const res = await fetch(`${ baseUrl }/inspector/${ formData.inspectorId }`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -409,7 +411,7 @@ export const createSiteLog = async (formData: AppTypes.SiteLogCreateInterface, h
   const res = await fetch(`${ baseUrl }/log`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -443,7 +445,7 @@ export const updateSiteLog = async (formData: AppTypes.SiteLogCreateInterface, h
   const res = await fetch(`${ baseUrl }/log/${ formData.uuid }`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ ...formData }),
+    body: JSON.stringify(emptyToNull(formData)),
   })
 
   if (res.status === 401) throw new Error('401')
@@ -480,7 +482,7 @@ export const createViolation = async (formData: AppTypes.ConstructionViolationCr
   const res = await fetch(`${ baseUrl }/violation`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -530,7 +532,7 @@ export const updateViolation = async (formData: AppTypes.ConstructionViolationCr
   const res = await fetch(`${ baseUrl }/violation/${ formData.uuid }`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ ...formData }),
+    body: JSON.stringify(emptyToNull(formData)),
   })
 
   if (res.status === 401) throw new Error('401')
@@ -567,7 +569,7 @@ export const createComplaint = async (formData: AppTypes.ComplaintCreateInterfac
   const res = await fetch(`${ baseUrl }/complaint`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -615,7 +617,7 @@ export const updateComplaint = async (formData: AppTypes.ComplaintCreateInterfac
   const res = await fetch(`${ baseUrl }/complaint/${ formData.uuid }`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -652,7 +654,7 @@ export const createIllicitDischarge = async (formData: AppTypes.IllicitDischarge
   const res = await fetch(`${ baseUrl }/illicitdischarge`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -700,7 +702,7 @@ export const updateIllicitDischarge = async (formData: AppTypes.IllicitDischarge
   const res = await fetch(`${ baseUrl }/illicitdischarge/${ formData.uuid }`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -737,7 +739,7 @@ export const createInactiveSite = async (formData: AppTypes.InactiveSiteCreateIn
   const res = await fetch(`${ baseUrl }/inactive`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
@@ -774,7 +776,7 @@ export const createIncompleteSite = async (formData: AppTypes.IncompleteSiteCrea
   const res = await fetch(`${ baseUrl }/incomplete`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(emptyToNull(formData))
   })
 
   if (res.status === 401) throw new Error('401')
