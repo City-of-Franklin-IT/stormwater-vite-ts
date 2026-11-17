@@ -5,6 +5,7 @@ build
 coverage
 .env
 .env.*
+.npmrc
 .git
 .gitignore
 .vscode

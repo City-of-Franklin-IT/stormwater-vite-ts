@@ -4,8 +4,10 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 
-COPY package.json package-lock.json .npmrc* ./
-RUN npm ci
+COPY package.json package-lock.json ./
+# .npmrc (Mobiscroll registry token) is supplied as a build secret so it never lands in a layer:
+#   docker build --secret id=npmrc,src=.npmrc -t stormwater-vite-ts .
+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
 
 COPY . .
 RUN npm run build
