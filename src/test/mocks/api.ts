@@ -33,7 +33,7 @@ export const createMockSite = (): AppTypes.SiteInterface => ({
 
 export const createMockInspector = (): AppTypes.InspectorInterface => ({
   inspectorId: faker.string.alphanumeric(),
-  name: faker.name.fullName(),
+  name: faker.person.fullName(),
   email: faker.internet.email(),
   slug: faker.string.alpha(),
   inactive: false,

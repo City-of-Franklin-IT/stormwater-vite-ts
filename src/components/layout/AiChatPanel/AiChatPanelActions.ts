@@ -1,4 +1,6 @@
-const baseUrl = import.meta.env.VITE_MCP_URL
+import { MCP_URL } from "@/config"
+
+const baseUrl = MCP_URL
 
 export type ChatResponse = {
   sessionId: string

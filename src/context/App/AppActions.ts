@@ -1,10 +1,11 @@
-const baseUrl = import.meta.env.VITE_API_URL
-const activeSitesUrl = import.meta.env.VITE_ACTIVE_SITES_URL
-
+import { API_URL, ACTIVE_SITES_URL } from "@/config"
 import { emptyToNull } from "@/helpers/utils"
 
 // Types
 import * as AppTypes from "./types"
+
+const baseUrl = API_URL
+const activeSitesUrl = ACTIVE_SITES_URL
 
 /**
 * Get sites

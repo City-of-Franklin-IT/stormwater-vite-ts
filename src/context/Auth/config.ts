@@ -1,12 +1,13 @@
 import { LogLevel } from "@azure/msal-browser"
 import type { AccountInfo } from "@azure/msal-browser"
+import { CLIENT_ID, ENTRA_CLIENT_ID, AUTH_AUTHORITY, AUTH_REDIRECT_URI, AUTH_POST_LOGOUT_REDIRECT_URI } from "@/config"
 
 export const setAuth = () => {
   const auth = {
-    clientId: import.meta.env.VITE_CLIENT_ID,
-    authority: import.meta.env.VITE_AUTH_AUTHORITY,
-    redirectUri: import.meta.env.VITE_AUTH_REDIRECT_URI,
-    postLogoutRedirectUri: import.meta.env.VITE_AUTH_POST_LOGOUT_REDIRECT_URI,
+    clientId: CLIENT_ID,
+    authority: AUTH_AUTHORITY,
+    redirectUri: AUTH_REDIRECT_URI,
+    postLogoutRedirectUri: AUTH_POST_LOGOUT_REDIRECT_URI,
     navigateToLoginRequestUrl: true,
     allowRedirectInIframe: true
   }
@@ -52,6 +53,6 @@ export const loginRequest = {
 }
 
 export const acquireRequest = (account: AccountInfo) => ({
-  scopes: [`${ import.meta.env.VITE_ENTRA_CLIENT_ID }/.default`],
+  scopes: [`${ ENTRA_CLIENT_ID }/.default`],
   account
 })

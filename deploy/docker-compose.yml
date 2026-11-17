@@ -1,0 +1,13 @@
+services:
+  stormwater-vite-ts:
+    image: ghcr.io/city-of-franklin-it/stormwater-vite-ts:1.0.0
+    container_name: stormwater-vite-ts
+    ports:
+      - "6007:6007"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:6007/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

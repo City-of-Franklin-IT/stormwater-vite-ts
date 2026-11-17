@@ -1,4 +1,5 @@
 import { useMsal } from "@azure/msal-react"
+import { AUTH_POST_LOGOUT_REDIRECT_URI } from "@/config"
 
 export default () => {
   const { instance, accounts } = useMsal()
@@ -7,7 +8,7 @@ export default () => {
     instance
       .logoutPopup({
         account: accounts[0],
-        postLogoutRedirectUri: import.meta.env.VITE_AUTH_POST_LOGOUT_REDIRECT_URI
+        postLogoutRedirectUri: AUTH_POST_LOGOUT_REDIRECT_URI
       })
   }
 }

@@ -19,6 +19,7 @@ import Discharges from "./pages/Enforcement/Discharges"
 import Contacts from "./pages/Contacts"
 import Redirect from "./pages/Redirect"
 import Docs from "./pages/Docs"
+import { APP_BASE } from "@/config"
 
 const queryClient = new QueryClient()
 
@@ -26,7 +27,7 @@ function AppContent() {
   useHandleVisibilityChange(queryClient)
 
   return (
-    <Router basename={import.meta.env.VITE_APP_BASE}>
+    <Router basename={APP_BASE}>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Login />} />

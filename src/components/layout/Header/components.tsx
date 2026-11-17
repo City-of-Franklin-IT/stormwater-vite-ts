@@ -1,6 +1,7 @@
 import { useLocation, Link } from "react-router"
 import cofIcon from "@/assets/icons/cof/cof-primary-content.svg"
 import claudeIcon from "@/assets/icons/claude/claude.webp"
+import { APP_TITLE } from "@/config"
 import { useAuth } from "@/context/Auth"
 import useHandleLogoutRedirect from "@/context/Auth/hooks/useHandleLogoutRedirect"
 import { useGetInspectors, useIsEnforcmentPageActive } from "./hooks"
@@ -19,7 +20,7 @@ export const Title = () => {
     <Link to={href} className="flex flex-col text-primary-content text-center mt-4 w-fit lg:my-4">
       <div className="flex gap-4 text-primary-content items-center justify-center">
         <img src={cofIcon} alt="cof icon" className="w-20" />
-        <h1 className="text-lg font-bold text-center md:text-xl lg:text-3xl">{import.meta.env.VITE_APP_TITLE}</h1>
+        <h1 className="text-lg font-bold text-center md:text-xl lg:text-3xl">{APP_TITLE}</h1>
       </div>
     </Link>
   )
