@@ -1,7 +1,7 @@
 services:
   stormwater-vite-ts:
     image: ghcr.io/city-of-franklin-it/stormwater-vite-ts:1.0.0
-    container_name: stormwater-vite-ts
+    container_name: stormwater
     ports:
       - "6007:6007"
     restart: unless-stopped
